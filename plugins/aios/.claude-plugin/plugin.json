@@ -1,7 +1,7 @@
 {
   "name": "aios",
-  "version": "0.3.0",
-  "description": "AIOS-Klaudynka - Personal Agentic OS. 6 skilli (File Over AI): init (onboarding 57 pytan), sortuj (_inbox), stworz-projekt, dodaj-do-wiki, szukaj, koniec-sesji.",
+  "version": "0.4.0",
+  "description": "AIOS-Klaudynka - Personal Agentic OS. 12 skilli (File Over AI): init (onboarding 61 max pytan + blok Blizniaki), sortuj, stworz-projekt, dodaj-do-wiki, szukaj, koniec-sesji, kontynuuj, dzien, core-update, research, ingest-article, zadania.",
   "author": {
     "name": "Jakub Orlowski",
     "url": "https://github.com/InduPhantom-hash"

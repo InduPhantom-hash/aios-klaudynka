@@ -1,13 +1,13 @@
 ---
 name: init
-description: Onboarding do AIOS-Klaudynki - prowadzi usera przez 57 pytan w 10 sekcjach (A-J) + FIN, generuje me.md, dostosowuje strukture vaulta, opcjonalnie konfiguruje Pinecone. Triggery - "/aios:init", "uruchom onboarding", "wygeneruj me.md", "skonfiguruj AIOS", "zacznij konfiguracje AIOS".
+description: Onboarding do AIOS-Klaudynki - prowadzi usera przez max 61 pytan w 10 sekcjach (A-J) + opcjonalne E10-E13 (Blizniaki) + FIN, generuje me.md z blokiem Blizniaki, dostosowuje strukture vaulta, opcjonalnie konfiguruje Pinecone. Triggery - "/aios:init", "uruchom onboarding", "wygeneruj me.md", "skonfiguruj AIOS", "zacznij konfiguracje AIOS".
 ---
 
 # init
 
-Skill onboardingowy AIOS-Klaudynki. Wywolywany raz, po instalacji plugina. Na wyjsciu: gotowy `me.md`, dostosowana struktura `Projekty/`, opcjonalnie skonfigurowany Pinecone, wypelniony `vault-map.md`.
+Skill onboardingowy AIOS-Klaudynki. Wywolywany raz, po instalacji plugina. Na wyjsciu: gotowy `me.md` (z opcjonalnym blokiem `## Blizniaki`), dostosowana struktura `Projekty/`, opcjonalnie skonfigurowany Pinecone, wypelniony `vault-map.md`.
 
-Pelna lista 57 pytan z kompletnymi opcjami i logika warunkowa znajduje sie w `pytania.md` (obok tego pliku).
+Pelna lista pytan z kompletnymi opcjami i logika warunkowa znajduje sie w `pytania.md` (obok tego pliku).
 
 ---
 
@@ -71,7 +71,7 @@ Dla kazdej sekcji A-J wykonaj ten sam wzor:
 > 2. Pokaz userowi: "Widze, ze jestes podobny do archetypu [X]. Oto jak wyglada `me.md` i `Projekty/` u tej persony: [link / fragment]. Chcesz sie zainspirowac struktura, czy idziesz wlasna sciezka?"
 > 3. **Nie kopiuj** archetypu automatycznie - user decyduje. Archetyp to wzorzec wizualny, nie szablon do wklejenia.
 
-**Sekcja E - Stos technologiczny (8 pytan).** OS, edytor tekstu, synchronizacja, viewer, Pinecone (tak / nie / pozniej), git, inne narzedzia. Jesli E5=tak, przygotuj liste krokow Pinecone do FIN4 (oddasz userowi na koncu).
+**Sekcja E - Stos technologiczny (8 obligatoryjnych + 4 opcjonalne).** E1-E8: OS, edytor tekstu, synchronizacja, viewer, Pinecone (tak / nie / pozniej), git, inne narzedzia. Po E8 - blok Blizniaki (E10-E13, opcjonalne): task tracker, workspace + mapowanie, Tavily, Google Calendar. Jesli E5=tak, przygotuj liste krokow Pinecone do FIN4. Jesli E10-E13 uzupelnione - przygotuj blok `## Blizniaki` do FIN1. Szczegoly schematu Blizniakow: `docs/szablony/blizniacy.md`.
 
 **Sekcja F - Preferencje komunikacyjne (10 pytan).** To jest sedno personalizacji. 10 pytan (9 wyboru + 1 wolny tekst) miksuje elementy z `docs/szablony/style-komunikacji/`. Na wyjsciu: wygenerowany blok `## Hard rules` w `me.md`, osobisty dla tego usera. **Sekcja F zawsze 10 pytan** - nie ma trybu skroconego.
 
@@ -92,6 +92,8 @@ Po przejsciu sekcji A-J, z buforem wszystkich odpowiedzi:
 ### FIN1 - Generuj `me.md`
 
 Wczytaj `docs/szablony/me-template.md`, podstawiaj wartosci z bufora. Zapisz do `<VAULT_PATH>/me.md` (nadpisuje pusty szablon z INSTALL-u). Pokaz userowi finalny plik, poproś o ostatnie korekty.
+
+**Blok `## Blizniaki` (warunkowe):** jesli buffor zawiera odpowiedzi E10-E13 (tzn. user nie pominal bloku Blizniakow) - wczytaj `docs/szablony/blizniacy.md` i wygeneruj blok `## Blizniaki` na koncu me.md, przed sekcja `## Metadane`. Schemat bloku w `blizniacy.md`. Jesli E10 = zaden i E12 = nie i E13 = nie - pominaj sekcje w calosci (nie dodawaj pustego nagłówka).
 
 ### FIN2 - Stworz strukture `Projekty/`
 
@@ -117,6 +119,7 @@ Jedno zwiezle podsumowanie:
 > - `me.md` wygenerowany - $N regul, $M projektow, profil $PROFILE.
 > - `Projekty/` ma $K kategorii.
 > - Pinecone: $PINECONE_STATUS.
+> - Blizniaki: $BLIZNIAKI_STATUS (np. "ClickUp skonfigurowany" / "pominiety").
 > - $MATERIALY_STATUS (jesli I = tak, zaproponuj `/aios:dodaj-do-wiki` na nich).
 >
 > Co dalej?
@@ -181,7 +184,7 @@ Standard troubleshooting: sprawdz literowki, sprawdz czy klucz jest aktywny w Pi
 
 ## Metadane
 
-- **Wersja skilla:** v0.3 (MVP).
-- **Zaleznosci:** `pytania.md` (pytania, obok tego pliku), `docs/szablony/me-template.md` (szablon), `docs/szablony/style-komunikacji/*.md` (biblioteka dla Sekcji F), `docs/szablony/prywatnosc.md` (Sekcja H), `docs/przyklady/*.md` (archetypy pokazywane po D5), `docs/parsowanie-pdf.md` (parsowanie FRIS/Clifton).
+- **Wersja skilla:** v0.4 (beta - Blizniaki).
+- **Zaleznosci:** `pytania.md` (pytania, obok tego pliku), `docs/szablony/me-template.md` (szablon), `docs/szablony/blizniacy.md` (schemat bloku Blizniaki - NOWE), `docs/szablony/style-komunikacji/*.md` (biblioteka dla Sekcji F), `docs/szablony/prywatnosc.md` (Sekcja H), `docs/przyklady/*.md` (archetypy pokazywane po D5), `docs/parsowanie-pdf.md` (parsowanie FRIS/Clifton).
 - **Uruchamiany przez:** `/aios:init` (CC/Cowork) albo "wykonaj init" (tryb zdegradowany, plain .md w `_skille/aios/`).
-- **Output:** `me.md`, struktura `Projekty/*/index.md`, `vault-map.md`, opcjonalnie konfiguracja Pinecone MCP.
+- **Output:** `me.md` (z opcjonalnym `## Blizniaki`), struktura `Projekty/*/index.md`, `vault-map.md`, opcjonalnie konfiguracja Pinecone MCP.

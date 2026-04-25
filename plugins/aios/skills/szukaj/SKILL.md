@@ -119,9 +119,9 @@ Uwaga: warstwa 1 (hierarchia) nie znalazla. Uzyto Pinecone MCP.
    Score: 0.82  Namespace: wiedza-ai
    Cytat: "...karpathy wiki method polega na..."
 
-2. Projekty/Vibe-coding/PATUS/notes/karpathy-inspiration.md
-   Score: 0.71  Namespace: projekty-patus
-   Cytat: "...inspiracja karpathy w kontekscie PATUS..."
+2. Projekty/Vibe-coding/<projekt>/notes/karpathy-inspiration.md
+   Score: 0.71  Namespace: projekty-vibe
+   Cytat: "...inspiracja karpathy w kontekscie projektu..."
 ```
 
 ### Krok 3: Sugestia zapisu do hierarchii

@@ -1,4 +1,4 @@
-# INSTALL.md - AIOS-Klaudynka v0.3
+# INSTALL.md - AIOS-Klaudynka v0.4
 
 > **Ten dokument nie jest dla człowieka.** Jest pisany w trybie rozkazującym dla **AI-wykonawcy** (Claude Code, Cowork, Cursor, Codex, Gemini CLI), które instaluje AIOS-Klaudynkę w systemie użytkownika.
 >
@@ -345,9 +345,65 @@ cp -R /tmp/aios-klaudynka/plugins/aios/. $VAULT_PATH/_skille/aios/
 
 ---
 
+## Krok 4.5 - Instalacja plugina `aios-meta` (opcjonalna)
+
+**Cel:** zainstalować opcjonalny plugin `aios-meta` (higiena vaulta, MCP health, synchronizacja z narzędziami zewnętrznymi). Możesz to zrobić teraz albo wrócić do tego później - plugin jest niezależny od `aios` i od vault template.
+
+**Kiedy instalować:** jeśli user używa co najmniej jednego "bliźniaka" (ClickUp, Linear, Notion, Airtable, Miro) albo chce audytować strukturę swojego vaulta. Jeśli użytkownik nie wie co to jest - pomiń ten krok i wróć do niego po zakończeniu onboardingu.
+
+### 4.5A - Claude Code (`$INSTALL_MODE = cc`)
+
+```
+/plugin install aios-meta@aios-klaudynka
+```
+
+Weryfikacja:
+
+```
+/plugin list
+```
+
+Szukaj `aios-meta` na liście ze statusem `enabled` / `active`.
+
+### 4.5B - Cowork (`$INSTALL_MODE = cowork`)
+
+**4.5B.1** Zbuduj `.plugin` zip dla `aios-meta`:
+
+```bash
+cd /tmp/aios-klaudynka/plugins/aios-meta
+zip -r /tmp/aios-meta.plugin .
+```
+
+Sprawdź że plik powstał: `ls -la /tmp/aios-meta.plugin`.
+
+**4.5B.2** Przenieś plik w miejsce gdzie user go znajdzie:
+
+```bash
+cp /tmp/aios-meta.plugin $VAULT_PATH/aios-meta.plugin
+```
+
+**4.5B.3** **[PYTANIE DO USERA - krok manualny]**:
+
+> Zbudowałem plugin `aios-meta` jako `$VAULT_PATH/aios-meta.plugin`. Wgraj go do Coworka tak samo jak plugin `aios` (Settings / Plugins / Upload albo podobne miejsce). Po wgraniu zrestartuj sesję i napisz "gotowe".
+
+**4.5B.4** Po potwierdzeniu - weryfikacja:
+
+> Spróbuj wpisać `/aios-meta:audyt-luk`. Czy Cowork rozpoznaje komendę?
+
+### 4.5C - Tryb zdegradowany (`$INSTALL_MODE = degraded`)
+
+```bash
+mkdir -p $VAULT_PATH/_skille/aios-meta
+cp -R /tmp/aios-klaudynka/plugins/aios-meta/. $VAULT_PATH/_skille/aios-meta/
+```
+
+Skille dostępne przez słowne wywołanie: "wykonaj aios-meta:audyt-luk" albo "przeczytaj SKILL.md z `_skille/aios-meta/skills/audyt-luk/` i wykonaj".
+
+---
+
 ## Krok 5 - Uruchomienie onboardingu
 
-**Cel:** oddać kontrolę do `/aios:init`, który poprowadzi ankietę 57 pytań i wygeneruje `me.md` + konfigurację vaulta.
+**Cel:** oddać kontrolę do `/aios:init`, który poprowadzi ankietę do 61 pytań i wygeneruje `me.md` + konfigurację vaulta.
 
 ### 5.0 Smoke-test skilla (zanim oddasz kontrolę)
 
@@ -365,7 +421,7 @@ W trybie zdegradowanym pomiń ten krok - user wywoła skill słownie.
 
 **[KOMUNIKAT DO USERA]**:
 
-> Instalacja skończona. Teraz odpal: `/aios:init`. To jest ankieta onboardingowa (10 sekcji, 57 pytań, około 30-45 min). Wygeneruje twój `me.md` i dostosuje strukturę vaulta. Możesz to zrobić teraz albo kiedy indziej - do momentu wykonania init, vault stoi w stanie szablonowym.
+> Instalacja skończona. Teraz odpal: `/aios:init`. To jest ankieta onboardingowa (10 sekcji, do 61 pytań, około 30-45 min). Wygeneruje twój `me.md` i dostosuje strukturę vaulta. Możesz to zrobić teraz albo kiedy indziej - do momentu wykonania init, vault stoi w stanie szablonowym.
 
 Nie wywołuj `/aios:init` za usera - to jego decyzja kiedy startuje.
 
@@ -373,7 +429,7 @@ Nie wywołuj `/aios:init` za usera - to jego decyzja kiedy startuje.
 
 **[KOMUNIKAT DO USERA]**:
 
-> Instalacja skończona. Kiedy chcesz przejść onboarding, napisz mi: **"wykonaj aios-init"**. Wtedy przeczytam `SKILL.md` z `_skille/aios/skills/init/` i poprowadzę cię przez ankietę. Ankieta ma 10 sekcji i 57 pytań, zajmuje 30-45 min.
+> Instalacja skończona. Kiedy chcesz przejść onboarding, napisz mi: **"wykonaj aios-init"**. Wtedy przeczytam `SKILL.md` z `_skille/aios/skills/init/` i poprowadzę cię przez ankietę. Ankieta ma 10 sekcji i do 61 pytań, zajmuje 30-45 min.
 
 ---
 
@@ -492,8 +548,9 @@ Po wykonaniu wszystkich kroków user powinien mieć:
 
 1. Katalog `$VAULT_PATH` ze szablonową strukturą AIOS.
 2. Plugin `aios` zainstalowany (CC: w cache; Cowork: przez UI; degraded: w `_skille/aios/`).
-3. Wyczyszczone `/tmp/`.
-4. Wiedzę że następny krok to `/aios:init` (albo zdegradowany odpowiednik).
+3. Opcjonalnie: plugin `aios-meta` zainstalowany (krok 4.5).
+4. Wyczyszczone `/tmp/`.
+5. Wiedzę że następny krok to `/aios:init` (albo zdegradowany odpowiednik).
 
 Jeśli którykolwiek z tych punktów nie jest spełniony - **nie raportuj "gotowe"**. Zamiast tego powiedz userowi co nie wyszło i co trzeba zrobić.
 
@@ -501,16 +558,17 @@ Jeśli którykolwiek z tych punktów nie jest spełniony - **nie raportuj "gotow
 
 ## Metadane
 
-- **Wersja dokumentu:** v0.3 (MVP-ready po fixach K1-K3, W1-W4, M1-M2 z review 2026-04-22)
-- **Ostatnia aktualizacja:** 2026-04-22
+- **Wersja dokumentu:** v0.4 (beta - dodana sekcja 4.5 dla aios-meta, bump wersji)
+- **Ostatnia aktualizacja:** 2026-04-25
 - **Zastępuje:** `Raw/INSTALL-v01.md` (deprecated - pisany na błędnych założeniach o mechanizmie instalacji pluginów). Wersja v0.2 była draftem przejściowym bez fixów z review.
 - **Zakłada:** repo `aios-klaudynka` jest publiczne na GitHubie. Prywatne repo wymaga dodatkowych kroków (SSH key / token) nieobjętych tym dokumentem.
 - **Status ścieżek:**
-  - CC (4A) - TESTED
-  - Cowork (4B) - PARTIALLY TESTED
-  - Degraded (4C) - UNTESTED
-- **Target MVP:** macOS + Claude Code + user od zera. Reszta - best effort bez gwarancji.
+  - CC (4A, 4.5A) - TESTED
+  - Cowork (4B, 4.5B) - PARTIALLY TESTED
+  - Degraded (4C, 4.5C) - UNTESTED
+- **Target:** macOS + Claude Code + user od zera. Reszta - best effort bez gwarancji.
 - **Changelog:**
+  - v0.4 (2026-04-25) - dodana sekcja 4.5 (instalacja aios-meta), zaktualizowany checkpoint, bump wersji.
   - v0.3 (2026-04-22) - MVP. K1 (flow 2.2), K2 (find zamiast rm *), K3 (jawność public repo), W1 (`/plugin list`), W2 (`_skille/aios/` zamiast `.claude/plugins/aios/`), W3 (fallback URL), W4 (sekcja Aktualizacja), M2 (smoke-test skilla), M1 (data). 57 pytań (poprzednio 55).
   - v0.2 (2026-04-21) - draft z poprawną architekturą marketplace-based, przed review.
   - v0.1 (2026-04-20) - deprecated, błędne założenia o `cp -R` do `~/.claude/plugins/`.

@@ -122,7 +122,7 @@ Koniec /sortuj.
 
 Przeniesiono: 3 pliki
   - 1 do Wiedza/AI/Raw/
-  - 1 do Projekty/Vibe-coding/Zew-App-4.0/notes/
+  - 1 do Projekty/Vibe-coding/<projekt>/notes/
   - 1 do Kosz/
 
 Nowe projekty: 0

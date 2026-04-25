@@ -2,7 +2,7 @@
 
 > Personalny Agentic OS dla AI-first użytkownika. Twoje AI uczy się ciebie z **twojego** pliku `me.md`, a nie z jakiegoś generycznego promptu.
 
-**Status:** α (alpha). MVP po onboardingu na testerach. Publiczne repo pod licencją MIT.
+**Status:** β (beta, v0.4.0). 12 skilli + opcjonalny plugin `aios-meta`. Publiczne repo pod licencją MIT.
 
 **Dla kogo:** marketing manager, developer, student programowania, albo ktokolwiek kto pracuje z Claude / ChatGPT / Gemini / LM Studio codziennie i chce żeby AI przestało gadać w kółko te same rzeczy i zaczęło rozumieć **jak** z nim rozmawiać.
 
@@ -10,11 +10,11 @@
 
 ## Co to robi
 
-1. **Onboarding `/aios:init`** - 57 pytań w 10 sekcjach, 30-45 minut. Wypełniasz je rozmową z AI. Wynik: twój `me.md` - przenośny profil, który każde AI czyta na starcie sesji.
+1. **Onboarding `/aios:init`** - do 61 pytań w 10 sekcjach, 30-45 minut. Wypełniasz je rozmową z AI. Wynik: twój `me.md` - przenośny profil, który każde AI czyta na starcie sesji. Od v0.4: Sekcja E opcjonalnie pyta o narzędzia bliźniacze (ClickUp, Linear, Notion itp.) i generuje blok `## Bliźniaki` w `me.md`.
 
 2. **Vault AIOS** - lokalna baza plików `.md` w duchu **File Over AI**: pliki są trwałe, AI jest wymienne. Katalogi: `Projekty/`, `Wiedza/`, `Kalendarz/`, `_inbox/`, `_pamiec/`, `_brudnopis/`, `_Archiwum/`, `Kosz/`.
 
-3. **6 skilli** (slash commands w Claude Code, Cowork, albo wywoływanych słownie w Cursor/Codex/Gemini):
+3. **12 skilli** w pluginie `aios` (slash commands w Claude Code, Cowork, albo wywoływanych słownie w Cursor/Codex/Gemini):
 
 | Skill | Co robi |
 |-------|---------|
@@ -24,6 +24,21 @@
 | `/aios:dodaj-do-wiki` | Karpathy pipeline: surowiec z `Wiedza/Raw/` → strona w `Wiedza/Wiki/`. |
 | `/aios:szukaj` | Hierarchiczne wyszukiwanie (index.md → pełny tekst → semantic fallback). |
 | `/aios:koniec-sesji` | Zapis transkryptu do `_brudnopis/`, aktualizacja `_pamiec/aktualny.md`. |
+| `/aios:kontynuuj` | Wczytuje kontekst poprzedniej sesji - otwiera bieżącą z gotowym briefingiem. |
+| `/aios:dzien` | Briefing dnia: kalendarz Google + aktywne projekty + sugestia focusu. |
+| `/aios:core-update` | Audyt + update dokumentów nawigacyjnych AIOS, sprzątanie, reindex Pinecone. |
+| `/aios:research` | Deep research przez Tavily → wynik do `Wiedza/<obszar>/Raw/`. |
+| `/aios:ingest-article` | Wyciąga treść artykułu z URL → zapisuje do `Wiedza/<obszar>/Raw/`. |
+| `/aios:zadania` | Wyciąga zadania z sesji → tworzy w ClickUp (lista AIOS) po akceptacji. |
+
+4. **Plugin `aios-meta`** (opcjonalny) - 4 skille do higieny vaulta i synchronizacji z narzędziami zewnętrznymi:
+
+| Skill | Co robi |
+|-------|---------|
+| `/aios-meta:audyt-luk` | Skanuje vault pod kątem luk strukturalnych (brakujące README, puste Raw/ itp.). |
+| `/aios-meta:mcp-health` | Sprawdza które MCP z `me.md` odpowiadają, a które leżą. |
+| `/aios-meta:synchronizuj` | Porównuje vault z bliźniakami (ClickUp, Linear, Notion) - pokazuje rozjazdy. |
+| `/aios-meta:wizualizuj-vault` | Generuje diagram struktury vaulta inline, opcjonalnie eksportuje do Miro. |
 
 ---
 
@@ -49,7 +64,13 @@
 /aios:init
 ```
 
-**Cowork (częściowo przetestowane):** zbuduj `.plugin` zip z `plugins/aios/` i wgraj w UI Coworka. Szczegóły: `INSTALL.md` sekcja 4B.
+Opcjonalnie (plugin meta-tools):
+
+```
+/plugin install aios-meta@aios-klaudynka
+```
+
+**Cowork (częściowo przetestowane):** zbuduj `.plugin` zip z `plugins/aios/` i wgraj w UI Coworka. Szczegóły: `INSTALL.md` sekcja 4B. Dla `aios-meta` - analogicznie z `plugins/aios-meta/`.
 
 **Cursor / Codex / Gemini (tryb zdegradowany, nieprzetestowane):** skopiuj `plugins/aios/` do `_skille/aios/` w swoim vaulcie. Triggery wywołujesz słownie ("wykonaj aios-init").
 
@@ -62,21 +83,35 @@
 ```
 aios-klaudynka/
 ├── .claude-plugin/
-│   └── marketplace.json           # Repo jest swoim własnym marketplace'em
+│   └── marketplace.json           # Repo jest swoim wlasnym marketplace'em
 ├── plugins/
-│   └── aios/                      # Plugin Claude Code
+│   ├── aios/                      # Plugin Claude Code - core (12 skilli)
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json
+│   │   └── skills/
+│   │       ├── init/              # /aios:init (+ pytania.md)
+│   │       ├── sortuj/            # /aios:sortuj
+│   │       ├── stworz-projekt/    # /aios:stworz-projekt
+│   │       ├── dodaj-do-wiki/     # /aios:dodaj-do-wiki
+│   │       ├── szukaj/            # /aios:szukaj
+│   │       ├── koniec-sesji/      # /aios:koniec-sesji
+│   │       ├── kontynuuj/         # /aios:kontynuuj
+│   │       ├── dzien/             # /aios:dzien
+│   │       ├── core-update/       # /aios:core-update
+│   │       ├── research/          # /aios:research
+│   │       ├── ingest-article/    # /aios:ingest-article
+│   │       └── zadania/           # /aios:zadania
+│   └── aios-meta/                 # Plugin opcjonalny - higiena vaulta (4 skilli)
 │       ├── .claude-plugin/
 │       │   └── plugin.json
 │       └── skills/
-│           ├── init/              # /aios:init
-│           ├── sortuj/            # /aios:sortuj
-│           ├── stworz-projekt/    # /aios:stworz-projekt
-│           ├── dodaj-do-wiki/     # /aios:dodaj-do-wiki
-│           ├── szukaj/            # /aios:szukaj
-│           └── koniec-sesji/      # /aios:koniec-sesji
+│           ├── audyt-luk/         # /aios-meta:audyt-luk
+│           ├── mcp-health/        # /aios-meta:mcp-health
+│           ├── synchronizuj/      # /aios-meta:synchronizuj
+│           └── wizualizuj-vault/  # /aios-meta:wizualizuj-vault
 ├── vault-template/                # Szablon vaulta kopiowany do $VAULT_PATH
 │   ├── CLAUDE.md
-│   ├── me.md                      # Placeholder, wypełniany przez /aios:init
+│   ├── me.md                      # Placeholder, wypelniany przez /aios:init
 │   ├── _inbox/
 │   ├── _brudnopis/
 │   ├── _pamiec/
@@ -90,7 +125,13 @@ aios-klaudynka/
 │   │   ├── marketing-manager.md
 │   │   ├── developer.md
 │   │   └── student-programowania.md
+│   ├── szablony/
+│   │   ├── me-template.md         # Pelny szablon me.md z warunkami IF/LOOP
+│   │   ├── blizniacy.md           # Schemat bloku ## Blizniaki w me.md
+│   │   ├── prywatnosc.md          # Szablon sekcji H (prywatnosc)
+│   │   └── style-komunikacji/     # 10 szablonow sekcji F (styl komunikacji)
 │   └── parsowanie-pdf.md          # Referencja dla AI przy Sekcji C (FRIS/Clifton)
+├── CHANGELOG.md                   # Historia zmian
 ├── INSTALL.md                     # Instrukcja dla AI-wykonawcy
 ├── README.md                      # ten plik
 └── LICENSE                        # MIT
@@ -121,12 +162,17 @@ Zanim przejdziesz onboarding, zobacz jak wygląda `me.md` innych archetypów. To
 
 ## Roadmapa
 
-**v0.3 (MVP, 2026-04-22):** ten release. 6 skilli, onboarding 57 pytań, 3 archetypy, PL-only.
+**v0.3 (alpha, 2026-04-22):** pierwsze publiczne wydanie. 6 skilli, onboarding 57 pytań, 3 archetypy, PL-only.
 
-**v0.4 (planowane):**
+**v0.4 (beta, 2026-04-25):** ten release.
+- 12 skilli w `aios` (kontynuuj, dzien, core-update, research, ingest-article, zadania).
+- Sekcja E Bliźniaki w onboardingu (E10-E13 opcjonalne, 61 max pytań).
+- Nowy plugin `aios-meta` (4 skilli: audyt-luk, mcp-health, synchronizuj, wizualizuj-vault).
+
+**v0.5 (planowane):**
 - Tryb `/aios:init --quick` (tylko A+B+D+FIN, reszta default, ~10 min).
+- Wynieść hardcoded ścieżki (np. `Vibe-coding/` w `stworz-projekt`) jako konfigurowalne w `me.md`.
 - EN translation szablonów i skilli.
-- Własne auto-update (`/aios:update`) - obecnie odrzucone, do rozważenia po testach MVP.
 
 **v1.0 (cel):** production-ready dla co najmniej 3 użytkowników z różnych archetypów, pełne testy ścieżek Cowork i zdegradowanych, dokumentacja EN+PL.
 

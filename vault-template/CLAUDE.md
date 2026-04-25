@@ -18,7 +18,7 @@ Jeśli `me.md` nie istnieje - uruchom `/aios:init` (onboarding).
 
 ## Skille dostępne w tym vaulcie
 
-Plugin `aios` (6 skilli):
+Plugin `aios` (12 skilli):
 
 - `/aios:init` - onboarding (jednorazowy, wypełnia `me.md`).
 - `/aios:sortuj` - przegląd `_inbox/` i rozmieszczenie plików.
@@ -26,6 +26,21 @@ Plugin `aios` (6 skilli):
 - `/aios:dodaj-do-wiki <ścieżka>` - przetwarza materiał z `Wiedza/<X>/Raw/` na stronę w `Wiedza/<X>/Wiki/` (metoda Karpathy).
 - `/aios:szukaj <query>` - wyszukiwanie hierarchiczne (index.md → Pinecone fallback).
 - `/aios:koniec-sesji` - zamknięcie sesji, zapis do `_brudnopis/`, aktualizacja `_pamiec/aktualny.md`.
+- `/aios:kontynuuj` - wczytuje kontekst poprzedniej sesji (`_pamiec/aktualny.md` + transkrypt), otwiera bieżącą z briefingiem.
+- `/aios:dzien` - briefing dnia: kalendarz + aktywne projekty + sugestia focusu.
+- `/aios:core-update` - audyt i update dokumentów nawigacyjnych (me.md, vault-map.md, index.md), sprzątanie, reindex Pinecone.
+- `/aios:research <temat>` - deep research przez Tavily → wynik do `Wiedza/<obszar>/Raw/`.
+- `/aios:ingest-article <url>` - wyciąga treść artykułu z URL → zapisuje do `Wiedza/<obszar>/Raw/`.
+- `/aios:zadania` - wyciąga zadania z sesji → tworzy w ClickUp (lista AIOS) po akceptacji.
+
+Plugin `aios-meta` (4 skilli, opcjonalny - osobna instalacja):
+
+- `/aios-meta:audyt-luk` - skanuje vault pod kątem luk strukturalnych: brakujące README, puste Raw/, aktywne.md bez "Następny krok" itp.
+- `/aios-meta:mcp-health` - sprawdza które MCP serwery z `me.md` odpowiadają, a które leżą.
+- `/aios-meta:synchronizuj` - porównuje vault z bliźniakami (ClickUp, Linear, Notion, Airtable) - pokazuje rozjazdy.
+- `/aios-meta:wizualizuj-vault` - generuje diagram struktury vaulta inline, opcjonalnie eksportuje do Miro.
+
+Żeby zainstalować `aios-meta` w Claude Code: `/plugin install aios-meta@aios-klaudynka`. W Cowork: zbuduj `.plugin` zip z `plugins/aios-meta/` i wgraj w UI.
 
 ## Struktura vaulta
 

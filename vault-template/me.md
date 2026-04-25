@@ -44,6 +44,10 @@
 |---------|---------|--------|
 | (puste do pierwszego `/aios:stworz-projekt`) | | |
 
+## Bliźniaki
+
+(E10-E13 - opcjonalne, wypełni init jeśli user skonfiguruje zewnętrzne trackery / kalendarz)
+
 ---
 
-*Plik wygenerowany przez AIOS-Klaudynka vault-template (v0.3.0). Nadpisywany przez `/aios:init`.*
+*Plik wygenerowany przez AIOS-Klaudynka vault-template (v0.4.0). Nadpisywany przez `/aios:init`.*

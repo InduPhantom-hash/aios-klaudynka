@@ -1,4 +1,4 @@
-# pytania.md - 55 pytań onboardingowych AIOS-Klaudynki
+# pytania.md - onboarding AIOS-Klaudynki
 
 > Ten plik jest **referencją dla skilla `init`**. Skill wczytuje sekcje po kolei i zadaje pytania userowi. Format każdego pytania:
 >
@@ -13,7 +13,12 @@
 > **Uwagi dla AI:** <dodatkowy kontekst dla wykonawcy>
 > ```
 
-**Status wersji:** v0.2.2 (hybryda light w C dla ścieżki z PDF, razem 57/57).
+**Status wersji:** v0.3.0 (Bliźniaki - E10-E13 opcjonalne, 57 obligatoryjnych + 4 opcjonalne = 61 max).
+
+**Zmiany v0.3.0 vs v0.2.2 (2026-04-25):**
+- Dodane E10-E13 (Bliźniaki) - opcjonalne, batch po Sekcji E-Stos. Generują blok `## Bliźniaki` w me.md.
+- Zaktualizowane konwencje generowania (dodany `Bliźniaki`).
+- Zaktualizowane podsumowanie (61 max, E10-E13 w sekcji opcjonalnych).
 
 **Zmiany v0.2.2 vs v0.2.1 (2026-04-22):**
 - Dodane C6 (tempo) i C7 (krytyka) jako uzupełnienie ścieżki z PDF - PDF daje typologię, te 2 pytania praktyczne preferencje pracy. Warunkowe od `$MA_PROFILE_PDF = tak`. Ścieżka bez PDF (C1'-C4') bez zmian.
@@ -29,7 +34,7 @@
 
 **Konwencje generowania (globalne):**
 - Wszystkie zmienne `$imie`, `$rola` itd. odnoszą się do bufora odpowiedzi usera.
-- me.md buduje się z sekcji: `Hard rules` (F + C5), `Kim jestem` (A), `Profil psychologiczny` (C, opcjonalne), `Styl pracy` (C' i F), `Aktywne projekty` (D, tabela), `Stack` (E), `Rytm pracy` (G), `Prywatność` (H, warunkowe).
+- me.md buduje się z sekcji: `Hard rules` (F + C5), `Kim jestem` (A), `Profil psychologiczny` (C, opcjonalne), `Styl pracy` (C' i F), `Aktywne projekty` (D, tabela), `Stack` (E), `Rytm pracy` (G), `Prywatność` (H, warunkowe), `Bliźniaki` (E10-E13, opcjonalne - tylko jeśli user podał conajmniej jeden tracker).
 - Struktura folderów: `Projekty/<kategoria>/index.md` (z D), `Kalendarz/` (z G), `Prywatne/` (z H3, warunkowo), `Wiedza/Raw/` (z I).
 - Nazwy folderów bez polskich znaków diakrytycznych (tytuły w `index.md` mogą mieć diakrytyki).
 
@@ -300,6 +305,58 @@
 
 ---
 
+### Bliźniaki (opcjonalne, E10-E13)
+
+**Cel bloku:** skonfigurować zewnętrzne systemy (trackery, wyszukiwarka, kalendarz), z których korzystają skille `/aios:zadania`, `/aios:dzien`, `/aios-meta:synchronizuj` i `/aios-meta:mcp-health`. Odpowiedzi trafiają do sekcji `## Bliźniaki` w me.md.
+
+**Pominięcie:** jeśli user nie używa żadnych zewnętrznych trackerów i nie potrzebuje tych skilli - może pominąć E10-E13. Skille `zadania`/`dzien`/`synchronizuj`/`mcp-health` będą działać w trybie zdegradowanym (log do `_pamiec/` bez trackera).
+
+**Uwagi dla AI:** po E8, jeszcze w Sekcji E, zapowiedz: "Zostało kilka opcjonalnych pytań o zewnętrzne systemy (trackery, kalendarz). Jeśli nie używasz takich narzędzi - możemy pominąć. Kontynuujemy?"
+
+### E10 - Task tracker
+
+**Pytanie:** Jakiego task trackera używasz do zarządzania zadaniami? (Możesz wybrać kilka.)
+**Typ odpowiedzi:** multi-select z listy
+**Warianty:** 1. ClickUp, 2. Linear, 3. Asana, 4. Notion, 5. GitHub Issues, 6. żaden (nie używam zewnętrznego trackera)
+**Default:** żaden
+**Generuje:** zapisuje `$task_tracker_typ` do bufora (np. "clickup" / "linear" / "asana" / "notion" / "github" / "brak"). Jeśli wybrano 6 - pomija E11, generuje w `## Bliźniaki → ### Task tracker` linię: "- typ: brak". Jeśli wybrano 1-5 - aktywuje E11.
+**Uwagi dla AI:** jeśli user wybrał kilka trackerów - zapytaj który jest GŁÓWNYM (dla `zadania` skill obsługuje jeden typ trackera na raz; pozostałe można dopisać w E8).
+
+### E11 - Workspace i mapowanie
+
+**Pytanie:** Podaj URL workspace / organizacji w $task_tracker_typ. Opcjonalnie: wklej 2-3 nazwy list/projektów w trackerze, które odpowiadają kategoriom z D1.
+**Typ odpowiedzi:** wolny tekst (URL + opcjonalne mapowanie)
+**Warunkowe:** tylko jeśli E10 != żaden
+**Generuje:** zapisuje `$tracker_workspace` i `$tracker_mapowanie` do bufora. Generuje w `## Bliźniaki → ### Task tracker` blok:
+```
+- typ: $task_tracker_typ
+- workspace: $tracker_workspace
+- mapowanie kategoria -> lista:
+  | $kategoria | $lista_lub_projekt_id |
+```
+Jeśli user nie podał mapowania - wstaw "(uzupełnij ręcznie)" w kolumnie listy.
+**Uwagi dla AI:** nie pytaj o API key ani list_id teraz - te techniczne wartości user uzupełni ręcznie po onboardingu. Wystarczy URL workspace i nazwy list/projektów.
+
+### E12 - Tavily (semantic search i ingest)
+
+**Pytanie:** Masz klucz Tavily API? (Potrzebny dla `/aios:research` i `/aios:ingest-article`.)
+**Typ odpowiedzi:** wybór z listy
+**Warianty:** 1. tak (mam), 2. nie (nie potrzebuję tych skilli), 3. co to jest Tavily?
+**Default:** nie
+**Generuje:** jeśli 1 - dopisuje w `## Bliźniaki → ### Search & ingest`: "- tavily: tak". Jeśli 2 - "- tavily: nie". Jeśli 3 - wyjaśnij: "Tavily to API do przeszukiwania internetu i wyciągania treści stron - używa go skill `/aios:research` (deep research na temat) i `/aios:ingest-article` (wyciągnij artykuł z URL do Wiedzy). Konto darmowe na tavily.com. Możesz pominąć teraz i uzupełnić ręcznie w me.md later." Po wyjaśnieniu pytaj ponownie (1 lub 2).
+**Uwagi dla AI:** klucza API NIE przechowuj w me.md - tylko flagę tak/nie. Klucz idzie do konfiguracji MCP klienta AI (np. `~/.claude/settings.json`), nie do vaulta.
+
+### E13 - Google Calendar
+
+**Pytanie:** Chcesz włączyć Google Calendar dla skilla `/aios:dzien` (briefing dnia z wydarzeniami)?
+**Typ odpowiedzi:** wybór z listy
+**Warianty:** 1. tak, 2. nie, 3. używam innego kalendarza
+**Default:** nie
+**Generuje:** jeśli 1 - dopisuje w `## Bliźniaki → ### Calendar`: "- google-calendar: tak \n- strefa czasowa: $tz (z A4)." Jeśli 2 - "- google-calendar: nie". Jeśli 3 - dopisz "- google-calendar: nie\n- kalendarz: $inny_kalendarz" i zanotuj w E8 że user ma inny kalendarz. Skill `/aios:dzien` czyta Calendar MCP - jeśli google-calendar: nie, pomija sekcję kalendarza i pokazuje tylko aktywne projekty.
+**Uwagi dla AI:** konfiguracja Google Calendar MCP leży po stronie klienta AI (Claude Code settings), nie vaulta. Po onboardingu skill `/aios:dzien` sam wykryje czy MCP jest aktywny i dostosuje output.
+
+---
+
 ## Sekcja F - Preferencje komunikacyjne (10 pytań)
 
 **Cel sekcji:** wygenerować **własne hard rules** dla tego usera, miksując elementy z `docs/szablony/style-komunikacji/`. To jest KLUCZOWE - każdy user generuje własny, spersonalizowany zestaw reguł, nie dziedziczy cudzych.
@@ -440,7 +497,7 @@ Każde pytanie wybiera jedną z 2-3 osiowych preferencji. AI tłumaczy wybór na
 **Pytanie:** Czy osoby trzecie (partner / dzieci / przyjaciele) mogą pojawiać się w notatkach imiennie czy wolisz inicjały / pseudonimy?
 **Typ odpowiedzi:** wybór z listy
 **Warianty:** 1. imiennie, 2. inicjały, 3. pseudonimy
-**Generuje:** dopisuje do sekcji `## Prywatność` w me.md: "Osoby trzecie w notatkach: $tryb." Jeśli 2 lub 3 - dodaje hard rule "Przy cytowaniu notatek zawierających osoby trzecie - używaj $trybu (np. 'A.' zamiast 'Agnieszka')."
+**Generuje:** dopisuje do sekcji `## Prywatność` w me.md: "Osoby trzecie w notatkach: $tryb." Jeśli 2 lub 3 - dodaje hard rule "Przy cytowaniu notatek zawierających osoby trzecie - używaj $trybu (np. 'X.' zamiast pełnego imienia)."
 
 ### H3 - Osobny folder prywatne
 
@@ -632,23 +689,19 @@ Nie ma tabeli - AI formułuje 1-3 hard rules z wolnego tekstu usera, pokazuje pr
 
 ## Podsumowanie struktury
 
-- **Razem:** 57 pytań (+ 3 meta-pytania w Kroku 0). Wzrost z 55 po dodaniu C6/C7 (hybryda light - decyzja 2026-04-22).
-- **Obligatoryjne sekcje:** A, B, D, E, F, G, I, J (44 pytania obligatoryjne).
+- **Razem max:** 61 pytań (+ 3 meta-pytania w Kroku 0). Wzrost z 57 po dodaniu E10-E13 (Bliźniaki - decyzja 2026-04-25).
+- **Obligatoryjne sekcje:** A, B, D, E(E1-E8), F, G, I, J (44 pytania obligatoryjne).
 - **Warunkowe / opcjonalne:**
   - C ścieżka z PDF (5 pytań C1-C5 + 2 uzupełniające C6-C7), zależne od `$MA_PROFILE_PDF = tak`.
   - C ścieżka bez PDF (4 pytania C1'-C4'), zależne od `$MA_PROFILE_PDF = nie`.
   - H (6 pytań, zależne od B1 = prywatne / hybryda).
+  - E Bliźniaki (E10-E13, 4 pytania, opcjonalne - user może pominąć; E11 warunkowe od E10 != żaden).
   - Niektóre pytania warunkowe wewnątrz sekcji (np. B2 zależne od B1 = hybryda, E6 zależne od E5 = tak).
 - **Tryby czasowe:**
-  - Szybki (30 min): pomija C, pomija I (poza I4=nie), skraca J do potwierdzenia defaultów → ~32 pytania.
-  - Standard (45 min): pełne A-G, I, J, H jeśli warunek spełniony → 44-52 pytań.
-  - Pełny (60 min): wszystkie 57 pytań + upload PDF w C → 57.
+  - Szybki (30 min): pomija C, pomija I (poza I4=nie), pomija E10-E13, skraca J do potwierdzenia defaultów → ~32 pytania.
+  - Standard (45 min): pełne A-G, I, J, H jeśli warunek spełniony, E10-E13 jeśli user chce → 44-56 pytań.
+  - Pełny (60 min): wszystkie pytania + upload PDF w C + E10-E13 → max 61.
 
 ## Status
 
-Szkielet v0.2.2 - wszystkie pola `Generuje:` wypełnione (57/57 po dodaniu C6/C7), tabela mapowania F→hard rules kompletna. **Wypełnienia jeszcze wymagają:**
-
-1. Biblioteka plików `szablony/style-komunikacji/*.md` - 5-8 plików. `konkret-vs-kontekst.md` (F1) gotowy 2026-04-22 jako wzorzec. Pozostałe F2-F9 do napisania.
-2. Dokładnych instrukcji parsowania PDF FRIS / Clifton w Sekcji C (decyzja 2026-04-21: multimodal + potwierdzenie) - szczegóły w `init-SKILL-v02.md`, ale warto dopisać przykłady sygnałów w osobnym pliku `docs/parsowanie-pdf.md`.
-3. Szablon `szablony/me-template.md` - gotowy 2026-04-22 (v0.1).
-4. 3 archetypy w `docs/przyklady/` (marketing manager, developer, student programowania) - pełne me.md + struktura `Projekty/` jako demo.
+v0.3.0 (2026-04-25) - E10-E13 dodane. Wszystkie pola `Generuje:` wypełnione (61/61 max). Tabela mapowania F→hard rules kompletna. Biblioteka `docs/szablony/style-komunikacji/` kompletna (9 plików). Szablon `docs/szablony/me-template.md` gotowy (v0.1, do aktualizacji o blok `## Bliźniaki`). `docs/szablony/blizniacy.md` - nowy (Faza 3). Archetypy w `docs/przyklady/` - 3 (marketing manager, developer, student programowania).

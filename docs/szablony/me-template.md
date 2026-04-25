@@ -172,12 +172,46 @@ $h4_tresc
 ---
 <!-- ENDIF -->
 
+<!-- IF:$ma_blizniaki -->
+## Blizniaki
+
+<!-- Generowany z E10-E13. Szczegoly schematu: docs/szablony/blizniacy.md -->
+<!-- Pomijaj cala sekcje jesli E10=brak AND E12=nie AND E13=nie -->
+
+### Task tracker
+<!-- IF:$task_tracker_typ_nie_brak -->
+- typ: $task_tracker_typ
+- workspace: $tracker_workspace
+- mapowanie kategoria -> lista:
+
+| kategoria | lista / projekt |
+|-----------|-----------------|
+<!-- LOOP:$tracker_mapowanie -->
+| $kategoria | $lista_lub_projekt |
+<!-- ENDLOOP -->
+<!-- ELSE -->
+- typ: brak
+<!-- ENDIF -->
+
+### Search & ingest
+- tavily: $tavily_status
+
+### Calendar
+- google-calendar: $google_calendar_status
+- strefa czasowa: $tz
+
+### MCP do monitorowania
+- lista: [$mcp_lista_oddzielona_przecinkami]
+
+---
+<!-- ENDIF -->
+
 ## Metadane
 
-- Wersja szablonu: me-template v0.1 (2026-04-22).
-- Wygenerowany przez: `/aios:init` w wersji v0.2 (szablon i skill trzymają się razem - bump synchroniczny, patrz decyzje.md 2026-04-22).
+- Wersja szablonu: me-template v0.2 (2026-04-25 - dodany blok Blizniaki).
+- Wygenerowany przez: `/aios:init` w wersji v0.4 (szablon i skill trzymaja sie razem - bump synchroniczny, patrz decyzje.md).
 - Tryb onboardingu: $tryb (szybki / standard / pelny).
-- Łącznie odpowiedzi w buforze: $n_odpowiedzi / 57.
+- Lacznie odpowiedzi w buforze: $n_odpowiedzi / 61 max.
 <!-- IF:$j5_kategoria_d -->
-- Dodatkowe notatki z onboardingu: `_brudnopis/onboarding-notes-$data_generacji.md` (J5 kategoria d - tekst nie pasował do F10/E8/Kim jestem).
+- Dodatkowe notatki z onboardingu: `_brudnopis/onboarding-notes-$data_generacji.md` (J5 kategoria d - tekst nie pasowal do F10/E8/Kim jestem).
 <!-- ENDIF -->

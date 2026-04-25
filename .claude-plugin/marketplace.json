@@ -5,17 +5,26 @@
     "url": "https://github.com/InduPhantom-hash"
   },
   "metadata": {
-    "description": "AIOS-Klaudynka - Personal Agentic OS (File Over AI). Onboarding 57 pytan + 6 skilli do zarzadzania vaultem.",
-    "version": "0.3.0"
+    "description": "AIOS-Klaudynka - Personal Agentic OS (File Over AI). Onboarding 61 max pytan + blok Blizniaki + 12 skilli do zarzadzania vaultem. Opcjonalny plugin aios-meta (higiena vaulta, MCP health, synchronizacja z bliznniakami).",
+    "version": "0.4.0"
   },
   "plugins": [
     {
       "name": "aios",
       "source": "./plugins/aios",
-      "description": "Personal Agentic OS - 6 skilli (init, sortuj, stworz-projekt, dodaj-do-wiki, szukaj, koniec-sesji)",
-      "version": "0.3.0",
+      "description": "Personal Agentic OS - 12 skilli (init, sortuj, stworz-projekt, dodaj-do-wiki, szukaj, koniec-sesji, kontynuuj, dzien, core-update, research, ingest-article, zadania)",
+      "version": "0.4.0",
       "category": ["productivity", "knowledge-management", "personal"],
       "keywords": ["aios", "personal-agentic-os", "obsidian", "file-over-ai", "polish", "pl"],
+      "strict": false
+    },
+    {
+      "name": "aios-meta",
+      "source": "./plugins/aios-meta",
+      "description": "AIOS meta-tools - higiena vaulta i nadzor nad bliznniakami: audyt-luk, mcp-health, synchronizuj, wizualizuj-vault. Opcjonalne, niezalezne od aios.",
+      "version": "0.1.0",
+      "category": ["productivity", "knowledge-management", "personal"],
+      "keywords": ["aios", "personal-agentic-os", "obsidian", "file-over-ai", "polish", "pl", "meta", "audit"],
       "strict": false
     }
   ]

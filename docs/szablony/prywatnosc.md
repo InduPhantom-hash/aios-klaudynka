@@ -46,7 +46,7 @@ $wolny-tekst-z-H4 (jeśli wypełniony)
 Sekcja **`## Hard rules`** - dopisywane reguły z H1, H2 (jeśli nie-imiennie), H5 (jeśli opcja 2), H6:
 
 - `Nie pytaj proaktywnie o: $tematy-H1.` (soft opt-out)
-- `Przy cytowaniu notatek zawierających osoby trzecie - używaj $trybu-H2.` (np. `A.` zamiast `Agnieszka`)
+- `Przy cytowaniu notatek zawierających osoby trzecie - używaj $trybu-H2.` (np. `A.` zamiast pełnego imienia)
 - `W obrębie Prywatne/ - nie inicjuj wątków, czekaj na usera.` (hard rule z H5 opcja 2)
 - `Nigdy nie komentuj: $tabu-H6. Nawet gdy sam o to zagadnę.` (hard opt-out, analogiczny do C5)
 
@@ -77,7 +77,7 @@ Nie przyjmuj. Odpowiedź "wszystko" wypacza hard rule - AI nie mógłby w ogóle
 
 ### H2 pseudonimy, ale user nie podaje listy
 
-Jeśli user wybiera "3. pseudonimy" ale nie podaje mapowania (np. `Agnieszka -> A.` albo `Agnieszka -> Magda`), dopisz w `## Prywatność`: "Osoby trzecie: pseudonimy (mapowanie do ustalenia na bieżąco)." i dodaj w Hard rules: "Przy pierwszym wystąpieniu nowej osoby w notatce zaproponuj pseudonim, poczekaj na potwierdzenie, zapisz mapowanie w `_pamiec/pseudonimy.md`." Ten plik tworzy się dopiero przy pierwszym użyciu, nie w FIN2.
+Jeśli user wybiera "3. pseudonimy" ale nie podaje mapowania (np. `<imię> -> A.` albo `<imię> -> <pseudonim>`), dopisz w `## Prywatność`: "Osoby trzecie: pseudonimy (mapowanie do ustalenia na bieżąco)." i dodaj w Hard rules: "Przy pierwszym wystąpieniu nowej osoby w notatce zaproponuj pseudonim, poczekaj na potwierdzenie, zapisz mapowanie w `_pamiec/pseudonimy.md`." Ten plik tworzy się dopiero przy pierwszym użyciu, nie w FIN2.
 
 ### H3=tak, E7=nie (brak gita)
 
