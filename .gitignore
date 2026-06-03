@@ -1,0 +1,49 @@
+# AIOS-Klaudynka - .gitignore publicznego repo
+# Ten plik ląduje w root repo GitHuba, NIE w vaulcie użytkownika.
+# User z vaulta nadpisuje sobie .gitignore sam przy `/aios:init` (H3=tak, E7=tak).
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Edytory
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python (jeśli dokładamy helpery)
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Node (jeśli dokładamy build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+.pnpm-debug.log*
+
+# Build artefakty
+*.plugin
+build/
+dist/
+
+# Lokalne testy / sandboxy
+.test-vault/
+/tmp-vault/
+*.local.md
+
+# Sekrety (nie powinno ich tu być, ale jako bezpiecznik)
+.env
+.env.local
+*.key
+*.pem
+.secrets/
+
+# Logi
+*.log
+logs/

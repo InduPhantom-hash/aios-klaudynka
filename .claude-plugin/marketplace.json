@@ -1,0 +1,22 @@
+{
+  "name": "aios-klaudynka",
+  "owner": {
+    "name": "Jakub Orlowski",
+    "url": "https://github.com/InduPhantom-hash"
+  },
+  "metadata": {
+    "description": "AIOS-Klaudynka - Personal Agentic OS (File Over AI). Onboarding 57 pytan + 6 skilli do zarzadzania vaultem.",
+    "version": "0.3.0"
+  },
+  "plugins": [
+    {
+      "name": "aios",
+      "source": "./plugins/aios",
+      "description": "Personal Agentic OS - 6 skilli (init, sortuj, stworz-projekt, dodaj-do-wiki, szukaj, koniec-sesji)",
+      "version": "0.3.0",
+      "category": "productivity",
+      "keywords": ["aios", "personal-agentic-os", "knowledge-management", "obsidian", "file-over-ai", "polish", "pl"],
+      "strict": false
+    }
+  ]
+}
