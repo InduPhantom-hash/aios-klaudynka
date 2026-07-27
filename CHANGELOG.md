@@ -6,6 +6,21 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 
 ---
 
+## [0.5.0] - 2026-07-27 (release)
+
+### Dodane i Zmienione (Zasada Code Over AI & File Over AI)
+
+- **Wdrażanie `AGENTS.md` jako SSOT**: Jednolite źródło zasad operacyjnych dla Antigravity, Gemini CLI, Cursor, Codex, OpenHand i Claude Code. `CLAUDE.md` zredukowany do 1-liniowego redirectu.
+- **Dodano `bootstrap-prompt.md`**: Uniwersalny prompt startowy dla środowisk AI bez automatycznego ładowania system promptów.
+- **Natywny AIOS Task Tracker**: Dodano `_szablony/zadania.md` i obsługę lokalnych `zadania.md` w projektach (100% offline, zero zbędnych opłat i tokenów). Zewnętrzny ClickUp/Linear/Notion jako opcja.
+- **Nowy skill Vibe Coding**: `/aios:pomysl-do-promptu` – prowadzi użytkownika od luźnego pomysłu do specyfikacji PRD, makiet i finałowego prompta startowego.
+- **Szybki Onboarding `/aios:init --quick`**: Opcja 10-minutowego startu (12 kluczowych pytań) obok pełnego onboardingu `--full`.
+- **Zoptymalizowany skill `/aios:dzien`**: Równoległe pobieranie wielu kalendarzy Google (`list_calendars` -> `list_events`) oraz szybkie przeszukiwanie `zadania.md` ripgrepem.
+- **Szablony dokumentów (`_szablony/`)**: Utworzono katalog w szablonie vaulta z wzorcami `zadania.md`, `brief-projektu.md`, `decyzja.md`, `index.md`.
+- **Usunięcie nieużywanego `Kalendarz/`**: Usunięto pusty folder z szablonu vaulta (zgodnie z "File Over AI: brak ręcznego duplikowania kalendarzy zewnętrznych").
+
+---
+
 ## [0.4.0] - 2026-04-25 (beta)
 
 ### Dodane - plugin `aios`
@@ -47,18 +62,6 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 
 Pierwsze publiczne wydanie.
 
-### Dodane
-
-- Plugin `aios` z 6 skillami: `init`, `sortuj`, `stworz-projekt`, `dodaj-do-wiki`, `szukaj`, `koniec-sesji`.
-- Onboarding `init` - 57 pytan w 10 sekcjach (A-J + FIN), ~30-45 minut, wynik: `me.md` + konfiguracja vaulta.
-- Szablon vaulta (`vault-template/`) - pelna struktura katalogow AIOS.
-- 3 przyklady `me.md` dla archetypow: marketing-manager, developer, student-programowania.
-- Dokumentacja: `INSTALL.md` (dla AI-wykonawcy, 6 krokow), `README.md`, `LICENSE` (MIT).
-- Repo jako wlasny marketplace (`marketplace.json`): `InduPhantom-hash/aios-klaudynka`.
-- Opis parsowania PDF profilowych (FRIS/Clifton) w `docs/parsowanie-pdf.md`.
-- Szablony stylu komunikacji (10 plikow w `docs/szablony/style-komunikacji/`).
-
----
-
+[0.5.0]: https://github.com/InduPhantom-hash/aios-klaudynka/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/InduPhantom-hash/aios-klaudynka/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/InduPhantom-hash/aios-klaudynka/releases/tag/v0.3.0

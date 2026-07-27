@@ -1,12 +1,12 @@
 {
   "name": "aios",
-  "version": "0.4.0",
-  "description": "AIOS-Klaudynka - Personal Agentic OS. 12 skilli (File Over AI): init (onboarding 61 max pytan + blok Blizniaki), sortuj, stworz-projekt, dodaj-do-wiki, szukaj, koniec-sesji, kontynuuj, dzien, core-update, research, ingest-article, zadania.",
+  "version": "0.5.0",
+  "description": "AIOS-Klaudynka - Personal Agentic OS. 13 skilli (File Over AI & Code Over AI): init (onboarding --quick / --full), sortuj, stworz-projekt, dodaj-do-wiki, szukaj, koniec-sesji, kontynuuj, dzien, core-update, research, ingest-article, zadania (lokalny Task Tracker), pomysl-do-promptu.",
   "author": {
     "name": "Jakub Orlowski",
     "url": "https://github.com/InduPhantom-hash"
   },
   "homepage": "https://github.com/InduPhantom-hash/aios-klaudynka",
   "license": "MIT",
-  "keywords": ["aios", "personal-agentic-os", "obsidian", "file-over-ai", "polish"]
+  "keywords": ["aios", "personal-agentic-os", "file-over-ai", "code-over-ai", "task-tracker", "polish"]
 }

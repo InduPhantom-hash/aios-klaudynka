@@ -1,6 +1,6 @@
-# INSTALL.md - AIOS-Klaudynka v0.4
+# INSTALL.md - AIOS-Klaudynka v0.5.0
 
-> **Ten dokument nie jest dla człowieka.** Jest pisany w trybie rozkazującym dla **AI-wykonawcy** (Claude Code, Cowork, Cursor, Codex, Gemini CLI), które instaluje AIOS-Klaudynkę w systemie użytkownika.
+> **Ten dokument nie jest dla człowieka.** Jest pisany w trybie rozkazującym dla **AI-wykonawcy** (Claude Code, Cowork, Cursor, Codex, Gemini CLI, Antigravity), które instaluje AIOS-Klaudynkę w systemie użytkownika.
 >
 > Jeśli czytasz ten plik jako AI - jesteś adresatem. Wykonaj kroki po kolei, zadaj pytania userowi tylko tam gdzie to wskazano, oddaj kontrolę do `/aios:init` po skończonej instalacji.
 >

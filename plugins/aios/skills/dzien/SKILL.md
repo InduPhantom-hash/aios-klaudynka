@@ -1,70 +1,53 @@
 ---
 name: dzien
 description: >
-  Briefing dnia: kalendarz Google + aktywne projekty + sugestia focusu.
-  Triggery: /aios:dzien, "co dzis mam", "plan na dzis", "co jest na kalendarzu".
+  Briefing dnia: kalendarze Google + aktywne zadania z projektów (ripgrep) + sugestia focusu.
+  Zasada Code Over AI - szybkie skanowanie lokalnych plików bez pożerania tokenów.
+  Triggery: /aios:dzien, "co dziś mam", "plan na dziś", "co jest na kalendarzu".
 ---
 
-# AIOS: Dzien
+# AIOS: Dzień
 
-User chce wiedziec co ma dzis i od czego zaczac. Daj mu jeden ekran - kalendarz + kontekst projektow + propozycja focusu.
+Użytkownik chce wiedzieć co ma dziś i od czego zacząć. Daj mu jeden zwięzły ekran - kalendarz + kontekst projektów + propozycja focusu.
 
-## Krok 1: Pobierz dzisiejsze eventy z Google Calendar
+## Krok 1: Pobierz dzisiejsze eventy ze wszystkich kalendarzy
 
-Wywolaj `list_events` z parametrami:
-- `startTime`: dzis 00:00:00 w ISO 8601 (uzyj aktualnej daty z kontekstu sesji)
-- `endTime`: dzis 23:59:59 w ISO 8601
-- `timeZone`: strefa czasowa usera z me.md (sekcja Tozsamosc) lub `Europe/Warsaw` jako fallback
-- `orderBy`: startTime
-- `pageSize`: 30
+1. Wywołaj `list_calendars` i pobierz listę dostępnych identyfikatorów kalendarzy (`calendarId`).
+2. Dla każdego `calendarId` wywołaj równolegle `list_events` z parametrami:
+   - `startTime`: dziś 00:00:00 z offsetem strefy czasowej (np. `2026-07-27T00:00:00+02:00`)
+   - `endTime`: dziś 23:59:59 z offsetem strefy
+   - `timeZone`: strefa z `me.md` lub `Europe/Warsaw`
+   - `orderBy`: startTime
+3. Scal i posortuj chronologicznie wydarzenia. Zdeduplikuj powtórzenia.
 
-Jesli Calendar MCP niedostepny: powiedz "Kalendarz niedostepny" i kontynuuj z samymi projektami.
+Jeśli Calendar MCP jest niedostępny: napisz "Kalendarz niedostępny" i przejdź do skanowania zadań.
 
-## Krok 2: Przeczytaj aktywne projekty
+## Krok 2: Skanuj lokalne zadania (Code Over AI)
 
-Przeczytaj `_pamiec/aktualny.md` - sekcja "Nastepny krok" i projekt.
+Wykonaj szybkie wyszukiwanie komendą powłoki zamiast wczytywać całe katalogi do kontekstu:
 
-Nastepnie przeczytaj `me.md` - tabela "Aktywne projekty" - zeby wiedziec co jest aktywne i gdzie leza pliki.
+```bash
+grep -rn "DO ZROBIENIA" Projekty/*/*/zadania.md || true
+```
 
-## Krok 3: Zinterpretuj dzien
+Skompresuj odnalezione priorytetowe zadania z aktywnych projektów.
 
-Na podstawie wydarzen ocen typ dnia:
-
-- **Sesja edukacyjna / szkoleniowa** w kalendarzu (rozpoznawana po slowach kluczowych z me.md - sekcja Aktywne projekty / Nauka) -> dzien nauki, przygotuj kontekst jesli sesja za < 2h
-- **Duze bloki bez eventow (>= 3h)** -> deep work mozliwy, zaproponuj projekt do pracy
-- **Gesty kalendarz (>= 4 eventy)** -> dzien spotkan, zaproponuj tylko sprawy < 30 min
-- **Brak eventow** -> wolny dzien lub weekend, user sam zdecyduje
-
-## Krok 4: Przedstaw briefing
+## Krok 3: Przedstaw briefing
 
 Format:
 
-```
-[Data, dzien tygodnia]
+```text
+[Data, dzień tygodnia]
 
 Kalendarz:
-- HH:MM - HH:MM  Nazwa eventu  [lokalizacja lub link jesli jest]
-- ...
-(jesli brak eventow: "Brak eventow")
+- HH:MM - HH:MM  Nazwa eventu [lokalizacja lub link]
+(jeśli brak: "Brak eventów")
 
-Aktywny projekt: [nazwa projektu z aktualny.md]
-Nastepny krok: [z aktualny.md]
+Zadania w projektach (AIOS Task Tracker):
+- [Projekt A] Nazwa priorytetowego zadania
+- [Projekt B] Nazwa priorytetowego zadania
 
-Focus na dzis: [1 zdanie sugestii na podstawie kalendarza]
+Focus na dziś: [1 zdanie sugestii na podstawie kalendarza i zadań]
 ```
 
-Bez naglowkow markdown. Bez "Oto Twoj plan dnia!". Jesli jest duzo eventow - pokaz je wszystkie, nie skracaj.
-
-## Krok 5: Opcjonalne akcje
-
-Po briefingu mozesz zaproponowac (max 1, tylko jesli naprawde trafne):
-
-- `/aios:kontynuuj` - jesli nie wiadomo od czego zaczac
-
-Nie proponuj niczego jesli kontekst jest oczywisty.
-
-## Czego NIE rob
-
-- Nie czytaj calego vaulta "zeby lepiej doradzic"
-- Nie pytaj "Czy chcesz zebym sprawdzil cos jeszcze?"
-- Nie pisz "Mam nadzieje, ze dzien bedzie produktywny" ani podobnych fraz
+Bez ozdobników, bez "Witaj!", bez powitań. Używaj wyłącznie znaku `-` jako myślnika.
