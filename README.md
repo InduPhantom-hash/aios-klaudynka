@@ -1,5 +1,7 @@
 # AIOS-Klaudynka
 
+![AIOS Klaudynka - Personal Agentic OS](./assets/aios-klaudynka-header.jpg)
+
 > Personalny Agentic OS oparty na plikach (`File Over AI`) i deterministycznych skryptach (`Code Over AI`). Twoje AI uczy się ciebie z **twojego** profilu `me.md`, wykonuje zadania w lokalnych plikach Markdown bez zbędnych kosztów API i pozwala wymieniać modele AI bez utraty wiedzy.
 
 **Status:** v0.5.0 (Release). 13 skilli core + opcjonalny plugin `aios-meta`. Publiczne repozytorium pod licencją MIT.
