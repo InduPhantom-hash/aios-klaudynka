@@ -55,6 +55,7 @@ AIOS-Vault/
 ├── CLAUDE.md              ← 1-liniowy redirect do AGENTS.md
 ├── bootstrap-prompt.md    ← prompt startowy dla środowisk AI
 ├── vault-map.md           ← mapa sitemap vaulta
+├── _skille/               ← reguły czystego języka polskiego (jezyk-pl.md) i filtry Anty-Slop
 ├── _szablony/             ← szablony zadań, briefów i rejestru decyzji
 ├── _inbox/                ← skrzynka wrzutowa na surowe notatki
 ├── _brudnopis/            ← transkrypty i dzienne myślenie na głos

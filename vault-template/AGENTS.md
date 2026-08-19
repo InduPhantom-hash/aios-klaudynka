@@ -9,6 +9,7 @@ Czytaj w tej kolejności:
 1. `me.md`
 2. `vault-map.md` (jeśli istnieje)
 3. `_pamiec/aktualny.md` (jeśli istnieje)
+4. `_skille/jezyk-pl.md` (gdy tworzysz lub redagujesz teksty po polsku)
 
 Potwierdź jedną linią: `Wczytałem profil użytkownika | Ostatni kontekst: [nazwa sesji / brak]`. Nie odtwarzaj profilu użytkownika.
 
@@ -29,9 +30,11 @@ Potwierdź jedną linią: `Wczytałem profil użytkownika | Ostatni kontekst: [n
 | Nowy projekt | Wywołaj `/aios:stworz-projekt` lub uzgodnij cel z użytkownikiem. |
 | Usunięcie lub przeniesienie pliku | Przenieś do `Kosz/` lub poproś o osobną zgodę. |
 
-## Styl odpowiedzi i komunikacji
+## Styl odpowiedzi i jakość języka (Plain Polish & Anty-AI Slop)
 
-- Zaczynaj od wyniku. Pisz prostym językiem, bez korpomowy i bez zbędnych wstępów.
-- Używaj wyłącznie znaku `-` jako myślnika.
-- Linki do plików zapisuj w formacie `[tekst](file:///ścieżka/do/pliku)`.
-- Przed napisaniem większego kodu lub przebudową struktury przedstaw zarys planu (Implementation Plan).
+- **Konkrety na początku (Lead with Action):** Zaczynaj od wyniku, bez wstępów, bez lania wody i bez pustych pochwał ("Świetne pytanie!", "Oczywiście, pomogę").
+- **Myślniki:** Używaj wyłącznie znaku `-` jako myślnika.
+- **Filtry językowe:** Wymuszaj reguły z `_skille/jezyk-pl.md`: zakaz komunałów ("W dobie AI"), zakaz fałszywych morałów, zakaz korpomowy i ponglishu.
+- **Linki:** Linki do plików zapisuj w formacie `[tekst](file:///ścieżka/do/pliku)`.
+- **Planowanie:** Przed napisaniem większego kodu lub przebudową struktury przedstaw zarys planu (Implementation Plan).
+- **Zakończenie:** Na końcu odpowiedzi wskaż dokładnie JEDNĄ konkretną akcję / mikrokrok na najbliższe 2 minuty.
