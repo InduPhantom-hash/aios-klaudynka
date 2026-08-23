@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# aios-backpass – Deterministyczny silnik Gradient Descent dla pamięci i instrukcji AIOS
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PYTHONPATH="$DIR/aios_backpass:$PYTHONPATH"
+python3 "$DIR/aios_backpass/cli.py" "$@"

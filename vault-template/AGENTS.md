@@ -16,7 +16,8 @@ Potwierdź jedną linią: `Wczytałem profil użytkownika | Ostatni kontekst: [n
 ## Zasady nadrzędne
 
 - **File Over AI**: Wszystkie dane, decyzje i wiedza istnieją jako trwale zapisane pliki Markdown (`.md`). Model AI jest wymienny.
-- **Code Over AI**: Jeśli zadanie (agregacja zadań, przeszukiwanie plików, generowanie struktury) można wykonać komendą powłoki (`grep`, `ripgrep`, `find`, skrypt), wykonaj je skryptem zamiast pożerać tokeny w pętlach myślenia.
+- **Code Over AI**: Jeśli zadanie (agregacja zadań, przeszukiwanie plików, generowanie struktury, odszumianie logów) można wykonać komendą powłoki (`grep`, `ripgrep`, `find`, skrypt Python), wykonaj je skryptem zamiast pożerać tokeny w pętlach myślenia.
+- **AIOS Backpass (Gradient Descent)**: Samodoskonalenie instrukcji i reguł na podstawie logów sesji przez skrypt `_skrypty/aios-backpass` lub skill `/aios:backpass`. Zakaz dopisywania niesprawdzonych reguł bez potwierdzenia w min. 2 sesjach.
 - Vault i kod są nadrzędne wobec pamięci modelu. Nie zgaduj, gdy możesz sprawdzić plik lub konfigurację.
 
 ## Uprawnienia i checkpointy

@@ -2,32 +2,34 @@
 
 ![AIOS Klaudynka - Personal Agentic OS](./assets/aios-klaudynka-banner.jpg)
 
-> Personalny Agentic OS oparty na plikach (`File Over AI`) i deterministycznych skryptach (`Code Over AI`). Twoje AI uczy się ciebie z **twojego** profilu `me.md`, wykonuje zadania w lokalnych plikach Markdown bez zbędnych kosztów API i pozwala wymieniać modele AI bez utraty wiedzy.
+> Personalny Agentic OS oparty na plikach (`File Over AI`) i deterministycznych skryptach (`Code Over AI`). Twoje AI uczy się ciebie z **twojego** profilu `me.md`, wykonuje zadania w lokalnych plikach Markdown bez zbędnych kosztów API, samodoskonali swoje instrukcje metodą Gradient Descent (`/aios:backpass`) i pozwala wymieniać modele AI bez utraty wiedzy.
 
-**Status:** v0.5.0 (Release). 13 skilli core + opcjonalny plugin `aios-meta`. Publiczne repozytorium pod licencją MIT.
+**Status:** v0.6.0 (Release). 14 skilli core + opcjonalny plugin `aios-meta`. Publiczne repozytorium pod licencją MIT.
 
-**Dla kogo:** [Marketing Manager](docs/przyklady/marketing-manager.md), [Developer](docs/przyklady/developer.md), [Student](docs/przyklady/student-programowania.md), produktowiec - każdy, kto pracuje z AI (Antigravity, Claude, Gemini CLI, Cursor, Codex, OpenHand) i chce, aby system natychmiast rozumiał jego styl pracy oraz porządkował wiedzę i zadania lokalnie.
+**Dla kogo:** [Marketing Manager](docs/przyklady/marketing-manager.md), [Developer](docs/przyklady/developer.md), [Student](docs/przyklady/student-programowania.md), produktowiec - każdy, kto pracuje z AI (Antigravity, Claude Code, Cursor, Codex, OpenHand, Gemini CLI) i chce, aby system natychmiast rozumiał jego styl pracy oraz porządkował wiedzę, zadania i pamięć lokalnie.
 
 ---
 
 ## Co wyróżnia Klaudynkę (Filozofia Systemu)
 
 1. **File Over AI:** Twój vault to trwałe pliki `.md` na Twoim dysku. Możesz je czytać w Obsidianie, VS Code, terminalu czy edytorze tekstu. AI jest narzędziem do ich pielęgnacji - nie właścicielem Twoich danych.
-2. **Code Over AI:** Mechaniczne operacje (agregacja zadań, przeszukiwanie plików, porządkowanie struktur) wykonują natywne komendy systemowe (`grep`/`ripgrep`/`find`/skrypty). AI nie marnuje Twoich tokenów na pętle myślenia tam, gdzie wystarczy prosty skrypt.
-3. **Natywny AIOS Task Tracker (100% Offline):** Wszystkie zadania żyją w prostych plikach `zadania.md` wewnątrz Twoich projektów. Brak wymogu posiadania płatnych kont w zewnętrznych narzędziach.
-4. **Szybki Onboarding (`/aios:init --quick`):** 10-15-minutowy proces (12 kluczowych pytań) buduje Twój przenośny profil `me.md` oraz zasady komunikacji. Dostępny jest także tryb pełny (`--full`).
-5. **Wieloplatformowość:** Działa natywnie z Antigravity, Claude Code, Gemini CLI, Cursorem, Codextem i OpenHand dzięki ujednoliconemu plikowi `AGENTS.md` oraz `bootstrap-prompt.md`.
+2. **Code Over AI:** Mechaniczne operacje (agregacja zadań, odszumianie logów, przeszukiwanie plików, sprawdzanie budżetu tokenów) wykonują natywne komendy systemowe i skrypty Python. AI nie marnuje Twoich tokenów na pętle myślenia tam, gdzie wystarczy deterministyczny skrypt.
+3. **AIOS Backpass (Gradient Descent dla pamięci agentów):** Zamiast dopisywać reguły pod wpływem chwili, system analizuje prawdziwe logi sesji na dysku, rejestruje luki w ledgerze (wymóg min. 2 sesji), pilnuje sztywnego budżetu tokenów i proponuje małe, poparte dowodami diffy do Twojego zatwierdzenia.
+4. **Natywny AIOS Task Tracker (100% Offline):** Wszystkie zadania żyją w prostych plikach `zadania.md` wewnątrz Twoich projektów. Zero wymogu posiadania płatnych kont w zewnętrznych narzędziach.
+5. **Szybki Onboarding (`/aios:init --quick`):** 10-15-minutowy proces (12 kluczowych pytań) buduje Twój przenośny profil `me.md` oraz zasady komunikacji. Dostępny jest także tryb pełny (`--full`).
+6. **Wieloplatformowość:** Działa natywnie z Antigravity, Claude Code, Cursor, Codex i OpenHand dzięki ujednoliconemu plikowi `AGENTS.md`, `bootstrap-prompt.md` oraz skryptom CLI.
 
 ---
 
-## Lista Skilli (Plugin `aios` - 13 skilli)
+## Lista Skilli (Plugin `aios` - 14 skilli)
 
 | Skill | Co robi |
 |---|---|
 | `/aios:init` | Onboarding - buduje profil `me.md`, strukturę vaulta i Task Trackera (`--quick` / `--full`). |
+| `/aios:backpass` | **NOWOŚĆ:** Samodoskonalenie instrukcji `AGENTS.md` metodą Gradient Descent z logów sesji na dysku. |
+| `/aios:pomysl-do-promptu` | Prowadzenie od surowego pomysłu do specyfikacji PRD, makiet i promptu dla Vibe Coding. |
 | `/aios:sortuj` | Interaktywne sortowanie wrzutek z `_inbox/` do docelowych folderów. |
 | `/aios:stworz-projekt` | Promocja pomysłu z `_brudnopis/` do pełnej struktury projektu w `Projekty/`. |
-| `/aios:pomysl-do-promptu` | **NOWOŚĆ:** Prowadzenie od surowego pomysłu do specyfikacji PRD, makiet i promptu dla Vibe Coding. |
 | `/aios:dodaj-do-wiki` | Pipeline wiedzy (metoda Karpathy): surowiec z `Wiedza/Raw/` → strona w `Wiedza/Wiki/`. |
 | `/aios:szukaj` | Hierarchiczne i skryptowe wyszukiwanie w vaulcie. |
 | `/aios:koniec-sesji` | Zapis transkryptu do `_brudnopis/` i aktualizacja pamięci `_pamiec/aktualny.md`. |
@@ -46,7 +48,7 @@
 
 ---
 
-## Nowa Struktura Vaulta (`vault-template/`)
+## Struktura Vaulta (`vault-template/`)
 
 ```text
 AIOS-Vault/
@@ -55,7 +57,8 @@ AIOS-Vault/
 ├── CLAUDE.md              ← 1-liniowy redirect do AGENTS.md
 ├── bootstrap-prompt.md    ← prompt startowy dla środowisk AI
 ├── vault-map.md           ← mapa sitemap vaulta
-├── _skille/               ← reguły czystego języka polskiego (jezyk-pl.md) i filtry Anty-Slop
+├── _skille/               ← reguły języka polskiego (jezyk-pl.md), filtry Anty-Slop i aios-backpass.md
+├── _skrypty/              ← narzędzia deterministyczne CLI (w tym aios-backpass)
 ├── _szablony/             ← szablony zadań, briefów i rejestru decyzji
 ├── _inbox/                ← skrzynka wrzutowa na surowe notatki
 ├── _brudnopis/            ← transkrypty i dzienne myślenie na głos
@@ -78,7 +81,7 @@ AI pobierze szablon, przygotuje strukturę i uruchomi 10-15-minutowy onboarding 
 
 ### Wymagania wstępne
 - Dowolne środowisko Agentic AI z dostępem do plików i konsoli (Claude Code, Cursor, Antigravity, Gemini CLI, OpenHand).
-- Zainstalowany `git`.
+- Python 3.9+ oraz `git`.
 - Opcjonalnie: darmowa aplikacja [Obsidian](https://obsidian.md/) lub edytor Markdown do przeglądania bazy wiedzy.
 
 Pełna instrukcja techniczna krok po kroku oraz rozwiązywanie problemów: [`INSTALL.md`](./INSTALL.md).
@@ -88,4 +91,3 @@ Pełna instrukcja techniczna krok po kroku oraz rozwiązywanie problemów: [`INS
 ## Licencja
 
 MIT. Copyright (c) 2026 Jakub Orłowski.
-

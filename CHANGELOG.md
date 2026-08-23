@@ -6,6 +6,23 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 
 ---
 
+## [0.6.0] - 2026-08-23 (release)
+
+### Dodane i Zmienione (AIOS Backpass & Gradient Descent)
+
+- **Nowy silnik i skill `/aios:backpass`**: Samodoskonalenie instrukcji (`AGENTS.md`) i pamięci agentów metodą Gradient Descent na podstawie rzeczywistych transkryptów z dysku (Antigravity, Claude Code, Cursor, Codex, OpenCode, Markdown).
+- **Deterministyczny silnik Python (`_skrypty/aios_backpass/`)**:
+  - `scanner.py` – skanuje logi sesji w różnych runtime'ach.
+  - `distiller.py` – mechaniczne odszumianie logów (redukcja 85-98%) i maskowanie sekretów (API keys, tokeny).
+  - `ledger.py` – rejestr luk `gap-ledger.json` z wymogiem corroboracji z co najmniej 2 niezależnych sesji (`min_sessions >= 2`).
+  - `budget.py` – Token Budget Guard egzekwujący bilans zero-sum oraz Skill Release Valve (ekstrakcja rzadkich procedur do skilli).
+  - `evaluator.py` – generator pakietu ewaluacyjnego model-agnostic (działa z dowolnym modelem) oraz walidator cytatów.
+  - `cli.py` + `_skrypty/aios-backpass` – interfejs CLI (`scan`, `distill`, `budget`, `ledger`, `eval`, `apply`).
+- **Przenośny skill w vaulcie**: Dodano `_skille/aios-backpass.md` do szablonu vaulta.
+- **Aktualizacja manifestu**: Podbito wersję pluginu `aios` do 0.6.0 (14 skilli core).
+
+---
+
 ## [0.5.0] - 2026-07-27 (release)
 
 ### Dodane i Zmienione (Zasada Code Over AI & File Over AI)
@@ -55,13 +72,3 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 
 - `marketplace.json` - dodany wpis dla `aios-meta`, zaktualizowana wersja i opis.
 - `CLAUDE.md` (vault-template) - dodana sekcja z 4 skillami `aios-meta` i instrukcja instalacji.
-
----
-
-## [0.3.0] - 2026-04-22 (alpha, MVP)
-
-Pierwsze publiczne wydanie.
-
-[0.5.0]: https://github.com/InduPhantom-hash/aios-klaudynka/compare/v0.4.0...v0.5.0
-[0.4.0]: https://github.com/InduPhantom-hash/aios-klaudynka/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/InduPhantom-hash/aios-klaudynka/releases/tag/v0.3.0
