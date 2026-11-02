@@ -19,6 +19,7 @@ Stan na 2026-11-02: kandydat wypchnięty do [roboczego PR](https://github.com/In
 | Realny lokalny BGE-M3 na macOS | PASS: syntetyczne notatki, pytania PL/EN ze wskazaniem oczekiwanego źródła, aktualizacja notatki i zapytanie MCP |
 | Linux ARM64 w Dockerze | PASS dla świeżej instalacji Python 3.13, CLI/MCP z lokalnym fixture i 7 testów Backpass; nie jest to test GUI LM Studio na natywnym Linuksie |
 | Minimalny Python 3.11 w Linux ARM64 | PASS: świeża instalacja, pip check, 21 testów instalatora/CLI/MCP i 7 testów Backpass; realny model pominięty. Nie zastępuje macOS/Windows 3.11 |
+| GitHub Actions, kod ce919cc | [6/6 PASS](https://github.com/InduPhantom-hash/aios-klaudynka/actions/runs/41469927879): macOS, Windows, Ubuntu x64, Python 3.11 i 3.13; pełna świeża instalacja, CLI/MCP z fixture i walidacja paczki |
 | Backpass | 7 testów PASS; usunięte prywatne ścieżki autora z demo i fixture testowego |
 | 18 skilli | Niezależny przegląd procedur i walidacja YAML/nazw/referencji; pełne wykonanie przez agentów niewykonane |
 | Manifesty i paczka | Wspólny validator sprawdza core 0.7.0, meta 0.2.0, 18 skilli, YAML nowych dokumentów, lokalne linki i brak prywatnych ścieżek |
@@ -48,7 +49,7 @@ Na PowerShell ustaw `$env:AIOS_LIVE_RAG="1"` i uruchom tę samą komendę Python
 
 `python tools/verify.py --live` zbiera powyższe komendy, wersje i pełne logi w ignorowanym `.aios/review/verification.json`. Nie nadpisuje profilu ani danych vaulta. Wymaga Git do sprawdzenia diffu i istniejącego lokalnego BGE-M3 dla ostatniej próby. Bez `--live` omija prawdziwy model.
 
-Workflow `.github/workflows/verify.yml` przygotowuje sześć zadań: macOS, Windows i Ubuntu, każde z Python 3.11 oraz 3.13. Workflow uruchomiono po zatwierdzonym push i utworzeniu PR; bieżący wynik widnieje w PR. Każde zadanie przygotowuje także świeży vault z własnym środowiskiem Python przez `install.py`. Testy CI korzystają z fixture, nie z GUI LM Studio.
+Workflow `.github/workflows/verify.yml` przygotowuje sześć zadań: macOS, Windows i Ubuntu, każde z Python 3.11 oraz 3.13. Workflow uruchomiono po zatwierdzonym push i utworzeniu PR. Kod `ce919cc` przeszedł pełną macierz 6/6. Bieżący wynik kolejnych commitów widnieje w PR. Każde zadanie przygotowuje także świeży vault z własnym środowiskiem Python przez `install.py`. Testy CI korzystają z fixture, nie z GUI LM Studio.
 
 ## Poprawki z przeglądu
 
@@ -61,13 +62,19 @@ Workflow `.github/workflows/verify.yml` przygotowuje sześć zadań: macOS, Wind
 - Wyjście JSON działa przy konsoli bez Unicode. Dokumenty i konfiguracje pozostają UTF-8.
 - Szablony referencyjne trafiają do `_skille/dokumentacja`, poza indeksem. Starszy plik Backpass kieruje do jednej aktualnej procedury.
 
+## Poprawki Windows potwierdzone w CI
+
+Pełna instalacja w katalogu ze spacjami i polskimi znakami wymagała UTF-8 dla procesu konfiguracji oraz przekazania diagnostyki pip na stderr. Dodany test błędu zależności potwierdza zachowanie źródeł i czytelną przyczynę.
+
+Test MCP na Windows ujawnił blokadę pierwszego importu natywnego rozszerzenia NumPy po uruchomieniu stdio. Stos z faulthandler wskazał import NumPy przez LanceDB, przed połączeniem z bazą i embeddingami. Inicjalizacja LanceDB przed startem transportu usuwa blokadę; ten sam test przechodzi na Windows z Python 3.11 i 3.13. Operacje RAG wykonują się poza pętlą komunikacji MCP, a testy mają granicę czasu.
+
 ## Niewykonane bramki
 
-- Natywna instalacja i realny BGE-M3 na Windows; brak maszyny/VM Windows w tej sesji.
+- Desktop LM Studio i realny BGE-M3 na Windows. CI potwierdza natywny Windows runner, pełną instalację Python oraz CLI/MCP z lokalnym fixture; nie potwierdza GUI i pobrania modelu.
 - Natywny Linux z GUI LM Studio i prawdziwym modelem; kontener potwierdza część Python/CLI/MCP.
 - Pełne quick/full, podłączenie MCP w docelowym kliencie i scenariusze wszystkich 18 skilli wykonane przez agentów. Integracyjny test MCP nie jest testem UI konkretnego klienta.
 - Zewnętrzne integracje i ich operacje zapisujące. Lokalne sprawdzenie ich instrukcji nie dowodzi działania kont użytkownika.
-- Ostateczny wynik macierzy GitHub Actions oraz osobno zatwierdzony merge, tag i pełne wydanie.
+- Osobno zatwierdzony merge, tag i pełne wydanie. Macierz CI dla kodu jest zielona 6/6.
 
 SDK MCP/Pydantic emituje w czystym środowisku ostrzeżenie o definicji `lifespan`; inicjalizacja, wywołania narzędzi i zamknięcie sesji w testach przechodzą. Nie ukrywamy ostrzeżenia w logach.
 
