@@ -24,11 +24,14 @@ Nazwa pliku: `_brudnopis/YYYY-MM-DD-<slug>.md`
 Frontmatter:
 ```yaml
 ---
+typ_wiedzy: fakt
+tematy: [tag1, tag2]
+podmioty: []
+ai_summary: "Rzeczywisty zakres i wynik sesji."
 data: YYYY-MM-DD
 tryb: eksploracja | skupienie
 projekt: <nazwa> | ad-hoc
 status: draft
-tematy: [tag1, tag2]
 ---
 ```
 
@@ -36,9 +39,16 @@ Treść: pełna rozmowa verbatim od początku sesji. Oznacz wypowiedzi `**User:*
 
 ## Krok 3: Zaktualizuj aktualny.md
 
-Nadpisz `_pamiec/aktualny.md` (nie appenduj):
+Pokaż diff `_pamiec/aktualny.md` i po zatwierdzeniu zastąp bieżący stan, zachowując metadane oraz flagi prywatności. Nowy plik opatrz wymaganym YAML:
 
 ```markdown
+---
+typ_wiedzy: fakt
+tematy: [stan-sesji]
+podmioty: []
+ai_summary: "Ostatni zatwierdzony stan pracy i następny krok."
+---
+
 # Aktualny stan pracy
 
 Data ostatniej sesji: YYYY-MM-DD
@@ -93,3 +103,11 @@ Sesja zapisana: _brudnopis/2026-04-19-aios-skille-setup.md | aktualny.md zaktual
 - Sesja krótsza niż 5 minut i nic znaczącego
 - User explicite: "nie zapisuj tego"
 - Sesja była tylko wyszukiwaniem, bez nowej wiedzy ani decyzji
+
+## Zgodność z lokalnym RAG
+
+Przed zapisem wczytaj `_skille/rag.md`. Nowe notatki `.md` zaczynaj od YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`; zachowaj pola źródłowe i flagi prywatności. Dane prywatne i cytaty z prywatnych logów nie tracą ochrony podczas przetwarzania.
+
+Po zakończonej partii zatwierdzonych zapisów/przeniesień/usunięć uruchom lokalny `index` zgodnie z `_skille/rag.md`. Dotyczy to również nowych raportów, pamięci, `index.md` i plików zadań. `--vault` podaj przed `index`. Przy błędzie zachowaj źródła, zgłoś indeks jako nieaktualny/niedostępny i pracuj na plikach. Nie uruchamiaj indeksowania w samym podglądzie lub po anulowaniu; nie wysyłaj danych do Pinecone automatycznie.
+
+Mechaniczne operacje wykonuj przez narzędzie plikowe lub Python `pathlib`/`shutil`, bez wymogu bash, `mv` lub `rg`. Używaj interpretera vaulta: `.venv/bin/python` na macOS/Linux albo `.venv/Scripts/python.exe` na Windows. Nie nadpisuj celu przeniesienia; zatwierdzenie edycji nie zastępuje osobnej zgody na przeniesienie/usunięcie lub zapis zewnętrzny.

@@ -10,7 +10,7 @@ description: Interaktywne sortowanie _inbox - przegladasz plik po pliku, AIOS pr
 Rozladowac `_inbox/` w trybie **rozmowy** - nie w trybie wielkiego wyboru na start.
 
 Filozofia: rozbic ciezar organizacyjny na atomowe decyzje. Ty mowisz **jedna litere**,
-AIOS wykonuje wszystko reszte (mv + update index + metadata).
+AIOS wykonuje resztę: przeniesienie pliku, aktualizację indeksów i metadanych. Używaj narzędzia plikowego albo Python `pathlib`/`shutil`, również na Windows; bash i `mv` nie są wymagane.
 
 ## Triggery
 
@@ -51,7 +51,7 @@ Dla kazdego:
 3. **Pokaz userowi format:**
 
 ```
-─── [1/4] mapa-ai-tools-2026.md ───
+--- [1/4] mapa-ai-tools-2026.md ---
 Preview (pierwsze 3 linie):
   # Mapa narzedzi AI 2026
   > Claude, ChatGPT, Gemini, perplexity, LM Studio...
@@ -79,9 +79,14 @@ Twoja decyzja?
 
    **Opcja a (Raw/):**
    ```
-   mv _inbox/mapa-ai-tools-2026.md Wiedza/AI/Raw/2026-04-20-mapa-ai-tools.md
-   # Dodaj frontmatter jesli brak:
+   Przenieś przez narzędzie plikowe albo Python pathlib/shutil:
+   _inbox/mapa-ai-tools-2026.md -> Wiedza/AI/Raw/2026-04-20-mapa-ai-tools.md
+   Dodaj frontmatter, jeśli brak, zachowując flagi prywatności:
    ---
+   typ_wiedzy: fakt
+   tematy: [narzedzia-ai]
+   podmioty: []
+   ai_summary: "Materiał źródłowy opisujący narzędzia AI."
    title: "Mapa narzedzi AI 2026"
    source: "_inbox"
    ingested: 2026-04-20
@@ -92,12 +97,12 @@ Twoja decyzja?
    **Opcja b (Wiki/):** analogicznie, do `Wiki/`.
 
    **Opcja c (projekt):** zapytaj ktory projekt (lista z `Projekty/<kategoria>/`).
-   Po wyborze: mv do projekt/ + update README projektu.
+   Po wyborze: przenieś do projektu i zastosuj zatwierdzony diff README.
 
    **Opcja d (nowy projekt):** wywolaj `/aios:stworz-projekt` inline - zapytaj nazwe i
-   kategorie. Po utworzeniu projektu mv pliku do nowego folderu.
+   kategorię. Po zgodzie na przeniesienie umieść plik w nowym folderze.
 
-   **Opcja e (Kosz):** mv do `Kosz/<YYYY-MM-DD>-<filename>`. User sam sobie usunie.
+   **Opcja e (Kosz):** po osobnym potwierdzeniu przenieś do `Kosz/<YYYY-MM-DD>-<filename>`, bez fizycznego usuwania.
 
    **Opcja s (skip):** nie ruszaj. Przejdz do nastepnego pliku.
 
@@ -117,7 +122,7 @@ Result: OK. Zaktualizowano Wiedza/AI/index.md.
 ### Krok 4: Podsumowanie
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 Koniec /sortuj.
 
 Przeniesiono: 3 pliki
@@ -130,14 +135,14 @@ Skip (zostaje w _inbox): 1
 Aktualizowane index.md: 3
 
 Log: _brudnopis/2026-04-20-sortuj.md
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 ```
 
 ## Zasady bezpieczenstwa
 
 - **NIGDY** nie rusza plikow bez explicite decyzji usera.
 - Zawsze proponuje `[s] Skip` - watpliwe pliki zostaja w inbox.
-- Usuniecie = mv do `Kosz/`, **nie** `rm`.
+- Przeniesienie do Kosz wymaga potwierdzenia i nie oznacza zgody na fizyczne usunięcie. Nie nadpisuj istniejącego celu; pokaż konflikt i uzgodnij nazwę.
 - Bez edycji tresci plikow (poza dodaniem frontmatter jesli go brakuje).
 - Jesli plik jest binarny (obraz, PDF, audio) - propozycje ograniczone do
   `Projekty/<projekt>/resources/` lub `Wiedza/Biblioteka/`.
@@ -149,3 +154,11 @@ Log: _brudnopis/2026-04-20-sortuj.md
 - `Projekty/index.md`
 - `_pamiec/DREAM.md`
 - `vault-map.md`
+
+## Zgodność z lokalnym RAG
+
+Przed zapisem wczytaj `_skille/rag.md`. Nowe notatki `.md` zaczynaj od YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`; zachowaj pola źródłowe i flagi prywatności. Dane prywatne i cytaty z prywatnych logów nie tracą ochrony podczas przetwarzania.
+
+Po zakończonej partii zatwierdzonych zapisów/przeniesień/usunięć uruchom lokalny `index` zgodnie z `_skille/rag.md`. Dotyczy to również nowych raportów, pamięci, `index.md` i plików zadań. `--vault` podaj przed `index`. Przy błędzie zachowaj źródła, zgłoś indeks jako nieaktualny/niedostępny i pracuj na plikach. Nie uruchamiaj indeksowania w samym podglądzie lub po anulowaniu; nie wysyłaj danych do Pinecone automatycznie.
+
+Mechaniczne operacje wykonuj przez narzędzie plikowe lub Python `pathlib`/`shutil`, bez wymogu bash, `mv` lub `rg`. Używaj interpretera vaulta: `.venv/bin/python` na macOS/Linux albo `.venv/Scripts/python.exe` na Windows. Nie nadpisuj celu przeniesienia; zatwierdzenie edycji nie zastępuje osobnej zgody na przeniesienie/usunięcie lub zapis zewnętrzny.

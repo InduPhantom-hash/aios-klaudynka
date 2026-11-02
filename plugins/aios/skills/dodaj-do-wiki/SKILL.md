@@ -22,7 +22,7 @@ User poda ścieżkę pliku z `Wiedza/<temat>/Raw/`, np.:
 
 ## Krok 2: Zmapuj na istniejące wiki
 
-1. Przeczytaj `Wiedza/<temat>/Wiki/index.md`
+1. Sprawdź lokalnym RAG według `_skille/rag.md`, czy temat ma już stronę; otwórz źródło. Następnie przeczytaj `Wiedza/<temat>/Wiki/index.md`. Przy braku RAG użyj lokalnych indeksów.
 2. Dla każdego pojęcia z kroku 1: czy istnieje strona?
    - **TAK** → kandydat do aktualizacji
    - **NIE** → kandydat na nową stronę
@@ -42,6 +42,10 @@ Dla pojęć bez strony w Wiki:
 1. Stwórz `Wiedza/<temat>/Wiki/<nazwa-kebab>.md` z frontmatter:
    ```yaml
    ---
+   typ_wiedzy: fakt
+   tematy: [lista, tagow]
+   podmioty: []
+   ai_summary: "Krótkie streszczenie treści strony oparte na źródle."
    tags: [lista, tagow]
    aktualizacja: YYYY-MM-DD
    zrodla: [src-NN]
@@ -49,7 +53,7 @@ Dla pojęć bez strony w Wiki:
    ```
 2. Struktura: `# Tytuł` → definicja → kluczowe punkty → szczegóły → `## Powiązane` z linkami `[[inna-strona]]`
 3. Zasada: jedno pojęcie = jedna strona. Atomowo, nie encyklopedycznie.
-4. Poinformuj usera: "Tworzę stronę [[nazwa]] - ok?"
+4. Nową stronę utwórz w zatwierdzonym zakresie i poinformuj o ścieżce. Przed zmianą istniejącego indeksu lub logu pokaż diff i uzyskaj zgodę na całą partię zmian.
 
 ## Krok 5: Zaktualizuj index.md
 
@@ -72,10 +76,10 @@ Dodaj nowe strony alfabetycznie lub tematycznie:
 
 Jednolinijkowy raport:
 ```
-Zingestowane src-NN. Zaktualizowane: N stron. Nowe: M stron. Reindex Pinecone? y/n
+Przetworzono src-NN. Zaktualizowane: N stron. Nowe: M stron. Lokalny indeks: [wynik].
 ```
 
-Nie uruchamiaj Pinecone automatycznie - user decyduje kiedy.
+Po zakończeniu zatwierdzonej partii zapisów odśwież lokalny RAG według `_skille/rag.md`. Pinecone wymaga odrębnej, jawnej prośby; nie proponuj go jako zwykłego odświeżenia.
 
 ## Zasady których nie łam
 
@@ -83,3 +87,11 @@ Nie uruchamiaj Pinecone automatycznie - user decyduje kiedy.
 - Nie twórz nowych stron dla pojęć już opisanych gdzie indziej - preferuj update
 - Nie kasuj starej treści - uzupełniaj i koryguj z notą źródła
 - Nie łącz dwóch tematów w jedną stronę na siłę
+
+## Zgodność z lokalnym RAG
+
+Przed zapisem wczytaj `_skille/rag.md`. Nowe notatki `.md` zaczynaj od YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`; zachowaj pola źródłowe i flagi prywatności. Dane prywatne i cytaty z prywatnych logów nie tracą ochrony podczas przetwarzania.
+
+Po zakończonej partii zatwierdzonych zapisów/przeniesień/usunięć uruchom lokalny `index` zgodnie z `_skille/rag.md`. Dotyczy to również nowych raportów, pamięci, `index.md` i plików zadań. `--vault` podaj przed `index`. Przy błędzie zachowaj źródła, zgłoś indeks jako nieaktualny/niedostępny i pracuj na plikach. Nie uruchamiaj indeksowania w samym podglądzie lub po anulowaniu; nie wysyłaj danych do Pinecone automatycznie.
+
+Mechaniczne operacje wykonuj przez narzędzie plikowe lub Python `pathlib`/`shutil`, bez wymogu bash, `mv` lub `rg`. Używaj interpretera vaulta: `.venv/bin/python` na macOS/Linux albo `.venv/Scripts/python.exe` na Windows. Nie nadpisuj celu przeniesienia; zatwierdzenie edycji nie zastępuje osobnej zgody na przeniesienie/usunięcie lub zapis zewnętrzny.

@@ -387,7 +387,7 @@ if __name__ == "__main__":
     from distiller import distill_session
     from scanner import scan_all_sessions
 
-    target_repo = Path("/Users/phantom/Documents/AIOS-Vault")
+    target_repo = Path.cwd()
     agents_file = target_repo / "AGENTS.md"
     ledger = GapLedger()
     sessions = scan_all_sessions(target_repo, since="7d", max_sessions=2)

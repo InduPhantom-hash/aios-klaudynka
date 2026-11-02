@@ -39,15 +39,14 @@ Napisz "ok" lub podaj poprawki.
 Po zatwierdzeniu przez użytkownika:
 
 1. **Dla zadań z przypisanym projektem:**
-   - Otwórz plik `Projekty/<kategoria>/<projekt>/zadania.md`. Jeśli nie istnieje – utwórz z szablonu `_szablony/zadania.md`.
+   - Otwórz plik `Projekty/<kategoria>/<projekt>/zadania.md`. Jeśli nie istnieje - utwórz z szablonu `_szablony/zadania.md`.
    - Dopisz nową pozycję `- [ ] <treść zadania>` pod sekcją `## DO ZROBIENIA`.
 2. **Dla zadań ogólnych / bez projektu:**
    - Dopisz do `_pamiec/zadania-log.md`.
 
 ## Krok 4: Eksport do zewnętrznego bliźniaka (Opcjonalnie)
 
-Jeśli w `me.md` w sekcji `## Bliźniaki -> Task tracker` użytkownik skonfigurował zewnętrzny tracker (ClickUp, Linear, Notion):
-- Wywołaj odpowiednie narzędzie API (`clickup_create_task`, `linear`, `notion`), aby utworzyć powiązane zadanie.
+Jeśli użytkownik jawnie poprosił o eksport do skonfigurowanego trackera, pokaż payload: tytuły, opisy, projekt/listę i zakres przesyłanych danych. Po zgodzie odkryj właściwe narzędzie API i utwórz zadania. Sama konfiguracja w `me.md` nie oznacza zgody na zewnętrzny zapis; bez integracji lokalny tracker działa nadal.
 
 ## Krok 5: Raport końcowy
 
@@ -55,3 +54,11 @@ Jedna zwięzła linia:
 ```text
 Dodano N zadań do lokalnego trackera (Projekty/.../zadania.md).
 ```
+
+## Zgodność z lokalnym RAG
+
+Przed zapisem wczytaj `_skille/rag.md`. Nowe notatki `.md` zaczynaj od YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`; zachowaj pola źródłowe i flagi prywatności. Dane prywatne i cytaty z prywatnych logów nie tracą ochrony podczas przetwarzania.
+
+Po zakończonej partii zatwierdzonych zapisów/przeniesień/usunięć uruchom lokalny `index` zgodnie z `_skille/rag.md`. Dotyczy to również nowych raportów, pamięci, `index.md` i plików zadań. `--vault` podaj przed `index`. Przy błędzie zachowaj źródła, zgłoś indeks jako nieaktualny/niedostępny i pracuj na plikach. Nie uruchamiaj indeksowania w samym podglądzie lub po anulowaniu; nie wysyłaj danych do Pinecone automatycznie.
+
+Mechaniczne operacje wykonuj przez narzędzie plikowe lub Python `pathlib`/`shutil`, bez wymogu bash, `mv` lub `rg`. Używaj interpretera vaulta: `.venv/bin/python` na macOS/Linux albo `.venv/Scripts/python.exe` na Windows. Nie nadpisuj celu przeniesienia; zatwierdzenie edycji nie zastępuje osobnej zgody na przeniesienie/usunięcie lub zapis zewnętrzny.

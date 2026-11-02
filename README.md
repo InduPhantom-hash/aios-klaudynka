@@ -1,93 +1,64 @@
 # AIOS-Klaudynka
 
-![AIOS Klaudynka - Personal Agentic OS](./assets/aios-klaudynka-banner.jpg)
+![AIOS Klaudynka](assets/aios-klaudynka-banner.jpg)
 
-> Personalny Agentic OS oparty na plikach (`File Over AI`) i deterministycznych skryptach (`Code Over AI`). Twoje AI uczy się ciebie z **twojego** profilu `me.md`, wykonuje zadania w lokalnych plikach Markdown bez zbędnych kosztów API, samodoskonali swoje instrukcje metodą Gradient Descent (`/aios:backpass`) i pozwala wymieniać modele AI bez utraty wiedzy.
+Klaudynka przechowuje wiedzę, profil i zadania w plikach Markdown. Lokalny RAG wyszukuje fragmenty notatek po znaczeniu, korzystając z LanceDB i embeddingów BGE-M3. Źródłem prawdy pozostają pliki, a model AI możesz zmienić bez przenoszenia wiedzy.
 
-**Status:** v0.6.0 (Release). 14 skilli core + opcjonalny plugin `aios-meta`. Publiczne repozytorium pod licencją MIT.
+**Stan: 0.7.0, kandydat do wydania.** 14 skilli podstawowych i 4 opcjonalne skille meta. Zakres: nowe instalacje. Migracja starszych vaultów pozostaje poza tym wydaniem.
 
-**Dla kogo:** [Marketing Manager](docs/przyklady/marketing-manager.md), [Developer](docs/przyklady/developer.md), [Student](docs/przyklady/student-programowania.md), produktowiec - każdy, kto pracuje z AI (Antigravity, Claude Code, Cursor, Codex, OpenHand, Gemini CLI) i chce, aby system natychmiast rozumiał jego styl pracy oraz porządkował wiedzę, zadania i pamięć lokalnie.
+## Co otrzymujesz
 
----
+- Lokalny indeks wektorowy, pytania PL/EN, filtry obszaru i typu oraz wyniki ze wskazaniem źródła.
+- Aktualizację indeksu po zatwierdzonych zmianach plików. Nieudana aktualizacja zachowuje ostatnią poprawną bazę; wyszukiwarka odmawia zwracania nieaktualnych fragmentów.
+- Przenośny profil `me.md`, instrukcje `AGENTS.md`, pamięć sesji i zadania w `zadania.md`.
+- Backpass: analizę logów i propozycje poprawy instrukcji wymagające zatwierdzenia.
+- CLI oraz MCP. Brak MCP pozwala korzystać z CLI i procedur zapisanych w plikach.
 
-## Co wyróżnia Klaudynkę (Filozofia Systemu)
+Indeks i embeddingi działają lokalnie. **Wybrane fragmenty otrzymuje używany agent**, który może działać w chmurze. Instalacja wymaga pobrania zależności i modelu; lokalny RAG działa bez internetu po ich przygotowaniu. Research, kalendarze i trackery mają własne zależności sieciowe.
 
-1. **File Over AI:** Twój vault to trwałe pliki `.md` na Twoim dysku. Możesz je czytać w Obsidianie, VS Code, terminalu czy edytorze tekstu. AI jest narzędziem do ich pielęgnacji - nie właścicielem Twoich danych.
-2. **Code Over AI:** Mechaniczne operacje (agregacja zadań, odszumianie logów, przeszukiwanie plików, sprawdzanie budżetu tokenów) wykonują natywne komendy systemowe i skrypty Python. AI nie marnuje Twoich tokenów na pętle myślenia tam, gdzie wystarczy deterministyczny skrypt.
-3. **AIOS Backpass (Gradient Descent dla pamięci agentów):** Zamiast dopisywać reguły pod wpływem chwili, system analizuje prawdziwe logi sesji na dysku, rejestruje luki w ledgerze (wymóg min. 2 sesji), pilnuje sztywnego budżetu tokenów i proponuje małe, poparte dowodami diffy do Twojego zatwierdzenia.
-4. **Natywny AIOS Task Tracker (100% Offline):** Wszystkie zadania żyją w prostych plikach `zadania.md` wewnątrz Twoich projektów. Zero wymogu posiadania płatnych kont w zewnętrznych narzędziach.
-5. **Szybki Onboarding (`/aios:init --quick`):** 10-15-minutowy proces (12 kluczowych pytań) buduje Twój przenośny profil `me.md` oraz zasady komunikacji. Dostępny jest także tryb pełny (`--full`).
-6. **Wieloplatformowość:** Działa natywnie z Antigravity, Claude Code, Cursor, Codex i OpenHand dzięki ujednoliconemu plikowi `AGENTS.md`, `bootstrap-prompt.md` oraz skryptom CLI.
+## Instalacja
 
----
+Wklej swojemu agentowi:
 
-## Lista Skilli (Plugin `aios` - 14 skilli)
+> Zainstaluj mi AIOS-Klaudynkę z https://github.com/InduPhantom-hash/aios-klaudynka. Przeczytaj INSTALL.md i wykonaj kroki dla nowego vaulta z lokalnym RAG.
 
-| Skill | Co robi |
+Wymagania: Python 3.11+, Git, LM Studio z modelem embeddingowym BGE-M3 oraz agent mający dostęp do plików i terminala. RAG stanowi domyślną ścieżkę instalacji. Brak modelu daje jawny status niepełnej konfiguracji; nadal można czytać pliki i używać lokalnego trackera.
+
+Docelowe systemy to macOS, Windows i Linux. LM Studio wymaga m.in. Apple Silicon na macOS, a na x64 procesora z AVX2. Sprawdź [wymagania producenta](https://lmstudio.ai/docs/app/system-requirements). Nie deklarujemy obsługi wszystkich architektur.
+
+**Dowody i ograniczenia:** [raport odbioru](docs/odbior-0.7.0.md) i [macierz 18 skilli](docs/zgodnosc-skilli.md). Testy automatyczne procedur nie dowodzą wykonania każdego skilla przez każdy model AI. Natywne komendy pluginu Claude Code oraz ręczne wywołanie pliku SKILL.md to odrębne ścieżki.
+
+Instrukcje: [instalacja](INSTALL.md), [RAG i prywatność](docs/rag.md), [zmiany](CHANGELOG.md).
+
+## Skille
+
+| Skill core | Zastosowanie |
 |---|---|
-| `/aios:init` | Onboarding - buduje profil `me.md`, strukturę vaulta i Task Trackera (`--quick` / `--full`). |
-| `/aios:backpass` | **NOWOŚĆ:** Samodoskonalenie instrukcji `AGENTS.md` metodą Gradient Descent z logów sesji na dysku. |
-| `/aios:pomysl-do-promptu` | Prowadzenie od surowego pomysłu do specyfikacji PRD, makiet i promptu dla Vibe Coding. |
-| `/aios:sortuj` | Interaktywne sortowanie wrzutek z `_inbox/` do docelowych folderów. |
-| `/aios:stworz-projekt` | Promocja pomysłu z `_brudnopis/` do pełnej struktury projektu w `Projekty/`. |
-| `/aios:dodaj-do-wiki` | Pipeline wiedzy (metoda Karpathy): surowiec z `Wiedza/Raw/` → strona w `Wiedza/Wiki/`. |
-| `/aios:szukaj` | Hierarchiczne i skryptowe wyszukiwanie w vaulcie. |
-| `/aios:koniec-sesji` | Zapis transkryptu do `_brudnopis/` i aktualizacja pamięci `_pamiec/aktualny.md`. |
-| `/aios:kontynuuj` | Wczytuje kontekst z poprzedniej sesji z gotowym briefingiem. |
-| `/aios:dzien` | Briefing dnia: kalendarze Google + aktywne zadania z `zadania.md` (ripgrep) + focus. |
-| `/aios:core-update` | Audyt i aktualizacja plików nawigacyjnych AIOS, higiena vaulta. |
-| `/aios:research` | Deep research → wynik trafia do `Wiedza/<obszar>/Raw/`. |
-| `/aios:ingest-article` | Pobieranie i czyszczenie artykułu z podanego URL do `Wiedza/<obszar>/Raw/`. |
-| `/aios:zadania` | Wyciąganie zadań z sesji i zapis do lokalnego `Projekty/<nazwa>/zadania.md` (z opcją ClickUp/Notion). |
+| `init` | Profil, onboarding quick/full, prywatność i pierwszy indeks |
+| `backpass` | Propozycje poprawy instrukcji na podstawie logów |
+| `pomysl-do-promptu` | Pomysł, wymagania i prompt do budowy produktu |
+| `sortuj` | Porządkowanie wrzutek i aktualizacja indeksu |
+| `stworz-projekt` | Struktura nowego projektu |
+| `dodaj-do-wiki` | Opracowanie źródeł w strony wiedzy |
+| `szukaj` | Lokalny RAG, odczyt źródeł i fallback plikowy |
+| `koniec-sesji` | Zapis sesji i aktualizacja pamięci |
+| `kontynuuj` | Powrót do ostatniego stanu pracy |
+| `dzien` | Zadania dnia i opcjonalny kalendarz |
+| `core-update` | Audyt nawigacji i odświeżenie lokalnego indeksu |
+| `research` | Research wymagający dostępu do źródeł zewnętrznych |
+| `ingest-article` | Pobranie artykułu i zapis źródła |
+| `zadania` | Lokalny tracker i opcjonalny eksport |
 
-### Opcjonalny Plugin `aios-meta` (4 skille higieniczne)
-- `/aios-meta:audyt-luk` - skanuje vault pod kątem brakujących plików README i spójności.
-- `/aios-meta:mcp-health` - weryfikacja dostępności serwerów MCP.
-- `/aios-meta:synchronizuj` - porównywanie stanu vaulta z zewnętrznymi narzędziami.
-- `/aios-meta:wizualizuj-vault` - generowanie diagramu drzewa vaulta.
+Plugin `aios-meta` zawiera `audyt-luk`, `mcp-health`, `synchronizuj`, `wizualizuj-vault`. Doinstalowanie opcjonalne. Badanie zewnętrznych źródeł i zapis do zewnętrznych usług wymagają właściwej integracji oraz zgody na zapis.
 
----
+## Pliki i przenośność
 
-## Struktura Vaulta (`vault-template/`)
+`vault-template/` zawiera strukturę wiedzy, pamięci i projektów, skrypty Python oraz konfigurację RAG. Instalator kopiuje też procedury skilli do `_skille/`. Profil powstaje podczas onboardingu. Indeks `.aios/rag/` i środowisko `.venv/` są danymi lokalnymi wykluczonymi z Git; nie kopiuj ich między komputerami.
 
-```text
-AIOS-Vault/
-├── me.md                  ← profil użytkownika i hard rules (generowany przez /aios:init)
-├── AGENTS.md              ← SSOT instrukcji operacyjnych dla wszystkich agentów AI
-├── CLAUDE.md              ← 1-liniowy redirect do AGENTS.md
-├── bootstrap-prompt.md    ← prompt startowy dla środowisk AI
-├── vault-map.md           ← mapa sitemap vaulta
-├── _skille/               ← reguły języka polskiego (jezyk-pl.md), filtry Anty-Slop i aios-backpass.md
-├── _skrypty/              ← narzędzia deterministyczne CLI (w tym aios-backpass)
-├── _szablony/             ← szablony zadań, briefów i rejestru decyzji
-├── _inbox/                ← skrzynka wrzutowa na surowe notatki
-├── _brudnopis/            ← transkrypty i dzienne myślenie na głos
-├── _pamiec/               ← skonsolidowana pamięć (aktualny.md, DREAM.md)
-├── _Archiwum/             ← zarchiwizowane projekty i dead-endy
-├── Kosz/                  ← bufor przed usunięciem
-├── Projekty/              ← projekty z podziałem na kategorie (z plikami zadania.md)
-└── Wiedza/                ← baza wiedzy (Raw/ oraz Wiki/)
-```
+Nie indeksujemy domyślnie stref prywatnych, transkryptów, archiwów, sekretów ani plików technicznych. Reguły możesz rozszerzyć w `_config/rag.json`. Nie włączamy automatycznej synchronizacji z chmurą ani harmonogramu indeksowania.
 
----
-
-## Szybki start (Instalacja jednym promptem)
-
-Wklej poniższe polecenie swojemu agentowi AI (Claude Code, Cursor, Antigravity, Gemini CLI):
-
-> `Zainstaluj mi AIOS-Klaudynkę z https://github.com/InduPhantom-hash/aios-klaudynka. Przeczytaj INSTALL.md i wykonaj kroki.`
-
-AI pobierze szablon, przygotuje strukturę i uruchomi 10-15-minutowy onboarding (`/aios:init --quick`), który zbuduje Twój spersonalizowany profil `me.md`.
-
-### Wymagania wstępne
-- Dowolne środowisko Agentic AI z dostępem do plików i konsoli (Claude Code, Cursor, Antigravity, Gemini CLI, OpenHand).
-- Python 3.9+ oraz `git`.
-- Opcjonalnie: darmowa aplikacja [Obsidian](https://obsidian.md/) lub edytor Markdown do przeglądania bazy wiedzy.
-
-Pełna instrukcja techniczna krok po kroku oraz rozwiązywanie problemów: [`INSTALL.md`](./INSTALL.md).
-
----
+Przykładowe fikcyjne profile: [marketing](docs/przyklady/marketing-manager.md), [developer](docs/przyklady/developer.md), [student](docs/przyklady/student-programowania.md).
 
 ## Licencja
 
-MIT. Copyright (c) 2026 Jakub Orłowski.
+[MIT](LICENSE). Copyright (c) 2026 Jakub Orłowski. Wagi modelu i narzędzia zewnętrzne mają odrębne warunki dystrybucji; repozytorium nie zawiera wag ani danych autora.

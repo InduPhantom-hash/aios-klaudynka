@@ -58,3 +58,7 @@ Profil psychologiczny AI-readable w me.md. Uczelnia, oceny, sprawy prywatne - `_
 - Źródło FRIS: trainer psychologiczny uczelni, 2025-10
 - Źródło Clifton: Gallup raport kupiony samodzielnie, 2025-11
 - Wygenerowane przez: AIOS-Klaudynka v0.2 (/aios:init, sekcje A-J + FIN). Dodane pytanie F-osi "tłumacz terminy" jako hard rule spoza standardowej siatki.
+
+## Lokalny RAG w Klaudynce 0.7.0
+
+To profil fikcyjny, nie gotowy status instalacji. Domyślna konfiguracja RAG znajduje się w `_config/rag.json`: LanceDB, lokalny BGE-M3 i wykluczone strefy prywatne. Agent korzysta z MCP `rag-vault` albo CLI. Status modelu, indeksu i zapytania sprawdź po instalacji; nie kopiuj deklaracji gotowości z przykładu. Dodatkowe granice prywatności tego profilu przenieś do `private_paths` przed pierwszym indeksem.

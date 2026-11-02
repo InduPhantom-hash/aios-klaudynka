@@ -27,9 +27,9 @@ class TestScanner(unittest.TestCase):
         self.assertEqual(parse_duration_to_seconds("2w"), 14 * 86400.0)
 
     def test_path_relation(self):
-        target = Path("/Users/phantom/Documents/AIOS-Vault")
-        sub = "/Users/phantom/Documents/AIOS-Vault/Projekty/Zew"
-        unrelated = "/Users/phantom/Downloads"
+        target = Path(tempfile.gettempdir()) / "example-vault"
+        sub = str(target / "Projekty" / "Przyklad")
+        unrelated = str(target.parent / "other-directory")
         self.assertTrue(is_path_related(sub, target))
         self.assertFalse(is_path_related(unrelated, target))
 

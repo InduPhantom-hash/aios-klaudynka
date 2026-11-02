@@ -13,7 +13,7 @@
 > **Uwagi dla AI:** <dodatkowy kontekst dla wykonawcy>
 > ```
 
-**Status wersji:** v0.3.0 (Bliźniaki - E10-E13 opcjonalne, 57 obligatoryjnych + 4 opcjonalne = 61 max).
+**Status wersji:** 0.7.0. Lokalne RAG domyślnie, prywatność przed pierwszym indeksem, integracje zewnętrzne opcjonalne. Liczba pytań zależy od trybu i odpowiedzi; nie deklaruj stałego czasu ukończenia. Poniżej zachowano historię wcześniejszych wersji.
 
 **Zmiany v0.3.0 vs v0.2.2 (2026-04-25):**
 - Dodane E10-E13 (Bliźniaki) - opcjonalne, batch po Sekcji E-Stos. Generują blok `## Bliźniaki` w me.md.
@@ -205,7 +205,7 @@
 
 **Cel sekcji:** wygenerować kategorie w `Projekty/`. Nie konkretne projekty - tylko kategorie.
 
-**Mechanika archetypów (decyzja 2026-04-21):** po D1-D5 skill pokazuje 1-2 pasujące archetypy z `docs/przyklady/` (marketing manager / developer / student programowania) jako inspirację - "oto jak wygląda vault marketing managera o podobnym profilu". User może z nich korzystać albo nie.
+**Mechanika archetypów (decyzja 2026-04-21):** po D1-D5 skill pokazuje 1-2 pasujące archetypy z `_skille/dokumentacja/przyklady/` (marketing manager / developer / student programowania) jako inspirację - "oto jak wygląda vault marketing managera o podobnym profilu". User może z nich korzystać albo nie.
 
 ### D1 - Obszary
 
@@ -242,7 +242,7 @@
 
 ## Sekcja E - Stos technologiczny (8 pytań)
 
-**Cel sekcji:** ustalić środowisko pracy + decyzja o Pinecone.
+**Cel sekcji:** ustalić środowisko pracy, potwierdzić lokalny RAG i opcjonalne integracje. Parametry techniczne RAG pozostają w `_config/rag.json`.
 
 ### E1 - OS
 
@@ -272,22 +272,18 @@
 **Warianty:** 1. Claude Code, 2. Claude Desktop (Cowork), 3. Cursor, 4. inne
 **Generuje:** dopisuje do `## Stack`: "Główny AI: $ai." Używane przez pozostałe skille (np. `/aios:koniec-sesji` dostosowuje format logów do tego AI).
 
-### E5 - Pinecone
+### E5 - Domyślny lokalny RAG
 
-**Pytanie:** Pinecone jako baza wektorowa dla semantic search w vaulcie?
-**Typ odpowiedzi:** wybór z listy
-**Warianty:** 1. tak (skonfigurujemy teraz), 2. nie (zostaje hierarchiczny search po index.md), 3. zdecyduję później
-**Default:** zdecyduję później
-**Generuje:** jeśli 1 - aktywuje krok FIN4 (setup Pinecone); jeśli 3 - dopisuje w me.md Stack "Pinecone: planowany do konfiguracji"; jeśli 2 - pomija Pinecone w me.md.
-**Uwagi dla AI:** nie blokuj onboardingu na tym. Default "zdecyduję później" bezpieczny.
+**Akcja AI:** sprawdź środowisko `.venv`, `_config/rag.json`, model BGE-M3 i dostępne capabilities MCP według `_skille/rag.md`. Nie pytaj użytkownika o fakty, które można odczytać z instalacji. Domyślny stos to lokalny LanceDB + BGE-M3 przez LM Studio.
+**Pytanie tylko przy brakującym modelu:** „Model BGE-M3 nie jest jeszcze gotowy. Skonfigurować go teraz czy dokończyć profil i wrócić do niego później?”
+**Default:** przygotuj model teraz w zakresie instalacji; przy odroczeniu zachowaj konfigurację i zgłoś RAG jako niegotowy. Pliki i lokalne zadania pozostają dostępne.
+**Generuje:** w `## Stack` informacja „RAG: lokalny LanceDB + BGE-M3; konfiguracja w `_config/rag.json`”. Stan gotowości podaj dopiero po `index`, `status` i rzeczywistym `query` z odczytem źródła. Pusty indeks nie dowodzi gotowości modelu.
+**Prywatność:** przed pierwszym indeksem zastosuj granice z B/H. Dane objęte `private_paths`, `rag: false`, `private: true` lub `prywatne: true` nie trafiają do indeksu. Nie używaj chmurowego embeddingu.
 
-### E6 - Konto Pinecone
+### E6 - Pinecone wyłącznie na jawne żądanie
 
-**Pytanie:** Masz już konto na pinecone.io?
-**Typ odpowiedzi:** tak/nie
-**Warunkowe:** tylko jeśli E5 = tak
-**Generuje:** zapisuje `$ma_pinecone_konto` do bufora. Jeśli nie - w kroku FIN4 AI pokaże pełną ścieżkę (rejestracja, index, API key). Jeśli tak - tylko "wygeneruj API key i skopiuj".
-**Uwagi dla AI:** jeśli nie - w kroku FIN4 AI pokaże jak założyć konto (kroki: rejestracja, utwórz index, skopiuj API key).
+**Warunkowe:** pomiń tę integrację, chyba że użytkownik sam poprosi o Pinecone lub wskaże już używaną konfigurację. Nie proponuj jej jako wymaganego etapu onboardingu ani zastępstwa za niedostępny lokalny RAG.
+**Generuje:** tylko informację o istniejącej integracji, jeśli użytkownik chce jej używać. Nie twórz konta ani indeksu, nie proś o klucz do `me.md` i nie wysyłaj vaulta do chmury. Każdy zewnętrzny zapis wymaga pokazania payloadu/zakresu i osobnej zgody.
 
 ### E7 - Git
 
@@ -295,7 +291,7 @@
 **Typ odpowiedzi:** wybór z listy
 **Warianty:** 1. tak, 2. nie, 3. jeszcze nie wiem
 **Default:** nie
-**Generuje:** zapisuje `$git_choice` do bufora. Jeśli 1 - w FIN3 tworzy `.gitignore` z `_pamiec/onboarding-progress.md`, `_brudnopis/`, i (jeśli H3=tak) `Prywatne/`. Inicjuje `git init` w FIN2 (za zgodą J2). Dopisuje do `## Stack`: "Git: $git_choice."
+**Generuje:** zapisuje `$git_choice` do bufora. Jeśli 1 - w FIN3 tworzy `.gitignore` z `.venv/`, `.aios/`, `_config/mcp-rag.json`, `_pamiec/onboarding-progress.md`, `_brudnopis/` oraz prywatnymi ścieżkami użytkownika. Inicjuje `git init` w FIN2 (za zgodą J2). Dopisuje do `## Stack`: "Git: $git_choice."
 
 ### E8 - Inne narzędzia
 
@@ -337,13 +333,13 @@
 Jeśli user nie podał mapowania - wstaw "(uzupełnij ręcznie)" w kolumnie listy.
 **Uwagi dla AI:** nie pytaj o API key ani list_id teraz - te techniczne wartości user uzupełni ręcznie po onboardingu. Wystarczy URL workspace i nazwy list/projektów.
 
-### E12 - Tavily (semantic search i ingest)
+### E12 - Opcjonalne wyszukiwanie internetu i pobieranie stron
 
-**Pytanie:** Masz klucz Tavily API? (Potrzebny dla `/aios:research` i `/aios:ingest-article`.)
+**Pytanie:** Czy używasz już wyszukiwarki lub ekstraktora stron, np. Tavily? Research może korzystać z dostępnego wyszukiwania i fetch; lokalne wyszukiwanie vaulta działa niezależnie przez RAG.
 **Typ odpowiedzi:** wybór z listy
 **Warianty:** 1. tak (mam), 2. nie (nie potrzebuję tych skilli), 3. co to jest Tavily?
 **Default:** nie
-**Generuje:** jeśli 1 - dopisuje w `## Bliźniaki → ### Search & ingest`: "- tavily: tak". Jeśli 2 - "- tavily: nie". Jeśli 3 - wyjaśnij: "Tavily to API do przeszukiwania internetu i wyciągania treści stron - używa go skill `/aios:research` (deep research na temat) i `/aios:ingest-article` (wyciągnij artykuł z URL do Wiedzy). Konto darmowe na tavily.com. Możesz pominąć teraz i uzupełnić ręcznie w me.md later." Po wyjaśnieniu pytaj ponownie (1 lub 2).
+**Generuje:** jeśli 1 - dopisuje w `## Bliźniaki → ### Search & ingest`: "- tavily: tak". Jeśli 2 - "- tavily: nie"; nie wyłączaj przez to lokalnego RAG ani dostępnych alternatyw researchu. Jeśli 3 - wyjaśnij: "Tavily to API do przeszukiwania internetu i wyciągania treści stron - używa go skill `/aios:research` (deep research na temat) i `/aios:ingest-article` (wyciągnij artykuł z URL do Wiedzy). Aktualne warunki i ewentualny koszt sprawdź przed konfiguracją; nie zakładaj darmowego konta. Możesz pominąć teraz i uzupełnić ręcznie w me.md later." Po wyjaśnieniu pytaj ponownie (1 lub 2).
 **Uwagi dla AI:** klucza API NIE przechowuj w me.md - tylko flagę tak/nie. Klucz idzie do konfiguracji MCP klienta AI (np. `~/.claude/settings.json`), nie do vaulta.
 
 ### E13 - Google Calendar
@@ -359,7 +355,7 @@ Jeśli user nie podał mapowania - wstaw "(uzupełnij ręcznie)" w kolumnie list
 
 ## Sekcja F - Preferencje komunikacyjne (10 pytań)
 
-**Cel sekcji:** wygenerować **własne hard rules** dla tego usera, miksując elementy z `docs/szablony/style-komunikacji/`. To jest KLUCZOWE - każdy user generuje własny, spersonalizowany zestaw reguł, nie dziedziczy cudzych.
+**Cel sekcji:** wygenerować **własne hard rules** dla tego usera, miksując elementy z `_skille/dokumentacja/szablony/style-komunikacji/`. To jest KLUCZOWE - każdy user generuje własny, spersonalizowany zestaw reguł, nie dziedziczy cudzych.
 
 **Nota dla AI-wykonawcy:** każdy user generuje własne preferencje. Skill NIE narzuca frameworków Paul-Elder / Rapoport / steelmanowania - to są opcjonalne soczewki, nie domyślne.
 
@@ -370,7 +366,7 @@ Każde pytanie wybiera jedną z 2-3 osiowych preferencji. AI tłumaczy wybór na
 **Pytanie:** Wolisz konkret na początku odpowiedzi, czy kontekst wprowadzający?
 **Typ odpowiedzi:** wybór z listy
 **Warianty:** 1. konkret na początku (bez wstępu), 2. kontekst najpierw (żeby zrozumieć), 3. zależy od tematu
-**Szablon:** `szablony/style-komunikacji/konkret-vs-kontekst.md`
+**Szablon:** `_skille/dokumentacja/szablony/style-komunikacji/konkret-vs-kontekst.md`
 **Generuje:** hard rule w me.md (patrz tabela mapowania). Jeśli 1 - "Konkrety na początku. Bez wstępów typu 'oczywiście, chętnie pomogę'." Jeśli 2 - "Zacznij od kontekstu - co się dzieje, czego dotyczy, a potem konkret." Jeśli 3 - pomiń hard rule, dopisuj kontekstowo w zależności od pytania.
 **Uwagi dla AI:** to najważniejsza oś dla F. Nie proponuj defaultu - user sam wybiera.
 
@@ -379,7 +375,7 @@ Każde pytanie wybiera jedną z 2-3 osiowych preferencji. AI tłumaczy wybór na
 **Pytanie:** Na pytania decyzyjne - wolisz jedną rekomendację, czy pełny obraz opcji?
 **Typ odpowiedzi:** wybór z listy
 **Warianty:** 1. jedna rekomendacja (szybko zdecyduję), 2. pełny obraz 2-4 opcji (sam wybiorę), 3. zależy
-**Szablon:** `szablony/style-komunikacji/zwiezlosc-vs-pelny-obraz.md`
+**Szablon:** `_skille/dokumentacja/szablony/style-komunikacji/zwiezlosc-vs-pelny-obraz.md`
 **Generuje:** hard rule (patrz tabela). Dodatkowo zapisuje `$F2` do bufora - używane przez inne skille (np. `/aios:stworz-projekt` przy decyzji o strukturze).
 
 ### F3 - Spór vs współpraca
@@ -387,7 +383,7 @@ Każde pytanie wybiera jedną z 2-3 osiowych preferencji. AI tłumaczy wybór na
 **Pytanie:** Gdy twierdzę coś dyskusyjnego - chcesz żeby AI sparował czy raczej się dostosował?
 **Typ odpowiedzi:** wybór z listy
 **Warianty:** 1. sparuj uczciwie (debata merytoryczna), 2. dostosuj się (nie wiem jeszcze czego chcę), 3. zależy - pytaj
-**Szablon:** `szablony/style-komunikacji/spor-vs-wspolpraca.md`
+**Szablon:** `_skille/dokumentacja/szablony/style-komunikacji/spor-vs-wspolpraca.md`
 **Generuje:** hard rule (patrz tabela).
 
 ### F4 - Tolerancja krytyki
@@ -395,7 +391,7 @@ Każde pytanie wybiera jedną z 2-3 osiowych preferencji. AI tłumaczy wybór na
 **Pytanie:** Jak wysoką tolerancję masz na bezpośrednią krytykę swoich pomysłów?
 **Typ odpowiedzi:** wybór z listy
 **Warianty:** 1. wysoka (bezpośrednio, nie owijaj), 2. średnia (krytyka z uzasadnieniem), 3. niska (delikatnie, z afirmacją wpierw)
-**Szablon:** `szablony/style-komunikacji/tolerancja-krytyki.md`
+**Szablon:** `_skille/dokumentacja/szablony/style-komunikacji/tolerancja-krytyki.md`
 **Generuje:** hard rule (patrz tabela).
 
 ### F5 - Emoji
@@ -441,8 +437,8 @@ Każde pytanie wybiera jedną z 2-3 osiowych preferencji. AI tłumaczy wybór na
 
 **Pytanie:** Jest coś, co AI ma **zawsze** robić albo **nigdy**, a nie wychwyciły tego F1-F9?
 **Typ odpowiedzi:** wolny tekst (opcjonalne)
-**Generuje:** jeśli wypełnione - AI formułuje z tego 1-3 hard rules w trybie rozkazującym i pokazuje userowi do akceptacji przed wklejeniem do me.md. Np. user pisze "nigdy nie używaj myślnika —" - AI proponuje hard rule "Myślniki: tylko `-`, nigdy `—` ani `–`."
-**Uwagi dla AI:** to "escape hatch" - user może tu wpisać specyficzną preferencję, np. "nigdy nie używaj myślnika —, tylko -".
+**Generuje:** jeśli wypełnione - AI formułuje z tego 1-3 hard rules w trybie rozkazującym i pokazuje userowi do akceptacji przed wklejeniem do me.md. Np. user pisze "nigdy nie używaj myślnika -" - AI proponuje hard rule "Myślniki: tylko `-`, nigdy `-` ani `-`."
+**Uwagi dla AI:** to "escape hatch" - user może tu wpisać specyficzną preferencję, np. "nigdy nie używaj myślnika -, tylko -".
 
 ---
 
@@ -504,7 +500,8 @@ Każde pytanie wybiera jedną z 2-3 osiowych preferencji. AI tłumaczy wybór na
 **Pytanie:** Chcesz osobny folder `Prywatne/` wyłączony z git / synchronizacji?
 **Typ odpowiedzi:** tak/nie
 **Default:** tak jeśli E7 = tak, inaczej nie
-**Generuje:** jeśli tak - w FIN2 tworzy `Prywatne/` z pustym `index.md`. Jeśli E7=tak - dopisuje `Prywatne/` do `.gitignore`. Dopisuje do `## Prywatność`: "Folder `Prywatne/` istnieje i jest poza gitem." Prywatne projekty z D idą tutaj, a nie pod `Projekty/`.
+**Generuje:** jeśli tak - w FIN2 tworzy `Prywatne/` z `index.md` i dopisuje tę strefę do `_config/rag.json` -> `private_paths` przed pierwszym indeksem. Jeśli E7=tak - dopisuje też do `.gitignore`. W `me.md` opisz rzeczywistą ochronę; brak gita nie oznacza „poza gitem”. Prywatne projekty z D idą do zatwierdzonej strefy.
+**Granica RAG:** domyślne `Prywatne/**` i `Projekty/Prywatne/**` pozostają wykluczone. Dodatkowe prywatne foldery dopisz jako wzorce. Jeśli B1=prywatne albo użytkownik uznaje cały vault za prywatny, ustaw `private_paths: ["**"]`. Brak osobnego folderu nie jest zgodą na indeksowanie prywatnych treści. Nie pomijaj tej decyzji w trybie quick.
 
 ### H4 - Styl AI w prywatnym
 
@@ -524,7 +521,7 @@ Każde pytanie wybiera jedną z 2-3 osiowych preferencji. AI tłumaczy wybór na
 
 **Pytanie:** Jest coś, co AI ma **zawsze** pomijać nawet, gdybyś sam o to zagadnął? (Świadome granice - np. "nie komentuj zdrowia".)
 **Typ odpowiedzi:** wolny tekst (opcjonalne)
-**Generuje:** jeśli wypełnione - dopisuje do `## Hard rules` (nie do Prywatność, bo to obowiązuje globalnie): "Nigdy nie komentuj: $tabu. Nawet gdy sam o to zagadnę." To jest twardy opt-out (analogicznie do C5).
+**Generuje:** jeśli wypełnione - dopisuje do `## Hard rules`: "Nigdy nie komentuj: $tabu. Nawet gdy sam o to zagadnę." Odpowiadające temu lokalizacje notatek potwierdź i dodaj do `_config/rag.json` -> `private_paths` przed indeksem. Nie zgaduj ścieżek na podstawie samego tematu.
 
 ---
 
@@ -591,7 +588,7 @@ Każde pytanie wybiera jedną z 2-3 osiowych preferencji. AI tłumaczy wybór na
 **Typ odpowiedzi:** wybór z listy
 **Warianty:** 1. pokaż od razu, 2. zaufaj, sprawdzę sam
 **Default:** 1 (bezpieczniejsze w MVP)
-**Generuje:** jeśli 1 - w FIN5 AI otwiera `me.md` (przez link `computer://`) i czeka na reakcję usera przed raportem końcowym. Jeśli 2 - FIN5 od razu raport końcowy, user sam otwiera plik później.
+**Generuje:** jeśli 1 - w FIN5 AI otwiera `me.md` (przez obsługiwany link do lokalnego pliku lub narzędzie podglądu) i czeka na reakcję usera przed raportem końcowym. Jeśli 2 - FIN5 od razu raport końcowy, user sam otwiera plik później.
 
 ### J5 - Ostatnie słowo
 
@@ -689,19 +686,12 @@ Nie ma tabeli - AI formułuje 1-3 hard rules z wolnego tekstu usera, pokazuje pr
 
 ## Podsumowanie struktury
 
-- **Razem max:** 61 pytań (+ 3 meta-pytania w Kroku 0). Wzrost z 57 po dodaniu E10-E13 (Bliźniaki - decyzja 2026-04-25).
-- **Obligatoryjne sekcje:** A, B, D, E(E1-E8), F, G, I, J (44 pytania obligatoryjne).
-- **Warunkowe / opcjonalne:**
-  - C ścieżka z PDF (5 pytań C1-C5 + 2 uzupełniające C6-C7), zależne od `$MA_PROFILE_PDF = tak`.
-  - C ścieżka bez PDF (4 pytania C1'-C4'), zależne od `$MA_PROFILE_PDF = nie`.
-  - H (6 pytań, zależne od B1 = prywatne / hybryda).
-  - E Bliźniaki (E10-E13, 4 pytania, opcjonalne - user może pominąć; E11 warunkowe od E10 != żaden).
-  - Niektóre pytania warunkowe wewnątrz sekcji (np. B2 zależne od B1 = hybryda, E6 zależne od E5 = tak).
-- **Tryby czasowe:**
-  - Szybki (30 min): pomija C, pomija I (poza I4=nie), pomija E10-E13, skraca J do potwierdzenia defaultów → ~32 pytania.
-  - Standard (45 min): pełne A-G, I, J, H jeśli warunek spełniony, E10-E13 jeśli user chce → 44-56 pytań.
-  - Pełny (60 min): wszystkie pytania + upload PDF w C + E10-E13 → max 61.
+- Tryb quick zbiera profil, cele, projekty, komunikację i granice prywatności; pomija opcjonalną psychometrię i zewnętrzne integracje.
+- Tryb full używa wszystkich pasujących sekcji A-J. Pytania warunkowe pomijaj, gdy ich warunek nie zachodzi.
+- E5 jest sprawdzeniem lokalnej instalacji i modelu; pytanie zadaj tylko przy brakującym modelu. E6 dotyczy Pinecone wyłącznie po jawnym żądaniu użytkownika.
+- H/B określa prywatne ścieżki w `_config/rag.json` przed pierwszym indeksem. Ta granica obowiązuje w obu trybach.
+- Dokumenty referencyjne znajdują się w `_skille/dokumentacja/szablony/`, a przykłady w `_skille/dokumentacja/przyklady/`. Skilla init i sąsiedni plik pytań instalator kopiuje do `_skille/aios/skills/init/`.
 
-## Status
+## Zasady zapisu i odbioru 0.7.0
 
-v0.3.0 (2026-04-25) - E10-E13 dodane. Wszystkie pola `Generuje:` wypełnione (61/61 max). Tabela mapowania F→hard rules kompletna. Biblioteka `docs/szablony/style-komunikacji/` kompletna (9 plików). Szablon `docs/szablony/me-template.md` gotowy (v0.1, do aktualizacji o blok `## Bliźniaki`). `docs/szablony/blizniacy.md` - nowy (Faza 3). Archetypy w `docs/przyklady/` - 3 (marketing manager, developer, student programowania).
+Kroki FIN opisane wyżej realizuj według aktualnego `SKILL.md` skilla init. Nowe notatki `.md` zaczynają się od YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`; zachowuj metadane źródłowe i flagi prywatności. Granice z H/B zapisz w `_config/rag.json` przed pierwszym indeksem, także w trybie quick. Nie publikuj profilu ani nie konfiguruj automacji. Brak modelu lub MCP oznacz osobno; gotowość RAG wymaga prawdziwego zapytania i sprawdzenia źródła, a nie samej obecności katalogu indeksu.

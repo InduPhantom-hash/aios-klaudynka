@@ -27,8 +27,7 @@ sprawdz czy rozmawiamy on-the-fly (wtedy zrob zapis z tej sesji).
 
 ### 1. Walidacja
 
-1. Czy `<kategoria>` nalezy do `{Praca, Hobby, Prywatne, Vibe-coding}`?
-   Jesli nie - zatrzymaj, pytaj.
+1. Czy `<kategoria>` należy do kategorii zatwierdzonych w `Projekty/index.md`? Jeśli nie - uzgodnij ją przed utworzeniem. Przykładowe kategorie w input nie stanowią zamkniętej listy.
 2. Czy `Projekty/<kategoria>/<nazwa>/` juz istnieje? Jesli tak - pytaj:
    "zaktualizowac czy zmienic nazwe?"
 3. Czy user potwierdzil ze to jest PROJEKT (nie archiwum, nie dead-end)?
@@ -58,6 +57,10 @@ Stworz `README.md` z frontmatter:
 
 ```yaml
 ---
+typ_wiedzy: decyzja
+tematy: [projekt]
+podmioty: []
+ai_summary: "Cel i aktualny stan zatwierdzonego projektu."
 projekt: <nazwa>
 kategoria: <kategoria>
 status: aktywny
@@ -86,6 +89,13 @@ aktualizowane co sesje.
 `decyzje.md` - pusty log z naglowkiem:
 
 ```markdown
+---
+typ_wiedzy: decyzja
+tematy: [projekt]
+podmioty: []
+ai_summary: "Rejestr zatwierdzonych decyzji projektu."
+---
+
 # Decyzje projektowe - <nazwa>
 
 > Kluczowe decyzje z uzasadnieniem. Append-only.
@@ -94,6 +104,13 @@ aktualizowane co sesje.
 ### 5. Wypelnienie Wiki/index.md
 
 ```markdown
+---
+typ_wiedzy: kategoria
+tematy: [projekt, wiki]
+podmioty: []
+ai_summary: "Indeks stron wiedzy projektu."
+---
+
 # <nazwa> - Wiki
 
 Strony skompilowanej wiedzy projektowej (Karpathy method - Raw/ → Wiki/).
@@ -152,4 +169,12 @@ Po zakonczeniu:
 ## Plain .md alternatywa
 
 Jesli AI nie ma tego skilla (np. ChatGPT), user moze wskazac zawartosc
-`_skille/stworz-projekt.md` z vaultu - identyczna procedura, format plain .md.
+`_skille/aios/skills/stworz-projekt/SKILL.md` z vaulta - ta sama procedura jako plik Markdown. Lista kategorii pochodzi z zatwierdzonej struktury `Projekty/index.md`; nie twórz nowych kategorii bez zgody.
+
+## Zgodność z lokalnym RAG
+
+Przed zapisem wczytaj `_skille/rag.md`. Nowe notatki `.md` zaczynaj od YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`; zachowaj pola źródłowe i flagi prywatności. Dane prywatne i cytaty z prywatnych logów nie tracą ochrony podczas przetwarzania.
+
+Po zakończonej partii zatwierdzonych zapisów/przeniesień/usunięć uruchom lokalny `index` zgodnie z `_skille/rag.md`. Dotyczy to również nowych raportów, pamięci, `index.md` i plików zadań. `--vault` podaj przed `index`. Przy błędzie zachowaj źródła, zgłoś indeks jako nieaktualny/niedostępny i pracuj na plikach. Nie uruchamiaj indeksowania w samym podglądzie lub po anulowaniu; nie wysyłaj danych do Pinecone automatycznie.
+
+Mechaniczne operacje wykonuj przez narzędzie plikowe lub Python `pathlib`/`shutil`, bez wymogu bash, `mv` lub `rg`. Używaj interpretera vaulta: `.venv/bin/python` na macOS/Linux albo `.venv/Scripts/python.exe` na Windows. Nie nadpisuj celu przeniesienia; zatwierdzenie edycji nie zastępuje osobnej zgody na przeniesienie/usunięcie lub zapis zewnętrzny.

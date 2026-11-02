@@ -134,7 +134,8 @@ $inne_testy_tresc
 | Edytor plików | $edytor |
 | Synchronizacja | $sync |
 | Główny AI | $ai |
-<!-- IF:$pinecone_aktywny -->| Pinecone | $pinecone_status |<!-- ENDIF -->
+| Lokalny RAG | LanceDB + BGE-M3, status: $rag_status |
+<!-- Pinecone tylko po jawnym wyborze, poza domyślną ścieżką. -->
 <!-- IF:$git_aktywny -->| Git | $git_choice |<!-- ENDIF -->
 
 <!-- IF:$inne_narzedzia_wypelnione -->

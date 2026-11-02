@@ -47,3 +47,7 @@ dist/
 # Logi
 *.log
 logs/
+
+# Local RAG state
+.aios/
+*.lance/

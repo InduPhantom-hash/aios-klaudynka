@@ -1,12 +1,20 @@
 {
   "name": "aios-meta",
-  "version": "0.1.0",
-  "description": "AIOS-Klaudynka meta-tools - higiena vaulta i nadzor nad bliznniakami: audyt-luk (skan brakujacych README, pustych Raw/), mcp-health (status MCP z me.md), synchronizuj (rozjazdy vault vs ClickUp/Linear/Notion z me.md), wizualizuj-vault (diagram struktury inline lub Miro). Doinstalowanie opcjonalne, niezalezne od aios.",
+  "version": "0.2.0",
+  "description": "4 opcjonalne skille meta AIOS: audyt-luk, mcp-health z lokalnym RAG, synchronizuj i wizualizuj-vault.",
   "author": {
     "name": "AIOS-Klaudynka contributors",
     "url": "https://github.com/InduPhantom-hash/aios-klaudynka"
   },
   "homepage": "https://github.com/InduPhantom-hash/aios-klaudynka",
   "license": "MIT",
-  "keywords": ["aios", "personal-agentic-os", "obsidian", "file-over-ai", "polish", "meta", "audit"]
+  "keywords": [
+    "aios",
+    "personal-agentic-os",
+    "obsidian",
+    "file-over-ai",
+    "polish",
+    "meta",
+    "audit"
+  ]
 }

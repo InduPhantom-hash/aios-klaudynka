@@ -50,7 +50,7 @@ Jesli ktorys warunek nie spelniony - zapisz jako luke.
 
 Przejrzyj pliki `aktywne.md` w:
 - `_pamiec/aktualny.md`
-- `Projekty/*/aktywne.md` (jesli istnieja)
+- `Projekty/*/*/aktywne.md` (jesli istnieja)
 
 Sprawdz czy kazdy zawiera niepusta sekcje "Nastepny krok" lub "Next step".
 
@@ -91,3 +91,7 @@ Nie dawaj rekomendacji ani porad - sam raport. Po raporcie zaproponuj `/aios:cor
 - Nie czytaj zawartosci plikow .md poza tymi wskazanymi w krokach (to skan struktury, nie tresci)
 - Nie tworz automatycznie brakujacych plikow - to decyzja usera
 - Nie przetwarzaj folderu `_Archiwum/`, `Kosz/`, `node_modules/`, `.git/`
+
+## Zgodność z lokalnym RAG
+
+To procedura odczytowa: nie uruchamiaj `index` ani `rebuild` i nie zmieniaj konfiguracji. Odczytuj źródła z vaulta; dostępny lokalny RAG może pomóc znaleźć kontekst, lecz jego brak nie blokuje odczytu plików. Wczytaj `_skille/rag.md`, respektuj wykluczenia prywatności także bez RAG, a mechaniczny skan wykonuj przez narzędzie plikowe lub Python `pathlib`, również na Windows. Nazwy integracji MCP ustal z dostępnych capabilities.
