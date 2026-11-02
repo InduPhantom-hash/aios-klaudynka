@@ -2,7 +2,7 @@
 
 > **Ten plik jest pusty celowo.**
 >
-> Wypełni go skill `/aios:init` podczas onboardingu. Nie edytuj ręcznie, dopóki onboarding nie zostanie ukończony - skill nadpisze ten plik.
+> Wypełni go skill `/aios:init` podczas onboardingu. Nie edytuj ręcznie, dopóki onboarding nie zostanie ukończony - skill pokaże proponowane zmiany przed zapisem.
 >
 > Jeśli chcesz zacząć: otwórz rozmowę z AI i napisz `/aios:init` (Claude Code / Cowork) albo "wykonaj init" (tryb zdegradowany).
 
@@ -50,4 +50,4 @@
 
 ---
 
-*Plik wygenerowany przez AIOS-Klaudynka vault-template (v0.4.0). Nadpisywany przez `/aios:init`.*
+*Plik wygenerowany przez AIOS-Klaudynka vault-template (v0.7.0). Wypełniany po zatwierdzeniu przez `/aios:init`.*

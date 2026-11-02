@@ -57,3 +57,7 @@ Profil FRIS/Clifton AI-readable w me.md - chcę żeby AI kalibrowało styl. Tema
 - Źródło FRIS: certyfikowany trainer, 2024-11
 - Źródło Clifton: Gallup raport, 2024-08
 - Wygenerowane przez: AIOS-Klaudynka v0.2 (/aios:init, sekcje A-J + FIN)
+
+## Lokalny RAG w Klaudynce 0.7.0
+
+To profil fikcyjny, nie gotowy status instalacji. Domyślna konfiguracja RAG znajduje się w `_config/rag.json`: LanceDB, lokalny BGE-M3 i wykluczone strefy prywatne. Agent korzysta z MCP `rag-vault` albo CLI. Status modelu, indeksu i zapytania sprawdź po instalacji; nie kopiuj deklaracji gotowości z przykładu. Dodatkowe granice prywatności tego profilu przenieś do `private_paths` przed pierwszym indeksem.

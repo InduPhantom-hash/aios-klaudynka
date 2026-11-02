@@ -1,0 +1,12 @@
+# Derived local state. Never commit vector stores, models, credentials or transcripts.
+.aios/
+.venv/
+__pycache__/
+*.pyc
+.env*
+*.key
+*.pem
+_config/mcp-rag.json
+Prywatne/
+Projekty/Prywatne/
+_brudnopis/

@@ -65,3 +65,7 @@ Głęboka analiza przed ruchem. Nie lubię "let's try and see" - preferuję zroz
 - Źródło FRIS: test online, 2023-06
 - Źródło Clifton: Gallup raport, 2023-09
 - Wygenerowane przez: AIOS-Klaudynka v0.2 (/aios:init, sekcje A-J + FIN). Sekcja C' hybryda light (C6/C7 wypełnione).
+
+## Lokalny RAG w Klaudynce 0.7.0
+
+To profil fikcyjny, nie gotowy status instalacji. Domyślna konfiguracja RAG znajduje się w `_config/rag.json`: LanceDB, lokalny BGE-M3 i wykluczone strefy prywatne. Agent korzysta z MCP `rag-vault` albo CLI. Status modelu, indeksu i zapytania sprawdź po instalacji; nie kopiuj deklaracji gotowości z przykładu. Dodatkowe granice prywatności tego profilu przenieś do `private_paths` przed pierwszym indeksem.

@@ -71,7 +71,7 @@ Zapisz rozbieznosci per projekt:
 Bierze konfiguracje z `## Bliznniaki -> ### Task tracker` (tej samej co `/aios:zadania`).
 
 **Vault -> tracker:**
-- Przeczytaj `_pamiec/zadania-log.md` (log z `/aios:zadania`) jesli istnieje.
+- Przeczytaj lokalne pliki `Projekty/<kategoria>/<projekt>/zadania.md` w dozwolonym zakresie oraz `_pamiec/zadania-log.md` dla zadań ogólnych, jeśli istnieje. To źródła lokalnego Task Trackera; RAG nie zastępuje bieżącego odczytu.
 - Przeczytaj `_pamiec/przypomnienia.md` jesli istnieje.
 
 **Tracker -> vault:**
@@ -135,3 +135,9 @@ Nie naprawiaj automatycznie - vault = zrodlo prawdy, kazda zmiana wymaga decyzji
 - Nie nadpisuj danych w bliznniakach bez potwierdzenia
 - Nie traktuj braku MCP jako bledu - po prostu pomin i zaznacz w raporcie
 - Nie hardkoduj sciezek do issues.md - czytaj z me.md (tabela mapowania)
+
+## Zgodność z lokalnym RAG
+
+Domyślny raport/diagram w czacie jest odczytowy: nie uruchamiaj `index` ani `rebuild`. Odkryj dostępne capabilities integracji; brak MCP zgłoś jako brak integracji. Lokalny skan wykonuj przez narzędzie plikowe lub Python `pathlib`, bez wymogu bash lub `rg` i z ochroną prywatnych ścieżek według `_skille/rag.md`.
+
+Jeśli użytkownik osobno zatwierdzi zapis raportu, URL lub poprawki w vaulcie, nową notatkę opatrz YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`, zachowaj flagi prywatności i po tej partii uruchom lokalny `index` według `_skille/rag.md`. Błąd indeksowania nie cofa źródeł: zgłoś indeks jako nieaktualny/niedostępny. Zapis zewnętrzny wymaga pokazania payloadu i osobnej zgody; nie publikuj prywatnych nazw lub treści przy okazji.

@@ -64,7 +64,7 @@ Te zasady są dopisywane do `me.md`, ale również czytane aktywnie przez pozost
 - **`/aios:stworz-projekt`** - jeśli user promuje wątek z `_brudnopis/` a wątek ma sygnały prywatne (imiona z H2, słowa z H6), zapytaj: "To wygląda na prywatny wątek. Projekt pod `Projekty/` czy `Prywatne/`?" Default dla hybrydy: `Prywatne/`.
 - **`/aios:dodaj-do-wiki`** - jeśli surowiec w `Wiedza/Raw/` zawiera dane wrażliwe (na podstawie H6 tabu), nie dodawaj do wiki globalnej - zaproponuj `Prywatne/Wiedza/` zamiast `Wiedza/`.
 - **`/aios:sortuj`** - gdy przegląda `_inbox/` z plikiem prywatnym (sygnały jw.), opcja docelowa "Prywatne/" jest na górze listy propozycji, nie pod innymi.
-- **`/aios:szukaj`** - przy wyszukiwaniu wyniki z `Prywatne/` są w osobnej grupie na końcu listy z etykietą `(prywatne)`. Nigdy nie pomijaj ich bez info dla usera - to byłoby oszukiwanie o stanie vaulta.
+- **`/aios:szukaj`** - strefy z `_config/rag.json` i dokumenty z `rag: false` nie trafiają do RAG. Poinformuj o wykluczeniach; nie obchodź ich fallbackiem tekstowym. Dostęp do prywatnego źródła wymaga jawnej prośby użytkownika.
 - **`/aios:koniec-sesji`** - transkrypt sesji zawierającej treści z `Prywatne/` nie idzie do `_brudnopis/` globalnego, tylko do `Prywatne/_brudnopis/` (jeśli istnieje) albo skrócony (bez konkretów prywatnych) do globalnego z etykietą `[SESJA: część prywatna skrócona]`.
 
 ---
@@ -108,3 +108,9 @@ Reguła: `me.md` jest **AI-readable profile**. To, co user chce zostawić dla si
 ## Wersja
 
 v0.1 (2026-04-22) - pierwszy szablon. Dopełnia biblioteki `szablony/` o sekcję H (jedyna warunkowa sekcja onboardingu).
+
+## Lokalny RAG (0.7.0)
+
+Przed pierwszym indeksem przenieś granice prywatności do `private_paths` w `_config/rag.json`. Domyślnie: `Prywatne/**`, `Projekty/Prywatne/**`. Dla całego vaulta użyj `["**"]`; dla dodatkowych stref dodaj wzorce z `/`. Nie usuwaj istniejących wykluczeń bez zgody. `exclude` rozszerza techniczne wykluczenia. Prywatny dokument może też mieć `rag: false`, `private: true` lub `prywatne: true`.
+
+Po zmianie granic wykonaj `index`. Działający MCP czyta konfigurację przy każdym wywołaniu, a nieaktualny indeks odmawia zwracania fragmentów. Indeksowanie lokalne nie daje zgody na przekazanie fragmentu modelowi chmurowemu. Stosuj granice z profilu także przy bezpośrednim odczycie plików. To wykluczenia ścieżek i metadanych, nie automatyczne wykrywanie wszystkich danych wrażliwych w treści.

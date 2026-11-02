@@ -1,0 +1,33 @@
+name: Verify fresh installation and local RAG
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-latest, macos-14]
+        python: ['3.11', '3.13']
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -r vault-template/_skrypty/requirements-rag.txt
+      - name: MCP regression with a bounded diagnostic probe
+        run: python -m unittest discover -s tests -p test_rag.py -k mcp -v
+      - name: Fresh installation with its own Python environment
+        run: python install.py --vault "${{ runner.temp }}/Klaudynka test żółć" --with-meta
+      - run: python -m unittest discover -s tests -v
+      - run: python vault-template/_skrypty/aios_backpass/tests/run_all_tests.py
+      - run: python tools/validate_release.py

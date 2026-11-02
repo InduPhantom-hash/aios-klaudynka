@@ -1,30 +1,43 @@
 ---
 name: init
-description: Onboarding do AIOS-Klaudynki - prowadzi usera przez ankietę (tryb --quick w 10 min lub pełny w 45 min), generuje me.md, buduje strukturę vaulta i AIOS Task Tracker. Triggery - "/aios:init", "/aios:init --quick", "uruchom onboarding", "wygeneruj me.md", "skonfiguruj AIOS".
+description: "Onboarding Klaudynki: profil me.md, struktura vaulta, lokalny Task Tracker oraz domyślny RAG LanceDB/BGE-M3. Tryby --quick i --full. Triggery: /aios:init, uruchom onboarding, skonfiguruj AIOS."
 ---
 
-# init
+# Pierwsza konfiguracja Klaudynki
 
-Skill onboardingowy AIOS-Klaudynki. Wywoływany po instalacji. Generuje profil `me.md`, dostosowuje strukturę `Projekty/`, tworzy `vault-map.md` oraz konfiguruje system zadań (lokalny Task Tracker lub ClickUp/Notion).
+Ta procedura dotyczy nowej instalacji. Nie migruj istniejącego vaulta i nie nadpisuj profilu. Najpierw odczytaj `me.md`, jeśli istnieje, oraz `AGENTS.md` i `_skille/rag.md`. Instalator `install.py` przygotowuje pliki, `.venv`, skille w `_skille/aios/skills/` i wzór `_config/mcp-rag.json`; integracja MCP zależy od capabilities klienta.
 
-## Krok 0 - Wybór trybu
+## 1. Wybierz tryb i zbierz profil
 
-Zapytaj użytkownika na starcie (lub sprawdź flagę `--quick`):
+- `--quick`: krótkie pytania o cel, zakres prywatny/zawodowy, kategorie projektów, narzędzia i komunikację. Nie pomijaj granic prywatności.
+- `--full`: przejdź sekcje z sąsiedniego `pytania.md`, łącznie z opcjonalnymi integracjami i granicami prywatności. Dokumenty referencyjne instalator kopiuje do `_skille/dokumentacja/szablony/`, a przykłady profili do `_skille/dokumentacja/przyklady/`. Jeśli ich brakuje, zgłoś niepełną instalację; nie udawaj odczytu brakującego szablonu.
+- Zapisuj zatwierdzony postęp w `_pamiec/onboarding-progress.md`, z metadanymi i `rag: false`. Nie zapisuj kluczy ani niepotrzebnych danych wrażliwych.
+- System zadań: domyślnie lokalny `zadania.md`; zewnętrzny tracker jest opcjonalny i wymaga osobnej konfiguracji oraz zgody na zapis.
 
-1. **Tryb Szybki (`/aios:init --quick`) ~10-15 min:** 12 kluczowych pytań (A: Tożsamość, B: Zakres, D: Projekty, E: Stos i Tracker zadań, F: Wytyczne komunikacji). Pomija zaawansowane sekcje psychologiczne i rozbudowane integracje.
-2. **Tryb Pełny (`/aios:init --full`) ~45 min:** 61 pytań w 10 sekcjach (A-J), obejmujący profil FRIS/Clifton (PDF), zaawansowane Bliźniaki i strefy prywatności.
+## 2. Ustaw prywatność przed pierwszym indeksem
 
-## Zasady wykonania (Code Over AI & File Over AI)
+Odczytaj odpowiedzi o strefach prywatnych i przygotuj konfigurację `_config/rag.json`:
 
-- Zapisuj postęp po każdej sekcji w `_pamiec/onboarding-progress.md`.
-- Pokazuj pytania w zwięzłych blokach. Używaj wyłącznie znaku `-`.
-- Generuj `me.md` z sekcjami: `## Profil`, `## Komunikacja`, `## Hard rules`, `## Aktywne projekty` oraz `## Bliźniaki`.
-- W sekcji E zadaj pytanie o system zadań: **Lokalny AIOS Task Tracker (`zadania.md`) [Rekomendowany, 100% offline, zerowy koszt]** vs zewnętrzny bliźniak (ClickUp / Linear / Notion).
+- Zachowaj domyślne `private_paths`: `Prywatne/**`, `Projekty/Prywatne/**`.
+- Dodaj wszystkie dodatkowe strefy wyłączone przez użytkownika, jako wzorce względne z `/`.
+- Jeśli użytkownik określa cały vault jako prywatny albo nie wydziela osobnej strefy dla treści prywatnych, ustaw `private_paths` na `["**"]`. Nie interpretuj lokalności embeddingów jako zgody na ujawnienie notatek agentowi.
+- Każda nowa prywatna notatka zachowuje także `rag: false`, `private: true` lub `prywatne: true`, gdy takie oznaczenie wskazał użytkownik.
+- Przed zmianą istniejącego `_config/rag.json` pokaż konkretny diff i uzyskaj zgodę. Nie uruchamiaj pierwszego indeksu przed zatwierdzeniem granic prywatności.
 
-## Finalizacja (FIN)
+## 3. Wygeneruj pliki w zatwierdzonym zakresie
 
-1. Wygeneruj `me.md` w korzeniu vaulta.
-2. Utwórz foldery podkategorii w `Projekty/` na podstawie odpowiedzi z Sekcji D.
-3. W każdym folderze kategorialnym utwórz szablon `index.md` oraz `zadania.md`.
-4. Wygeneruj `vault-map.md`.
-5. Usuń `_pamiec/onboarding-progress.md` i przedstaw podsumowanie gotowości.
+Utwórz `me.md` z profilem, komunikacją, hard rules, aktywnymi projektami, granicami prywatności oraz opcjonalnymi bliźniakami. Parametry techniczne RAG pozostają w `_config/rag.json`; w profilu zapisz tylko informację, że system korzysta z lokalnego RAG.
+
+Utwórz zaakceptowane kategorie `Projekty/`, ich `index.md`, projekty i pliki zadań oraz `vault-map.md`. Każdy nowy plik `.md` zaczyna się od YAML: `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`; zachowaj dodatkowe metadane. Przed zmianą istniejących plików pokaż diff i czekaj na zgodę.
+
+## 4. Potwierdź RAG
+
+1. Sprawdź `.venv` i lokalny model BGE-M3 według INSTALL. Bez modelu zgłoś niepełną konfigurację i kontynuuj pracę na plikach; nie zmieniaj endpointu na chmurę.
+2. Uruchom CLI `index` według `_skille/rag.md`, a następnie `status`.
+3. Jeżeli istnieje dozwolona notatka, wywołaj `query` z pytaniem o jej treść, otwórz wskazane źródło i sprawdź dopasowanie. Nie zakładaj, że sam `status` lub pusty indeks dowodzą działania modelu.
+4. Jeśli nie ma dozwolonych notatek, np. `private_paths: ["**"]`, zgłoś „Indeks pusty zgodnie z prywatnością; wyszukiwanie semantyczne niezweryfikowane”. Nie zmieniaj ochrony, żeby wymusić test.
+5. Odkryj w kliencie `rag_search` i `rag_namespaces`. Bez nich sprawdź CLI i podaj status „CLI dostępne, MCP niepodłączone”. Nie wymagaj konkretnego prefiksu nazwy narzędzia.
+
+## 5. Zakończ
+
+Przedstaw oddzielnie: profil i pliki, prywatność, lokalny indeks i model, MCP/CLI oraz brakujące integracje. Gotowość wyszukiwania deklaruj dopiero po rzeczywistym zapytaniu i sprawdzeniu źródła. Zapisz wynik w `aktualny.md` i odśwież lokalny indeks po tym zapisie. Plik postępu usuwaj wyłącznie po osobnym potwierdzeniu; możesz pozostawić go z zakończonym statusem i `rag: false`.

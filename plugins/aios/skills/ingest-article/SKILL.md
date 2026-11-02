@@ -1,7 +1,7 @@
 ---
 name: ingest-article
 description: >
-  Wyciaga tresc artykulu lub strony z podanego URL przez Tavily Extract i zapisuje do Wiedza/OBSZAR/Raw/.
+  Pobiera treść artykułu lub strony z URL i zapisuje do Wiedza/OBSZAR/Raw/ z lokalnym odświeżeniem RAG.
   Triggery: /aios:ingest-article, "wciagnij ten artykul", "zapisz te strone do wiedzy", "dodaj artykul z URL".
 ---
 
@@ -11,7 +11,7 @@ Masz URL artykulu lub strony. Wyciagasz tresc i zapisujesz do Raw/ - gotowe do `
 
 ## Wymagania
 
-- Tavily MCP (`tavily_extract`) skonfigurowane. Bez niego skill probuje fallbacku Firecrawl, a jak go tez brak - prosi o reczne wklejenie.
+- Odkryj funkcję zwykłego pobrania strony w bieżącym runtime. Gdy HTML jest zaszumiony, użyj dostępnego ekstraktora; Tavily/Firecrawl są opcjonalne. Brak wszystkich możliwości zgłoś i poproś o tekst, bez deklaracji, że sam RAG pobiera internet.
 
 ## Input
 
@@ -27,9 +27,9 @@ Masz URL artykulu lub strony. Wyciagasz tresc i zapisujesz do Raw/ - gotowe do `
 
 Tak samo jak w `/aios:research` - jesli nie podano `--obszar`, zapytaj o domene wiedzy.
 
-## Krok 2: Wyciagnij tresc przez Tavily Extract
+## Krok 2: Pobierz treść
 
-Wywolaj `tavily_extract` z parametrami:
+Najpierw użyj zwykłego fetch dostępnego w runtime. Gdy wynik nie zawiera treści artykułu, sprawdź capabilities ekstraktorów. Jeśli dostępny jest Tavily Extract, wywołaj go z parametrami:
 - `urls`: `[<url>]`
 - `format`: `markdown`
 - `query`: wartosc `--query` jesli podana, inaczej pusty string
@@ -43,7 +43,11 @@ Sciezka: `Wiedza/<obszar>/Raw/YYYY-MM-DD-<slug>.md`
 Struktura:
 ```markdown
 ---
-zrodlo: tavily-extract
+typ_wiedzy: fakt
+tematy: [temat-artykulu]
+podmioty: []
+ai_summary: "Krótkie streszczenie zawartości źródła."
+zrodlo: fetch-lub-uzyty-ekstraktor
 url: <url>
 data: YYYY-MM-DD
 status: raw
@@ -51,7 +55,7 @@ status: raw
 
 # <Tytul strony>
 
-<tresc wyekstrahowana przez Tavily - bez skracania>
+<treść pobrana przez fetch lub ekstraktor - bez skracania>
 ```
 
 ## Krok 4: Raport
@@ -81,3 +85,11 @@ Jesli `tavily_extract` zwroci pusty wynik, blad lub widac ze strona jest JS-heav
 
 - Nie streszczaj przed zapisem
 - Nie odrzucaj dlugich artykulow - cala tresc idzie do Raw/
+
+## Zgodność z lokalnym RAG
+
+Przed zapisem wczytaj `_skille/rag.md`. Nowe notatki `.md` zaczynaj od YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`; zachowaj pola źródłowe i flagi prywatności. Dane prywatne i cytaty z prywatnych logów nie tracą ochrony podczas przetwarzania.
+
+Po zakończonej partii zatwierdzonych zapisów/przeniesień/usunięć uruchom lokalny `index` zgodnie z `_skille/rag.md`. Dotyczy to również nowych raportów, pamięci, `index.md` i plików zadań. `--vault` podaj przed `index`. Przy błędzie zachowaj źródła, zgłoś indeks jako nieaktualny/niedostępny i pracuj na plikach. Nie uruchamiaj indeksowania w samym podglądzie lub po anulowaniu; nie wysyłaj danych do Pinecone automatycznie.
+
+Mechaniczne operacje wykonuj przez narzędzie plikowe lub Python `pathlib`/`shutil`, bez wymogu bash, `mv` lub `rg`. Używaj interpretera vaulta: `.venv/bin/python` na macOS/Linux albo `.venv/Scripts/python.exe` na Windows. Nie nadpisuj celu przeniesienia; zatwierdzenie edycji nie zastępuje osobnej zgody na przeniesienie/usunięcie lub zapis zewnętrzny.

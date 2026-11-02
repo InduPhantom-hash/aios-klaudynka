@@ -52,6 +52,7 @@ Wstaw blok po sekcji `## Rytm pracy` (lub po `## Prywatnosc` jesli istnieje), pr
 <!-- Kategorie = obszary z D1. Nie musisz miec mapowania dla wszystkich - tylko te ktore user podal -->
 
 ### Search & ingest
+- lokalny-rag: $rag_status (CLI/MCP; konfiguracja w `_config/rag.json`)
 - tavily: $tavily_status
 <!-- Wartosci: tak | nie -->
 <!-- NIE przechowuj klucza API w me.md - tylko flage tak/nie -->
@@ -65,7 +66,7 @@ Wstaw blok po sekcji `## Rytm pracy` (lub po `## Prywatnosc` jesli istnieje), pr
 ### MCP do monitorowania
 - lista: [$mcp_lista]
 <!-- Auto-generowana lista MCP na podstawie wszystkich E-odpowiedzi:
-     - Jesli E5 = tak -> dodaj "pinecone"
+     - Gdy MCP rag-vault skonfigurowany -> dodaj "rag-vault"; Pinecone tylko po jawnym wyborze
      - Jesli E12 = tak -> dodaj "tavily"
      - Jesli E10 = clickup -> dodaj "clickup"
      - Jesli E10 = linear -> dodaj "linear"
@@ -94,6 +95,7 @@ Wstaw blok po sekcji `## Rytm pracy` (lub po `## Prywatnosc` jesli istnieje), pr
 | Nauka | (uzupelnij recznie) |
 
 ### Search & ingest
+- lokalny-rag: $rag_status (CLI/MCP; konfiguracja w `_config/rag.json`)
 - tavily: tak
 
 ### Calendar
@@ -115,6 +117,7 @@ Wstaw blok po sekcji `## Rytm pracy` (lub po `## Prywatnosc` jesli istnieje), pr
 - typ: brak
 
 ### Search & ingest
+- lokalny-rag: $rag_status (CLI/MCP; konfiguracja w `_config/rag.json`)
 - tavily: tak
 
 ### Calendar

@@ -1,0 +1,5 @@
+# Reference versions verified against the source AIOS RAG environment. Python 3.11+.
+lancedb==0.33.0
+mcp==1.28.0
+requests==2.34.2
+PyYAML==6.0.3

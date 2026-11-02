@@ -5,7 +5,7 @@ Bufor przed ostatecznym usunięciem. Gdy decydujesz że coś ma zniknąć - najp
 ## Zasady
 
 - Nic nie trafia do `Kosz/` automatycznie. Skille proszą o zgodę zanim tu coś wrzucą.
-- `Kosz/` jest ignorowany przez `/aios:szukaj` (nawet przez fallback Pinecone).
+- `Kosz/` jest ignorowany przez `/aios:szukaj` oraz przez lokalny indeks RAG.
 - Raz na jakiś czas przejrzyj i opróżnij (`rm -rf Kosz/*`) - albo przenieś coś z powrotem, jeśli zmieniłeś zdanie.
 
 ---

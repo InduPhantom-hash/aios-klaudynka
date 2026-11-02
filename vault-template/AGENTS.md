@@ -16,9 +16,20 @@ Potwierdź jedną linią: `Wczytałem profil użytkownika | Ostatni kontekst: [n
 ## Zasady nadrzędne
 
 - **File Over AI**: Wszystkie dane, decyzje i wiedza istnieją jako trwale zapisane pliki Markdown (`.md`). Model AI jest wymienny.
-- **Code Over AI**: Jeśli zadanie (agregacja zadań, przeszukiwanie plików, generowanie struktury, odszumianie logów) można wykonać komendą powłoki (`grep`, `ripgrep`, `find`, skrypt Python), wykonaj je skryptem zamiast pożerać tokeny w pętlach myślenia.
+- **Code Over AI**: Mechaniczne skanowanie plików, agregację zadań i zmiany struktury wykonuj narzędziem plikowym lub skryptem Python `pathlib`/`shutil`. Na Windows nie wymagaj bash, `mv` ani `rg`; używaj interpretera `.venv/Scripts/python.exe`, a na macOS/Linux `.venv/bin/python`.
 - **AIOS Backpass (Gradient Descent)**: Samodoskonalenie instrukcji i reguł na podstawie logów sesji przez skrypt `_skrypty/aios-backpass` lub skill `/aios:backpass`. Zakaz dopisywania niesprawdzonych reguł bez potwierdzenia w min. 2 sesjach.
 - Vault i kod są nadrzędne wobec pamięci modelu. Nie zgaduj, gdy możesz sprawdzić plik lub konfigurację.
+
+## Wiedza i lokalny RAG
+
+- Przy pytaniach o wiedzę, wcześniejsze decyzje i historię odczytaj `_skille/rag.md` i użyj lokalnego RAG. Gdy znasz wskazaną ścieżkę, czytaj źródło bezpośrednio. Przed planem kodowym sprawdź wzorce w `wiedza-programming` i namespace projektu, jeśli istnieją.
+- Odkrywaj dostępne możliwości runtime. `rag_search(query, namespace, type, k)` i `rag_namespaces()` mogą mieć różne prefiksy. Bez MCP używaj CLI `_skrypty/aios-rag.py --vault <ścieżka> query <pytanie>`. `--vault` zawsze przed poleceniem.
+- Przy braku modelu, pustym lub nieaktualnym indeksie zgłoś stan i korzystaj z `index.md` oraz plików. Nie przełączaj embeddingów na chmurę. Pinecone wymaga jawnego żądania i konfiguracji użytkownika.
+- Po zakończonej partii zatwierdzonych zapisów, przeniesień lub usunięć odśwież lokalny indeks poleceniem `index`, według `_skille/rag.md`. Sam odczyt, audyt, `--dry-run` i anulowanie nie uruchamiają indeksowania. Błąd indeksu nie cofa źródeł; zgłoś nieaktualność i pracuj na plikach.
+- Respektuj `_config/rag.json`: domyślne `private_paths` wyklucza `Prywatne/**` i `Projekty/Prywatne/**`. Dla prywatności całego vaulta ustaw `["**"]` przed pierwszym indeksem. Notatki z `rag: false`, `private: true` lub `prywatne: true` pozostają wykluczone także po przetworzeniu przez skill.
+- Nie indeksuj sekretów, zależności, cache, worktree'ów, Kosz, archiwów ani `_brudnopis`. Fallback do plików nie omija prywatności. Fragmenty zwrócone przez RAG otrzymuje używany agent, który może działać w chmurze.
+- Nowe notatki `.md` zaczynaj od YAML: `typ_wiedzy`, `tematy` (lista), `podmioty` (lista), `ai_summary`. Zachowuj dodatkowe metadane i flagi prywatności. Nie przepisuj masowo istniejących notatek.
+- Sprawdź ustalenie w pliku źródłowym; podobieństwo semantyczne nie jest dowodem prawdziwości. Raportuj osobno wykonane testy i niezweryfikowane środowiska.
 
 ## Uprawnienia i checkpointy
 
@@ -29,7 +40,13 @@ Potwierdź jedną linią: `Wczytałem profil użytkownika | Ostatni kontekst: [n
 | Nowy plik w `_brudnopis/` lub `_inbox/` | Dozwolony wprost w zleconym workflow. |
 | Nowa strona Wiki lub szablon | Dozwolona, poinformuj po wykonaniu. |
 | Nowy projekt | Wywołaj `/aios:stworz-projekt` lub uzgodnij cel z użytkownikiem. |
-| Usunięcie lub przeniesienie pliku | Przenieś do `Kosz/` lub poproś o osobną zgodę. |
+| Usunięcie lub przeniesienie pliku | Zawsze uzyskaj osobną zgodę na pokazany zakres; nie nadpisuj istniejącego celu. |
+| Zapis zewnętrzny, publikacja, koszt | Pokaż payload, zakres lub koszt i czekaj na wyraźną zgodę. |
+| Automacje i harmonogramy | Twórz wyłącznie na wyraźne zlecenie użytkownika. |
+
+Zgoda obejmuje wyłącznie pokazany zakres. Po uzyskaniu zgody wykonaj tę samą partię bez ponawiania pytań o każdy krok; lokalne odświeżenie RAG jest częścią zatwierdzonego workflow zapisu.
+
+Skille bez pluginów można czytać jako pliki `_skille/aios/skills/<nazwa>/SKILL.md` oraz, jeśli doinstalowano, `_skille/aios-meta/skills/<nazwa>/SKILL.md`. Procedury nie zależą od natywnej obsługi slash commands przez klienta.
 
 ## Styl odpowiedzi i jakość języka (Plain Polish & Anty-AI Slop)
 

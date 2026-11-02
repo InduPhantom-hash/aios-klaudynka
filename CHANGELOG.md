@@ -6,6 +6,17 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 
 ---
 
+## [0.7.0] - kandydat, nieopublikowany
+
+- Lokalny RAG nad Markdown: LanceDB, BGE-M3, CLI i read-only MCP.
+- Przyrostowe embeddingi, atomowe przełączanie generacji, zachowanie poprzedniego indeksu przy błędzie i odmowa zwracania nieaktualnych treści.
+- Prywatność konfigurowana przed indeksem; wykluczenie stref prywatnych, sekretów, brudnopisów i plików technicznych.
+- Instalator Python dla nowych katalogów, własne środowisko i payload MCP bez zmiany ustawień klienta.
+- Dostosowanie 14 skilli core i 4 meta; core 0.7.0, meta 0.2.0, spójny marketplace.
+- Dokumentacja i testy dla nowych instalacji. Migracja poza zakresem; wyniki środowisk w `docs/odbior-0.7.0.md`.
+
+---
+
 ## [0.6.0] - 2026-08-23 (release)
 
 ### Dodane i Zmienione (AIOS Backpass & Gradient Descent)

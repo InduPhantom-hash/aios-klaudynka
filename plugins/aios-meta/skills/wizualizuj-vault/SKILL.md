@@ -57,9 +57,9 @@ Uzyj hierarchicznego ukladu (tree layout), nie kolowego. Czcionka czytelna, bez 
 
 Wymaga Miro MCP. Jesli niedostepne - powiedz userowi "Miro MCP nie podpiete, robie inline" i przejdz do 2a.
 
-Wywolaj `diagram_create` (lub odpowiednik z Miro MCP runtime'u) z wezlami odpowiadajacymi strukturze vaulta. Tytul diagramu: `AIOS Vault - [data]`.
+Pokaż najpierw payload diagramu, nazwę i zakres danych, pomijając chronione prywatne nazwy. Po wyraźnym potwierdzeniu odkryj dostępną funkcję tworzenia diagramu Miro i wywołaj ją z uzgodnionymi węzłami. Tytul diagramu: `AIOS Vault - [data]`.
 
-Po utworzeniu: podaj URL do diagramu. Zapisz URL do `_pamiec/miro-diagrams.md` (stworz plik jesli nie istnieje, dopisz linie `[YYYY-MM-DD] Struktura vaulta: <url>`).
+Po utworzeniu podaj URL. Zapis URL do `_pamiec/miro-diagrams.md` wykonaj w zatwierdzonym zakresie; przed zmianą istniejącego pliku pokaż diff. Nowy plik opatrz wymaganym YAML (stworz plik jesli nie istnieje, dopisz linie `[YYYY-MM-DD] Struktura vaulta: <url>`).
 
 ## Krok 3: Podsumowanie tekstowe
 
@@ -78,3 +78,9 @@ _brudnopis: N plikow
 - Nie wczytuj tresci plikow - tylko strukture katalogow i frontmatter statusu
 - Nie tworz diagramu jesli vault nie jest zamontowany jako folder roboczy
 - Przy trybie miro: nie tworz diagramu bez potwierdzenia (operacja tworzy zasob zewnetrzny)
+
+## Zgodność z lokalnym RAG
+
+Domyślny raport/diagram w czacie jest odczytowy: nie uruchamiaj `index` ani `rebuild`. Odkryj dostępne capabilities integracji; brak MCP zgłoś jako brak integracji. Lokalny skan wykonuj przez narzędzie plikowe lub Python `pathlib`, bez wymogu bash lub `rg` i z ochroną prywatnych ścieżek według `_skille/rag.md`.
+
+Jeśli użytkownik osobno zatwierdzi zapis raportu, URL lub poprawki w vaulcie, nową notatkę opatrz YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`, zachowaj flagi prywatności i po tej partii uruchom lokalny `index` według `_skille/rag.md`. Błąd indeksowania nie cofa źródeł: zgłoś indeks jako nieaktualny/niedostępny. Zapis zewnętrzny wymaga pokazania payloadu i osobnej zgody; nie publikuj prywatnych nazw lub treści przy okazji.

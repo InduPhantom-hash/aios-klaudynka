@@ -11,7 +11,7 @@ Robisz deep research i zapisujesz wynik do vaulta. Jeden skill call = gotowy pli
 
 ## Wymagania
 
-- Tavily MCP (`tavily_research`) skonfigurowane. Bez niego skill nie zadziala - powiedz userowi: "Tavily MCP nie jest podpiete. Sprawdz konfiguracje (sekcja Stos w me.md). Bez Tavily ten skill nie ma zrodla danych."
+- Najpierw sprawdź istniejącą lokalną wiedzę przez `_skille/rag.md`, potem dostępne możliwości wyszukiwania publicznych źródeł. Tavily Research jest opcjonalne; dostępna wyszukiwarka i fetch pozwalają wykonać research ze źródłami. Bez źródeł zewnętrznych zgłoś ograniczenie i nie udawaj świeżego researchu. Operacja płatna wymaga pokazania zakresu/kosztu i zgody.
 
 ## Input
 
@@ -31,9 +31,9 @@ Odczytaj istniejace foldery przez liste `Wiedza/`. Zaproponuj najbardziej pasuja
 
 Jesli user wybiera nowy obszar - utworz katalog `Wiedza/<nowy>/Raw/` i `Wiedza/<nowy>/Wiki/` z placeholderami `index.md`.
 
-## Krok 2: Wywolaj Tavily research
+## Krok 2: Zbierz źródła
 
-Wywolaj `tavily_research` z parametrami:
+Sprawdź lokalny RAG, aby nie dublować istniejącej wiedzy. Dla nowych faktów użyj dostępnej wyszukiwarki i pobierz źródła, preferując źródła pierwotne. Gdy użytkownik wybrał dostępne Tavily Research, wywołaj `tavily_research` z parametrami:
 - `input`: temat z inputu (naturalny opis, nie keyword)
 - `model`: wartosc z `--tryb` albo `auto` jesli nie podano
 
@@ -48,7 +48,11 @@ Sciezka: `Wiedza/<obszar>/Raw/YYYY-MM-DD-<slug>.md`
 Struktura pliku:
 ```markdown
 ---
-zrodlo: tavily-research
+typ_wiedzy: fakt
+tematy: [temat-researchu]
+podmioty: []
+ai_summary: "Krótkie streszczenie rzeczywistego wyniku researchu."
+zrodlo: uzyte-narzedzie
 temat: <temat z inputu>
 data: YYYY-MM-DD
 tryb: mini|pro|auto
@@ -57,10 +61,10 @@ status: raw
 
 # <Temat - sformatowany jako tytul>
 
-<pelny wynik z tavily_research - bez skracania>
+<wynik z odnośnikami do źródeł; dla Tavily zachowaj pełną treść odpowiedzi>
 ```
 
-Zapisz plik. Nie modyfikuj tresci z Tavily - tylko dodaj frontmatter i tytul.
+Zapisz plik wraz z odnośnikami i oznaczeniem niepotwierdzonych twierdzeń. Jeżeli zapisujesz odpowiedź Tavily, zachowaj jej treść i dodaj frontmatter oraz tytuł. Nie wysyłaj prywatnych notatek ani sekretów jako zapytania do usługi zewnętrznej.
 
 ## Krok 4: Raport
 
@@ -77,3 +81,11 @@ Jesli user odpowie "tak" lub "tak, dodaj" - od razu wywolaj skill `/aios:dodaj-d
 - Nie streszczaj wyniku z Tavily przed zapisem - caly wynik idzie do pliku
 - Nie tworz od razu strony Wiki - to robi `/aios:dodaj-do-wiki` osobno
 - Nie pytaj o potwierdzenie przed zapisem do Raw/ (Raw to brudnopis, bezpieczne)
+
+## Zgodność z lokalnym RAG
+
+Przed zapisem wczytaj `_skille/rag.md`. Nowe notatki `.md` zaczynaj od YAML `typ_wiedzy`, `tematy`, `podmioty`, `ai_summary`; zachowaj pola źródłowe i flagi prywatności. Dane prywatne i cytaty z prywatnych logów nie tracą ochrony podczas przetwarzania.
+
+Po zakończonej partii zatwierdzonych zapisów/przeniesień/usunięć uruchom lokalny `index` zgodnie z `_skille/rag.md`. Dotyczy to również nowych raportów, pamięci, `index.md` i plików zadań. `--vault` podaj przed `index`. Przy błędzie zachowaj źródła, zgłoś indeks jako nieaktualny/niedostępny i pracuj na plikach. Nie uruchamiaj indeksowania w samym podglądzie lub po anulowaniu; nie wysyłaj danych do Pinecone automatycznie.
+
+Mechaniczne operacje wykonuj przez narzędzie plikowe lub Python `pathlib`/`shutil`, bez wymogu bash, `mv` lub `rg`. Używaj interpretera vaulta: `.venv/bin/python` na macOS/Linux albo `.venv/Scripts/python.exe` na Windows. Nie nadpisuj celu przeniesienia; zatwierdzenie edycji nie zastępuje osobnej zgody na przeniesienie/usunięcie lub zapis zewnętrzny.

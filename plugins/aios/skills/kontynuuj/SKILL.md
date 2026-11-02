@@ -69,3 +69,7 @@ Powiedz wprost: "Transkrypt dotyczy [X], aktualny.md mowi o [Y]. Ktory kontekst 
 - Nie pytaj "Czy chcesz zebym wczytal wiecej plikow?" - albo je wczytaj, albo nie
 - Nie dawaj briefingu dluzszego niz jeden ekran
 - Nie uruchamiaj sie automatycznie na starcie sesji bez triggera
+
+## Zgodność z lokalnym RAG
+
+To procedura odczytowa: nie uruchamiaj `index` ani `rebuild` i nie zmieniaj konfiguracji. Odczytuj źródła z vaulta; dostępny lokalny RAG może pomóc znaleźć kontekst, lecz jego brak nie blokuje odczytu plików. Wczytaj `_skille/rag.md`, respektuj wykluczenia prywatności także bez RAG, a mechaniczny skan wykonuj przez narzędzie plikowe lub Python `pathlib`, również na Windows. Nazwy integracji MCP ustal z dostępnych capabilities.

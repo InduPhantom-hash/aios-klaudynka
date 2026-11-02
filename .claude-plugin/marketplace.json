@@ -5,26 +5,50 @@
     "url": "https://github.com/InduPhantom-hash"
   },
   "metadata": {
-    "description": "AIOS-Klaudynka - Personal Agentic OS (File Over AI & Code Over AI). Onboarding quick/full + 13 skilli + natywny AIOS Task Tracker. Opcjonalny plugin aios-meta.",
-    "version": "0.5.0"
+    "description": "AIOS-Klaudynka: 14 skilli, lokalny RAG LanceDB/BGE-M3, Backpass i Task Tracker. Nowe instalacje.",
+    "version": "0.7.0"
   },
   "plugins": [
     {
       "name": "aios",
       "source": "./plugins/aios",
-      "description": "Personal Agentic OS - 13 skilli (init, sortuj, stworz-projekt, dodaj-do-wiki, szukaj, koniec-sesji, kontynuuj, dzien, core-update, research, ingest-article, zadania, pomysl-do-promptu)",
-      "version": "0.5.0",
-      "category": ["productivity", "knowledge-management", "personal"],
-      "keywords": ["aios", "personal-agentic-os", "file-over-ai", "code-over-ai", "task-tracker", "polish", "pl"],
+      "description": "14 skilli AIOS, lokalny RAG przez CLI/MCP, Backpass, onboarding i lokalny Task Tracker.",
+      "version": "0.7.0",
+      "category": [
+        "productivity",
+        "knowledge-management",
+        "personal"
+      ],
+      "keywords": [
+        "aios",
+        "personal-agentic-os",
+        "file-over-ai",
+        "code-over-ai",
+        "task-tracker",
+        "polish",
+        "pl"
+      ],
       "strict": false
     },
     {
       "name": "aios-meta",
       "source": "./plugins/aios-meta",
       "description": "AIOS meta-tools - higiena vaulta i nadzór nad bliźniakami: audyt-luk, mcp-health, synchronizuj, wizualizuj-vault. Opcjonalne, niezależne od aios.",
-      "version": "0.1.0",
-      "category": ["productivity", "knowledge-management", "personal"],
-      "keywords": ["aios", "personal-agentic-os", "file-over-ai", "polish", "pl", "meta", "audit"],
+      "version": "0.2.0",
+      "category": [
+        "productivity",
+        "knowledge-management",
+        "personal"
+      ],
+      "keywords": [
+        "aios",
+        "personal-agentic-os",
+        "file-over-ai",
+        "polish",
+        "pl",
+        "meta",
+        "audit"
+      ],
       "strict": false
     }
   ]
