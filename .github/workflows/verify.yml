@@ -24,6 +24,8 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - run: python -m pip install -r vault-template/_skrypty/requirements-rag.txt
+      - name: MCP regression with a bounded diagnostic probe
+        run: python -m unittest discover -s tests -p test_rag.py -k mcp -v
       - name: Fresh installation with its own Python environment
         run: python install.py --vault "${{ runner.temp }}/Klaudynka test żółć" --with-meta
       - run: python -m unittest discover -s tests -v

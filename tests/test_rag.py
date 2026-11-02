@@ -275,7 +275,11 @@ class RagTest(unittest.TestCase):
         from mcp.client.stdio import stdio_client
 
         async def exercise():
-            params = StdioServerParameters(command=sys.executable, args=[str(RUNNER), "--vault", str(self.vault), "mcp"])
+            # A slow child prints its own stacks before the client deadline (not just the waiting client).
+            probe = ("import faulthandler,runpy,sys; from pathlib import Path; "
+                     "faulthandler.dump_traceback_later(20); script=sys.argv.pop(1); "
+                     "sys.path.insert(0,str(Path(script).parent)); runpy.run_path(script,run_name='__main__')")
+            params = StdioServerParameters(command=sys.executable, args=["-c", probe, str(RUNNER), "--vault", str(self.vault), "mcp"])
             async with stdio_client(params) as (read, write):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
