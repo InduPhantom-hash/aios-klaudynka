@@ -294,7 +294,7 @@ class RagTest(unittest.TestCase):
                     hidden = await session.call_tool("rag_search", {"query": "cycling"})
                     self.assertTrue(hidden.isError)
                     self.assertFalse(any("Rower na dojazdy" in c.text for c in hidden.content if c.type == "text"))
-        asyncio.run(exercise())
+        asyncio.run(asyncio.wait_for(exercise(), timeout=60))
 
 
 if __name__ == "__main__":

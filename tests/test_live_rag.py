@@ -57,7 +57,7 @@ class LiveRagTest(unittest.TestCase):
                         self.assertFalse(result.isError)
                         payload = result.structuredContent or json.loads(result.content[0].text)
                         self.assertEqual(payload["hits"][0]["path"], "Wiedza/Kuchnia/Wiki/pomidorowa.md")
-            asyncio.run(mcp_query())
+            asyncio.run(asyncio.wait_for(mcp_query(), timeout=120))
 
 
 if __name__ == "__main__":
