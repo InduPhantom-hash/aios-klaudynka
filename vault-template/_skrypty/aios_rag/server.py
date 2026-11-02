@@ -1,10 +1,14 @@
 """Read-only MCP interface: indexing remains an explicit CLI operation."""
 import asyncio
+from importlib import import_module
 
 from .engine import Config, Rag
 
 
 def serve(config: Config):
+    # Initialize NumPy/Arrow native extensions before stdio starts reading stdin.
+    # On Windows their first import under a live stdio transport can deadlock.
+    import_module("lancedb")
     from mcp.server.fastmcp import FastMCP
     mcp = FastMCP("rag-vault")
 
