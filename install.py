@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -41,9 +42,15 @@ def main(argv=None):
         command = [sys.executable, str(setup), "--vault", str(target)]
         if args.no_env:
             command.append("--payload-only")
-        result = subprocess.run(command, capture_output=True, text=True)
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=sys.stderr, text=True,
+                                encoding="utf-8", env={**os.environ, "PYTHONUTF8": "1"})
         if result.returncode:
+            try:
+                setup_result = json.loads(result.stdout)
+            except ValueError:
+                setup_result = {"status": "needs_setup", "error": "Proces konfiguracji zakończony błędem; szczegóły na stderr."}
             print(json.dumps({"status": "needs_setup", "vault": str(target), "error": "Pliki skopiowane; przygotowanie środowiska nie powiodło się.",
+                              "setup": setup_result,
                               "resume": [sys.executable, str(setup), "--vault", str(target)]}, ensure_ascii=True))
             return 1
         print(json.dumps({"status": "files_ready" if args.no_env else "needs_onboarding", "vault": str(target),

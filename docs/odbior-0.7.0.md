@@ -15,7 +15,7 @@ Stan na 2026-11-02: kandydat wypchnięty do [roboczego PR](https://github.com/In
 |---|---|
 | Nowa instalacja macOS, Python 3.13 | PASS: nowy katalog ze spacjami i polskimi znakami, własne venv, zależności, `pip check` |
 | Silnik CLI/MCP | 18 testów integracyjnych PASS: rzeczywisty LanceDB, lokalny HTTP-fixture embeddingów, rzeczywista sesja MCP stdio |
-| Instalator | 3 testy PASS: nowe pliki i payload MCP, odmowa nadpisania, JSON przy konsoli ASCII |
+| Instalator | 4 testy PASS: nowe pliki i payload MCP, odmowa nadpisania, JSON przy konsoli ASCII |
 | Realny lokalny BGE-M3 na macOS | PASS: syntetyczne notatki, pytania PL/EN ze wskazaniem oczekiwanego źródła, aktualizacja notatki i zapytanie MCP |
 | Linux ARM64 w Dockerze | PASS dla świeżej instalacji Python 3.13, CLI/MCP z lokalnym fixture i 7 testów Backpass; nie jest to test GUI LM Studio na natywnym Linuksie |
 | Minimalny Python 3.11 w Linux ARM64 | PASS: świeża instalacja, pip check, 21 testów instalatora/CLI/MCP i 7 testów Backpass; realny model pominięty. Nie zastępuje macOS/Windows 3.11 |
@@ -38,7 +38,7 @@ python tools/validate_release.py
 git diff --check
 ```
 
-Pierwsza komenda wykrywa 22 testy: 21 wykonuje, a rzeczywisty model pomija bez jawnego opt-in. Realny test lokalnego modelu:
+Pierwsza komenda wykrywa 23 testy: 22 wykonuje, a rzeczywisty model pomija bez jawnego opt-in. Realny test lokalnego modelu:
 
 ```sh
 AIOS_LIVE_RAG=1 python -m unittest discover -s tests -p test_live_rag.py -v

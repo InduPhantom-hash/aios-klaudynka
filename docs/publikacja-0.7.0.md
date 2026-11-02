@@ -33,7 +33,7 @@ Instalator odmawia nadpisania istniejącego vaulta i przygotowuje własne środo
 ## Evidence
 
 - **Before:** brak przenośnego lokalnego RAG w szablonie; test nowej instalacji i testy prywatności wykrywały brak implementacji lub ujawnienie nazwy wykluczonego projektu.
-  **After:** macOS: 18 testów RAG, 3 instalatora, 7 Backpass oraz rzeczywisty test BGE-M3 PL/EN przez CLI/MCP PASS. Linux ARM64 w kontenerze Python 3.11: 28 testów PASS; Python 3.13 sprawdzony w poprzedniej iteracji.
+  **After:** macOS: 18 testów RAG, 4 instalatora, 7 Backpass oraz rzeczywisty test BGE-M3 PL/EN przez CLI/MCP PASS. Linux ARM64 w kontenerze Python 3.11: 28 testów PASS; Python 3.13 sprawdzony w poprzedniej iteracji.
 - Walidator manifestów, YAML, lokalnych linków i prywatnych ścieżek PASS. Szczegóły i granice dowodów: [raport odbioru](https://github.com/InduPhantom-hash/aios-klaudynka/blob/codex/klaudynka-local-rag/docs/odbior-0.7.0.md).
 - PR uruchamia macierz macOS/Windows/Ubuntu z Python 3.11 oraz 3.13. Test CI korzysta z lokalnego fixture embeddingów.
 - Niewykonane: natywna instalacja Windows, realny model na natywnym Linuksie, pełny onboarding i wykonanie 18 procedur przez klientów AI. Migracja istniejących vaultów pozostaje poza zakresem.

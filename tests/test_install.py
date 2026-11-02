@@ -1,6 +1,7 @@
 """Fresh installation seam. Never install dependencies into the test interpreter."""
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -50,6 +51,21 @@ class InstallTest(unittest.TestCase):
                                 env={**os.environ, "PYTHONIOENCODING": "ascii"}, capture_output=True, text=True, timeout=20)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(Path(json.loads(result.stdout)["vault"]).resolve(), self.target.resolve())
+
+    def test_failed_dependency_setup_reports_diagnostics_and_preserves_files(self):
+        source = Path(self.tmp.name) / "fixture-source"
+        source.mkdir()
+        shutil.copy2(ROOT / "install.py", source / "install.py")
+        for name in ("plugins", "docs", "vault-template"):
+            shutil.copytree(ROOT / name, source / name, ignore=shutil.ignore_patterns("__pycache__", ".venv", ".aios"))
+        (source / "vault-template/_skrypty/requirements-rag.txt").write_text("klaudynka-missing-test-package==0\n", encoding="utf-8")
+        result = subprocess.run([sys.executable, str(source / "install.py"), "--vault", str(self.target)],
+                                env={**os.environ, "PIP_NO_INDEX": "1", "PYTHONIOENCODING": "ascii"},
+                                capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=90)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("No matching distribution", result.stderr)
+        self.assertEqual(json.loads(result.stdout)["setup"]["status"], "needs_setup")
+        self.assertTrue((self.target / "_skrypty/aios-rag.py").exists())
 
 
 if __name__ == "__main__":
