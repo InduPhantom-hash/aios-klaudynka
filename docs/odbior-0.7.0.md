@@ -7,7 +7,7 @@ ai_summary: "Dowody lokalnego wdrożenia 0.7.0 i jawne braki przed pełnym wydan
 
 # Odbiór kandydata 0.7.0
 
-Stan na 2026-11-02: wdrożenie lokalne, bez publikacji. Źródła RAG działają niezależnie od prywatnego Huba autora. Markdown pozostaje źródłem prawdy. Pełne wydanie wymaga zamknięcia niżej wymienionych bramek; sam zestaw testów kodu nie dowodzi działania wszystkich procedur agentowych.
+Stan na 2026-11-02: kandydat wypchnięty do [roboczego PR](https://github.com/InduPhantom-hash/aios-klaudynka/pull/2), opis About i tematy repo zaktualizowane. Bez scalenia do main, tagu i pełnego wydania. Źródła RAG działają niezależnie od prywatnego Huba autora. Markdown pozostaje źródłem prawdy. Pełne wydanie wymaga zamknięcia niżej wymienionych bramek; sam zestaw testów kodu nie dowodzi działania wszystkich procedur agentowych.
 
 ## Potwierdzone wyniki
 
@@ -48,7 +48,7 @@ Na PowerShell ustaw `$env:AIOS_LIVE_RAG="1"` i uruchom tę samą komendę Python
 
 `python tools/verify.py --live` zbiera powyższe komendy, wersje i pełne logi w ignorowanym `.aios/review/verification.json`. Nie nadpisuje profilu ani danych vaulta. Wymaga Git do sprawdzenia diffu i istniejącego lokalnego BGE-M3 dla ostatniej próby. Bez `--live` omija prawdziwy model.
 
-Workflow `.github/workflows/verify.yml` przygotowuje sześć zadań: macOS, Windows i Ubuntu, każde z Python 3.11 oraz 3.13. Workflow nie został uruchomiony z tego wdrożenia, bo nie wykonano push. Testy CI korzystają z fixture, nie z GUI LM Studio.
+Workflow `.github/workflows/verify.yml` przygotowuje sześć zadań: macOS, Windows i Ubuntu, każde z Python 3.11 oraz 3.13. Workflow uruchomiono po zatwierdzonym push i utworzeniu PR; bieżący wynik widnieje w PR. Każde zadanie przygotowuje także świeży vault z własnym środowiskiem Python przez `install.py`. Testy CI korzystają z fixture, nie z GUI LM Studio.
 
 ## Poprawki z przeglądu
 
@@ -67,7 +67,7 @@ Workflow `.github/workflows/verify.yml` przygotowuje sześć zadań: macOS, Wind
 - Natywny Linux z GUI LM Studio i prawdziwym modelem; kontener potwierdza część Python/CLI/MCP.
 - Pełne quick/full, podłączenie MCP w docelowym kliencie i scenariusze wszystkich 18 skilli wykonane przez agentów. Integracyjny test MCP nie jest testem UI konkretnego klienta.
 - Zewnętrzne integracje i ich operacje zapisujące. Lokalne sprawdzenie ich instrukcji nie dowodzi działania kont użytkownika.
-- Wykonanie całej macierzy GitHub Actions, merge, tag i publikacja.
+- Ostateczny wynik macierzy GitHub Actions oraz osobno zatwierdzony merge, tag i pełne wydanie.
 
 SDK MCP/Pydantic emituje w czystym środowisku ostrzeżenie o definicji `lifespan`; inicjalizacja, wywołania narzędzi i zamknięcie sesji w testach przechodzą. Nie ukrywamy ostrzeżenia w logach.
 

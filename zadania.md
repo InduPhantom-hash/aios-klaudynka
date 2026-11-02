@@ -15,7 +15,7 @@ Publiczne granice testów: CLI (index/rebuild/query/namespaces/status), MCP (rag
 - [x] T3 - Nowa instalacja, model lokalny, konfiguracja MCP/CLI i onboarding. Dowód: świeża instalacja z osobnym venv i pip check PASS; 3 testy instalatora i rzeczywisty test BGE-M3 PL/EN PASS. (Zablokowane przez: T2) (Blokuje: T5)
 - [x] T4 - Procedury 18 skilli i odświeżanie indeksu po zatwierdzonym zapisie. Dowód: niezależny przegląd wszystkich 18, poprawne YAML/nazwy i wspólna procedura; pełne wykonanie przez agentów pozostaje osobną bramką odbioru. (Zablokowane przez: T2) (Blokuje: T5)
 - [ ] T5 - Częściowy odbiór: 29 testów macOS PASS, 28 Linux ARM64 Docker PASS, walidator i dokumentacja gotowe. Otwarte: natywny Windows/Linux z modelem i scenariusze klientów AI. (Zablokowane przez: T3, T4) (Blokuje: T6)
-- [ ] T6 - Diff, raport i dokładny payload roboczego PR/About przygotowane. Wydanie wstrzymane do pełnego T5; commit, push, roboczy PR i About/topics zatwierdzone 2026-11-02. (Zablokowane przez: T5)
+- [ ] T6 - Diff, raport i dokładny payload roboczego PR/About przygotowane. Wydanie wstrzymane do pełnego T5; commit/push oraz roboczy PR wykonane, About/topics zaktualizowane po zgodzie z 2026-11-02. (Zablokowane przez: T5)
 
 Commit/push/roboczy PR/zmiana About: zatwierdzone 2026-11-02. Merge/tag/pełne wydanie: niezatwierdzone. Nie zmieniać plików profilu ani wiedzy autora poza repozytorium dystrybucji.
 
@@ -26,4 +26,4 @@ Commit/push/roboczy PR/zmiana About: zatwierdzone 2026-11-02. Merge/tag/pełne w
 - `.aios/review/verification.json`: ignorowane lokalne logi końcowego odbioru macOS.
 - `.aios/review/changes.patch`: ignorowany pełny diff źródeł do przeglądu.
 - Linux Docker Python 3.11: świeża instalacja, 21 testów CLI/MCP/instalatora + 7 Backpass PASS; validator PASS. Python 3.13 również sprawdzony w poprzedniej iteracji.
-- Przed zgodą użytkownika nie wykonano push/PR/zmiany About. Zatwierdzony zapis zewnętrzny w toku; merge/tag/pełne wydanie pozostają poza zakresem.
+- Push wykonany; roboczy PR: https://github.com/InduPhantom-hash/aios-klaudynka/pull/2. About/topics odczytane po aktualizacji. CI w toku; merge/tag/pełne wydanie pozostają poza zakresem.

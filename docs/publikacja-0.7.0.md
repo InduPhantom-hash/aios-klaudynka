@@ -19,16 +19,31 @@ Payload roboczego PR: base `main`, head `codex/klaudynka-local-rag`, draft `true
 
 Dokładna treść PR:
 
-```markdown
-Klaudynka 0.6.0 opisywała wyszukiwanie przez hierarchię i Pinecone. Ten kandydat dodaje domyślny lokalny RAG nad Markdown dla nowych instalacji: LanceDB, embeddingi BGE-M3, CLI i read-only MCP.
+````markdown
+## Summary
 
-Instalator odmawia nadpisania istniejącego vaulta i przygotowuje własne środowisko Python. Indeksowanie ponawia embeddingi tylko zmienionych dokumentów i publikuje nową generację po udanym zapisie. Zmiana prywatności działa także w istniejącej sesji MCP; nieaktualny indeks odmawia zwracania fragmentów. Dostosowano 14 skilli core i 4 meta, szablony oraz dokumentację.
+Klaudynka 0.6.0 opisywała wyszukiwanie przez hierarchię i Pinecone. Kandydat 0.7.0 dodaje domyślny lokalny RAG dla nowych instalacji:
 
-Weryfikacja: świeża instalacja i CLI/MCP na macOS oraz Linux ARM64 w kontenerach (Python 3.11 i 3.13); 18 testów RAG, 3 instalatora, 7 Backpass; osobny rzeczywisty test BGE-M3 PL/EN i MCP na macOS. Walidator sprawdza manifesty, YAML, linki i brak prywatnych ścieżek. Dokładne granice dowodów: docs/odbior-0.7.0.md.
-
-PR uruchamia macierz CI macOS/Windows/Ubuntu dla Python 3.11 i 3.13. Natywna instalacja Windows, realny model na natywnym Linuksie, pełny onboarding i wykonanie 18 procedur przez klientów AI pozostają niewykonane. Nie jest to jeszcze pełne wydanie. Migracja istniejących vaultów pozostaje poza zakresem.
+```text
+Markdown -> lokalny BGE-M3 -> LanceDB -> CLI / read-only MCP -> fragment ze źródłem
 ```
 
+Instalator odmawia nadpisania istniejącego vaulta i przygotowuje własne środowisko Python. Indeksowanie ponawia embeddingi tylko zmienionych dokumentów i publikuje generację po udanym zapisie. Zmiana prywatności działa także w istniejącej sesji MCP; nieaktualny indeks odmawia zwracania fragmentów. Dostosowano 14 skilli core i 4 meta, szablony oraz dokumentację.
+
+## Evidence
+
+- **Before:** brak przenośnego lokalnego RAG w szablonie; test nowej instalacji i testy prywatności wykrywały brak implementacji lub ujawnienie nazwy wykluczonego projektu.
+  **After:** macOS: 18 testów RAG, 3 instalatora, 7 Backpass oraz rzeczywisty test BGE-M3 PL/EN przez CLI/MCP PASS. Linux ARM64 w kontenerze Python 3.11: 28 testów PASS; Python 3.13 sprawdzony w poprzedniej iteracji.
+- Walidator manifestów, YAML, lokalnych linków i prywatnych ścieżek PASS. Szczegóły i granice dowodów: [raport odbioru](https://github.com/InduPhantom-hash/aios-klaudynka/blob/codex/klaudynka-local-rag/docs/odbior-0.7.0.md).
+- PR uruchamia macierz macOS/Windows/Ubuntu z Python 3.11 oraz 3.13. Test CI korzysta z lokalnego fixture embeddingów.
+- Niewykonane: natywna instalacja Windows, realny model na natywnym Linuksie, pełny onboarding i wykonanie 18 procedur przez klientów AI. Migracja istniejących vaultów pozostaje poza zakresem.
+
+## Merge Danger
+
+**Door:** two-way. Zmiany dotyczą nowych instalacji; Markdown pozostaje źródłem prawdy, indeks można odbudować.
+
+**Blast Radius:** instalacja. Wyższe wymagania Python i lokalnego modelu; pełna zgodność platform wymaga odbioru. To roboczy kandydat, bez zgody na merge, tag i pełne wydanie.
+````
 
 Zatwierdzenie samego push/PR nie oznacza zgody na merge, tag ani publiczne wydanie. PR uruchomi nowy workflow CI na macOS, Windows i Linux. To automatyczne testy z lokalnym serwerem-fixture, bez pobierania i uruchamiania LM Studio.
 
@@ -57,3 +72,9 @@ Zachowujemy dotychczasowe tematy i dodajemy RAG oraz lokalny stos. Pole homepage
 - Dopiero potem osobno zatwierdzony merge, tag `v0.7.0`, opis wydania oraz About/topics. Nie nadpisywać historycznego tagu ani starej paczki pluginu.
 
 Jeżeli właściciel wybierze publikację wcześniejszego kandydata, opis musi zachować stan „kandydat” i listę niewykonanych testów. Nie oznaczać go jako pełnego wydania po samym teście jednostkowym lub przeglądzie instrukcji.
+
+## Wykonany zapis zewnętrzny
+
+2026-11-02: wypchnięta gałąź `codex/klaudynka-local-rag` i utworzony [roboczy PR](https://github.com/InduPhantom-hash/aios-klaudynka/pull/2). Opis About oraz 18 tematów repozytorium zaktualizowano i odczytano ponownie przez API. README i instrukcje nowej wersji znajdują się w PR. `main`, tagi i pełne wydanie pozostają bez scalenia.
+
+CI uruchomiony dla trzech systemów i dwóch wersji Python. Pełne przygotowanie środowiska przez `install.py` jest osobnym krokiem każdego zadania. Bieżące wyniki w PR i raporcie odbioru.
