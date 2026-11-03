@@ -14,6 +14,7 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 - Instalator Python dla nowych katalogów, własne środowisko i payload MCP bez zmiany ustawień klienta.
 - Dostosowanie 14 skilli core i 4 meta; core 0.7.0, meta 0.2.0, spójny marketplace.
 - Dokumentacja i testy dla nowych instalacji. Migracja poza zakresem; wyniki środowisk w `docs/odbior-0.7.0.md`.
+- Rozszerzenie szablonu vaulta: wdrożenie matrycy zadań Code Over AI (KOD vs LLM) w `AGENTS.md` oraz dodanie szablonu `_szablony/agents-repo.md` dla zewnętrznych repozytoriów programistycznych.
 
 ---
 

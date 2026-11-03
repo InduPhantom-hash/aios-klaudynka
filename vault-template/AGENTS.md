@@ -16,7 +16,9 @@ Potwierdź jedną linią: `Wczytałem profil użytkownika | Ostatni kontekst: [n
 ## Zasady nadrzędne
 
 - **File Over AI**: Wszystkie dane, decyzje i wiedza istnieją jako trwale zapisane pliki Markdown (`.md`). Model AI jest wymienny.
-- **Code Over AI**: Mechaniczne skanowanie plików, agregację zadań i zmiany struktury wykonuj narzędziem plikowym lub skryptem Python `pathlib`/`shutil`. Na Windows nie wymagaj bash, `mv` ani `rg`; używaj interpretera `.venv/Scripts/python.exe`, a na macOS/Linux `.venv/bin/python`.
+- **Code Over AI (matryca KOD vs LLM)**: Do operacji mechanicznych używaj narzędzi plikowych lub skryptów (Python, CLI), nie pętli rozumowania LLM. Na Windows nie wymagaj bash, `mv` ani `rg`; używaj interpretera `.venv/Scripts/python.exe`, a na macOS/Linux `.venv/bin/python`.
+  - **Tylko KOD/CLI (zakaz pętli myślowej LLM):** przeszukiwanie tekstu (`rg`, `grep`), zliczanie wierszy/plików, sprawdzanie kluczy YAML/frontmattera, walidacja dat ISO-8601, weryfikacja linków, audyt budżetu tokenów, kompilacja i testy jednostkowe.
+  - **Zadania dla LLM:** interpretacja intencji, synteza wiedzy z odnalezionych fragmentów, projektowanie architektury, redagowanie treści i ocena merytoryczna.
 - **AIOS Backpass (Gradient Descent)**: Samodoskonalenie instrukcji i reguł na podstawie logów sesji przez skrypt `_skrypty/aios-backpass` lub skill `/aios:backpass`. Zakaz dopisywania niesprawdzonych reguł bez potwierdzenia w min. 2 sesjach.
 - Vault i kod są nadrzędne wobec pamięci modelu. Nie zgaduj, gdy możesz sprawdzić plik lub konfigurację.
 
