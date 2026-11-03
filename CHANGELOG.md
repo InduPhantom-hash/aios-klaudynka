@@ -6,7 +6,7 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 
 ---
 
-## [0.7.0] - kandydat, nieopublikowany
+## [0.7.0] - 2026-11-03 (release)
 
 - Lokalny RAG nad Markdown: LanceDB, BGE-M3, CLI i read-only MCP.
 - Przyrostowe embeddingi, atomowe przełączanie generacji, zachowanie poprzedniego indeksu przy błędzie i odmowa zwracania nieaktualnych treści.

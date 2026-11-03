@@ -4,7 +4,7 @@
 
 Klaudynka przechowuje wiedzę, profil i zadania w plikach Markdown. Lokalny RAG wyszukuje fragmenty notatek po znaczeniu, korzystając z LanceDB i embeddingów BGE-M3. Źródłem prawdy pozostają pliki, a model AI możesz zmienić bez przenoszenia wiedzy.
 
-**Stan: 0.7.0, kandydat do wydania.** 14 skilli podstawowych i 4 opcjonalne skille meta. Zakres: nowe instalacje. Migracja starszych vaultów pozostaje poza tym wydaniem.
+**Stan: 0.7.0 (release).** 14 skilli podstawowych i 4 opcjonalne skille meta. Zakres: nowe instalacje. Migracja starszych vaultów pozostaje poza tym wydaniem.
 
 ## Co otrzymujesz
 
