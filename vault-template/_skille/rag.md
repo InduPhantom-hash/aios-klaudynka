@@ -52,11 +52,13 @@ Pozostałe polecenia: `namespaces`, `rebuild` i `mcp`. `rebuild` wykonuje pełn�
 - Gdy cała zawartość vaulta jest prywatna, ustaw `private_paths: ["**"]`. Nie włączaj indeksowania tylko dlatego, że indeks jest lokalny. Zawężenie ochrony wymaga jawnej decyzji użytkownika i podglądu zmiany konfiguracji.
 - `rag: false`, `private: true` lub `prywatne: true` we frontmatter wyklucza notatkę. Nie zdejmuj tych oznaczeń przy kopiowaniu, promocji do Wiki lub tworzeniu projektu.
 - Sekrety, ukryte katalogi, zależności, cache, worktree'y, archiwa, Kosz i `_brudnopis` pozostają poza indeksem. Samo wywołanie skilla nie zezwala na obejście wykluczeń. Odczyt konkretnego prywatnego pliku wymaga odpowiedniego zakresu prośby użytkownika; nie dołączaj go do ogólnego wyszukiwania.
-- Każda nowa notatka `.md` zaczyna się od YAML: `typ_wiedzy`, `tematy` (lista), `podmioty` (lista), `ai_summary`. Zachowaj dodatkowe pola, źródła i flagi prywatności. Starsze metadane są czytelne dla RAG; nie przepisuj istniejących notatek masowo.
+- Każda nowa notatka `.md` zaczyna się od YAML: `typ_wiedzy`, `status` (`aktywny | obalony | zastąpiony przez [[link]]`), `data_wpisu` (ISO-8601), `tematy` (lista), `podmioty` (lista), `ai_summary`. Zachowaj dodatkowe pola, źródła i flagi prywatności. Starsze metadane są czytelne dla RAG; nie przepisuj istniejących notatek masowo.
 
 ```yaml
 ---
 typ_wiedzy: fakt
+status: aktywny
+data_wpisu: YYYY-MM-DD
 tematy: [temat]
 podmioty: []
 ai_summary: "Jedno zdanie o rzeczywistej zawartości notatki."

@@ -1,12 +1,35 @@
 """Fresh installation seam. Never install dependencies into the test interpreter."""
+import atexit
 import json
 import os
-import shutil
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+
+sys.dont_write_bytecode = True
+os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
+
+_TESTS_DIR = Path(__file__).resolve().parent
+
+
+def _cleanup_pycache(target_dir=_TESTS_DIR, rmtree=shutil.rmtree):
+    try:
+        pycache = target_dir / "__pycache__"
+        if pycache.exists():
+            rmtree(pycache, ignore_errors=True)
+    except Exception:
+        pass
+
+
+atexit.register(_cleanup_pycache)
+
+
+def tearDownModule():
+    _cleanup_pycache()
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -18,15 +41,16 @@ class InstallTest(unittest.TestCase):
         self.target = Path(self.tmp.name) / "Mój vault"
 
     def install(self, *args):
-        return subprocess.run([sys.executable, str(ROOT / "install.py"), "--vault", str(self.target), "--no-env", *args],
-                              capture_output=True, text=True, timeout=20)
+        return subprocess.run([sys.executable, "-B", str(ROOT / "install.py"), "--vault", str(self.target), "--no-env", *args],
+                              capture_output=True, text=True, timeout=20,
+                              env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
 
     def test_fresh_install_copies_skills_and_prepares_portable_mcp_payload(self):
         result = self.install("--with-meta")
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         self.assertEqual(json.loads(result.stdout)["status"], "files_ready")
-        self.assertEqual(len(list((self.target / "_skille/aios/skills").glob("*/SKILL.md"))), 14)
-        self.assertEqual(len(list((self.target / "_skille/aios-meta/skills").glob("*/SKILL.md"))), 4)
+        self.assertEqual(len(list((self.target / "_skille/aios/skills").glob("*/SKILL.md"))), 18)
+        self.assertFalse((self.target / "_skille/aios-meta").exists())
         self.assertTrue((self.target / "_skrypty/aios-rag.py").is_file())
         self.assertTrue((self.target / "_skille/dokumentacja/szablony/me-template.md").is_file())
         payload = json.loads((self.target / "_config/mcp-rag.json").read_text(encoding="utf-8"))
@@ -47,8 +71,8 @@ class InstallTest(unittest.TestCase):
         self.assertEqual(list(self.target.iterdir()), [note])
 
     def test_json_output_survives_non_unicode_console_encoding(self):
-        result = subprocess.run([sys.executable, str(ROOT / "install.py"), "--vault", str(self.target), "--no-env"],
-                                env={**os.environ, "PYTHONIOENCODING": "ascii"}, capture_output=True, text=True, timeout=20)
+        result = subprocess.run([sys.executable, "-B", str(ROOT / "install.py"), "--vault", str(self.target), "--no-env"],
+                                env={**os.environ, "PYTHONIOENCODING": "ascii", "PYTHONDONTWRITEBYTECODE": "1"}, capture_output=True, text=True, timeout=20)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(Path(json.loads(result.stdout)["vault"]).resolve(), self.target.resolve())
 
@@ -59,8 +83,8 @@ class InstallTest(unittest.TestCase):
         for name in ("plugins", "docs", "vault-template"):
             shutil.copytree(ROOT / name, source / name, ignore=shutil.ignore_patterns("__pycache__", ".venv", ".aios"))
         (source / "vault-template/_skrypty/requirements-rag.txt").write_text("klaudynka-missing-test-package==0\n", encoding="utf-8")
-        result = subprocess.run([sys.executable, str(source / "install.py"), "--vault", str(self.target)],
-                                env={**os.environ, "PIP_NO_INDEX": "1", "PYTHONIOENCODING": "ascii"},
+        result = subprocess.run([sys.executable, "-B", str(source / "install.py"), "--vault", str(self.target)],
+                                env={**os.environ, "PIP_NO_INDEX": "1", "PYTHONIOENCODING": "ascii", "PYTHONDONTWRITEBYTECODE": "1"},
                                 capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=90)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("No matching distribution", result.stderr)

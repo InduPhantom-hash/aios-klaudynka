@@ -50,4 +50,4 @@
 
 ---
 
-*Plik wygenerowany przez AIOS-Klaudynka vault-template (v0.7.0). Wypełniany po zatwierdzeniu przez `/aios:init`.*
+*Plik wygenerowany przez AIOS-Klaudynka vault-template (v0.8.0). Wypełniany po zatwierdzeniu przez `/aios-init`.*

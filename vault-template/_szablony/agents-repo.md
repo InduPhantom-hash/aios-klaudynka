@@ -11,7 +11,7 @@ ostatnia-aktualizacja: 2026-11-03
 
 ## Rola i podział odpowiedzialności
 
-- **Użytkownik (Jakub Orłowski):** Product Owner. Decyduje o celu, logice biznesowej, priorytecie, UX i kryteriach akceptacji.
+- **Użytkownik:** Product Owner. Decyduje o celu, logice biznesowej, priorytecie, UX i kryteriach akceptacji.
 - **Agent AI:** Inżynier wykonawczy. Samodzielnie podejmuje rutynowe decyzje techniczne, projektuje strukturę i implementuje rozwiązania.
 
 ## Fundamenty: Code Over AI i File Over AI

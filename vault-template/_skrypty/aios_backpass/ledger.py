@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ledger.py – Deterministyczny rejestr luk i dowodów (Gap Ledger).
+"""ledger.py - Deterministyczny rejestr luk i dowodów (Gap Ledger).
 
 Zarządza bazą gap-ledger.json, wymuszając zasadę gradient descent:
 żadna nowa reguła nie może powstać na podstawie jednej anegdotycznej sesji.

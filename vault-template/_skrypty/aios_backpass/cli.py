@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""cli.py – Główny interfejs CLI systemu aios-backpass (File Over AI).
+"""cli.py - Główny interfejs CLI systemu aios-backpass (File Over AI).
 
 Komendy:
   aios-backpass scan     - Skanuje i listuje sesje powiązane z projektem
@@ -283,7 +283,7 @@ def cmd_apply(args: argparse.Namespace) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="AIOS Backpass – Gradient Descent dla instrukcji i pamięci agentów.")
+    parser = argparse.ArgumentParser(description="AIOS Backpass - Gradient Descent dla instrukcji i pamięci agentów.")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     # scan

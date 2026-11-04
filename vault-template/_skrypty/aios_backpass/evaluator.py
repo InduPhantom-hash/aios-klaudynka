@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""evaluator.py – Model-Agnostic Evaluator & Gradient Proposal Engine (File Over AI).
+"""evaluator.py - Model-Agnostic Evaluator & Gradient Proposal Engine (File Over AI).
 
 Generuje pakiety ewaluacyjne dla dowolnego AI (Claude, Gemini, GPT, LM Studio, Ollama),
 waliduje otrzymane odpowiedzi (wymóg cytatów, próg 2 sesji, limit 5 edycji)

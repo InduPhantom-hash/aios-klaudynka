@@ -1,9 +1,13 @@
 """Opt-in real BGE-M3 smoke test over synthetic Markdown in a freshly copied vault."""
-import json
 import os
+import sys
+
+sys.dont_write_bytecode = True
+os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
+
+import json
 from pathlib import Path
 import subprocess
-import sys
 import tempfile
 import unittest
 
@@ -15,7 +19,7 @@ class LiveRagTest(unittest.TestCase):
     def test_fresh_vault_real_pl_en_retrieval_and_changed_note(self):
         with tempfile.TemporaryDirectory(prefix="żywy RAG ") as tmp:
             vault = Path(tmp) / "Mój vault"
-            subprocess.run([sys.executable, str(ROOT / "install.py"), "--vault", str(vault), "--with-meta", "--no-env"], check=True, capture_output=True)
+            subprocess.run([sys.executable, "-B", str(ROOT / "install.py"), "--vault", str(vault), "--with-meta", "--no-env"], check=True, capture_output=True, env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
             notes = {
                 "Wiedza/Transport/Wiki/dojazdy.md": "---\ntyp_wiedzy: fakt\ntematy: [transport]\npodmioty: []\nai_summary: Dojazdy na rowerze.\n---\n# Dojazdy\nRower pozwala codziennie dotrzeć do biura, ćwiczyć i omijać korki. Trzeba sprawdzić hamulce, opony i trasę przez park.",
                 "Wiedza/Kuchnia/Wiki/pomidorowa.md": "# Obiad\nZupa pomidorowa powstaje z pomidorów i bulionu. Gotuj ją przez dwadzieścia minut, dopraw bazylią i podaj z ryżem.",
@@ -27,7 +31,7 @@ class LiveRagTest(unittest.TestCase):
                 p.write_text(body, encoding="utf-8")
 
             def cli(*args):
-                result = subprocess.run([sys.executable, str(vault / "_skrypty/aios-rag.py"), "--vault", str(vault), *args], capture_output=True, text=True, timeout=180)
+                result = subprocess.run([sys.executable, "-B", str(vault / "_skrypty/aios-rag.py"), "--vault", str(vault), *args], capture_output=True, text=True, timeout=180, env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
                 self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                 return json.loads(result.stdout)
 
@@ -49,7 +53,7 @@ class LiveRagTest(unittest.TestCase):
             from mcp.client.stdio import stdio_client
 
             async def mcp_query():
-                params = StdioServerParameters(command=sys.executable, args=[str(vault / "_skrypty/aios-rag.py"), "--vault", str(vault), "mcp"])
+                params = StdioServerParameters(command=sys.executable, args=["-B", str(vault / "_skrypty/aios-rag.py"), "--vault", str(vault), "mcp"], env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
                 async with stdio_client(params) as (read, write):
                     async with ClientSession(read, write) as session:
                         await session.initialize()

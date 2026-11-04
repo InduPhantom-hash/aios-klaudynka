@@ -5,15 +5,15 @@
     "url": "https://github.com/InduPhantom-hash"
   },
   "metadata": {
-    "description": "AIOS-Klaudynka: 14 skilli, lokalny RAG LanceDB/BGE-M3, Backpass i Task Tracker. Nowe instalacje.",
-    "version": "0.7.0"
+    "description": "AIOS-Klaudynka: 18 skilli z prefiksem aios-, lokalny RAG LanceDB/BGE-M3, Backpass, Task Tracker i nowa architektura subagentów. Nowe instalacje.",
+    "version": "0.8.0"
   },
   "plugins": [
     {
       "name": "aios",
       "source": "./plugins/aios",
-      "description": "14 skilli AIOS, lokalny RAG przez CLI/MCP, Backpass, onboarding i lokalny Task Tracker.",
-      "version": "0.7.0",
+      "description": "18 skilli AIOS z prefiksem aios-, lokalny RAG przez CLI/MCP, Backpass, Task Tracker, higiena bazy i architektura subagentów.",
+      "version": "0.8.0",
       "category": [
         "productivity",
         "knowledge-management",
@@ -27,27 +27,6 @@
         "task-tracker",
         "polish",
         "pl"
-      ],
-      "strict": false
-    },
-    {
-      "name": "aios-meta",
-      "source": "./plugins/aios-meta",
-      "description": "AIOS meta-tools - higiena vaulta i nadzór nad bliźniakami: audyt-luk, mcp-health, synchronizuj, wizualizuj-vault. Opcjonalne, niezależne od aios.",
-      "version": "0.2.0",
-      "category": [
-        "productivity",
-        "knowledge-management",
-        "personal"
-      ],
-      "keywords": [
-        "aios",
-        "personal-agentic-os",
-        "file-over-ai",
-        "polish",
-        "pl",
-        "meta",
-        "audit"
       ],
       "strict": false
     }

@@ -6,6 +6,39 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 
 ---
 
+## [0.8.0] - 2026-11-04 (release)
+
+### Dodane i Zmienione (Uniwersalny Warsztat Agenta i Nowa Architektura)
+
+- **18 uniwersalnych skilli operacyjnych**:
+  - Wszystkie skille skonsolidowane w ramach jednego głównego pluginu `plugins/aios/skills/` bez zaśmiecania bazy reliktami czy opcjonalnymi dodatkami.
+  - Ujednolicenie nazewnictwa z prefiksem `aios-` zarówno w katalogach, jak i frontmatterze `SKILL.md` (`name: aios-<nazwa>`) z zachowaniem triggerów `/aios:<nazwa>` i `/aios-<nazwa>`.
+  - Zmiana nazwy `aios-feynman` na `aios-wyjasnij` (wyjaśnianie pojęć prostym językiem i diagnoza luk).
+  - Usunięcie zdezaktualizowanych reliktów (`aios-zadania`, `aios-dodaj-do-wiki`, `aios-ingest-article`, `aios-core-update`, `aios-pomysl-do-promptu`, `aios-youtube`, `aios-research`) oraz pominięcie skilli opcjonalnych.
+  - Ostateczny kanoniczny zestaw 18 skilli: `aios-anonimizacja`, `aios-backpass`, `aios-data-analysis`, `aios-debata`, `aios-doctor`, `aios-dzien`, `aios-grilling`, `aios-init`, `aios-koniec-sesji`, `aios-kontynuuj`, `aios-kustosz`, `aios-research-faktow`, `aios-research-rynkowy`, `aios-sortuj`, `aios-stworz-projekt`, `aios-szukaj`, `aios-weryfikacja`, `aios-wyjasnij`.
+- **Wycofanie pluginu `aios-meta`**:
+  - Usunięcie przestarzałego pakietu `plugins/aios-meta/`. Zadania higieny, audytu luk i diagnostyki MCP w pełni przejęły `aios-kustosz` oraz `aios-doctor`.
+  - Instalator `install.py` zachowuje flagę `--with-meta` jako bezpieczny no-op dla pełnej kompatybilności wstecznej CLI.
+- **Inwarianty architektoniczne AIOS w `vault-template/AGENTS.md`**:
+  - **Bitemporalność faktów i notatek**: rozdzielenie czasu zapisu (`data_wpisu` ISO-8601) od czasu obowiązywania w świecie realnym (`status: aktywny | obalony | zastąpiony przez [[link]]`).
+  - **Zasada Afirmatywnej Pamięci**: pozytywne formułowanie reguł i lekcji, eliminujące błędy negacji w modelach językowych.
+  - **Sandwich Prompting**: trójstrefowy podział promptów subagentów (Head 10-15%, Belly 70-80%, Tail 10-15%).
+  - **Clean Context Window (`messages: []`)**: faza i podzadania startują w świeżych procesach z czystym oknem kontekstu; stan przekazywany wyłącznie przez pliki dyskowe (File Over AI).
+  - **Wayfinder & Frontier Locks**: dekompozycja zadań na Decision Tickets z blokadami zależności `(Blokuje: X)` i `(Zablokowane przez: Y)`.
+  - **Higiena pamięci sesji**: ograniczenie bufora `_pamiec/aktualny.md` do twardego limitu <= 3 KB (3072 B).
+  - **Preflight Git i limity rozmiaru**: wymuszenie `git -c core.quotepath=off status --porcelain -uall` oraz wykluczenie w `.gitignore` baz wektorowych (`*.lance`), baz danych (`*.db`), modeli ML (`*.tflite`) i plików binarnych powyżej 100 MB.
+- **Nowe szablony pamięci i projektów**:
+  - `vault-template/_pamiec/aktualny.md`: szablon carry-over sesji z limitem 3 KB i frontmatterem bitemporalnym.
+  - `vault-template/_pamiec/lekcje.md`: szablon lekcji inżynieryjnych ze statusem bitemporalnym.
+  - `vault-template/_szablony/zadania.md`: zaktualizowany o notację Wayfinder & Frontier.
+  - `vault-template/_szablony/decyzja.md`: nagłówek YAML z typem wiedzy i statusem bitemporalnym.
+- **Aktualizacja instalatora i manifestów**:
+  - `install.py`: podbicie wersji do 0.8.0, instalacja 18 skilli do `_skille/aios/`, prompt poinstalacyjny wskazujący `/aios:init` oraz `_skille/aios/skills/aios-init/SKILL.md`.
+  - `.claude-plugin/marketplace.json` i `plugins/aios/.claude-plugin/plugin.json`: wersja 0.8.0, opis 18 uniwersalnych skilli z prefiksem `aios-`, usunięcie wpisu `aios-meta`.
+  - `tests/test_install.py`: zaktualizowane asercje dla 18 skilli oraz brak katalogu `aios-meta`.
+
+---
+
 ## [0.7.0] - 2026-11-03 (release)
 
 - Lokalny RAG nad Markdown: LanceDB, BGE-M3, CLI i read-only MCP.
@@ -24,12 +57,12 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 
 - **Nowy silnik i skill `/aios:backpass`**: Samodoskonalenie instrukcji (`AGENTS.md`) i pamięci agentów metodą Gradient Descent na podstawie rzeczywistych transkryptów z dysku (Antigravity, Claude Code, Cursor, Codex, OpenCode, Markdown).
 - **Deterministyczny silnik Python (`_skrypty/aios_backpass/`)**:
-  - `scanner.py` – skanuje logi sesji w różnych runtime'ach.
-  - `distiller.py` – mechaniczne odszumianie logów (redukcja 85-98%) i maskowanie sekretów (API keys, tokeny).
-  - `ledger.py` – rejestr luk `gap-ledger.json` z wymogiem corroboracji z co najmniej 2 niezależnych sesji (`min_sessions >= 2`).
-  - `budget.py` – Token Budget Guard egzekwujący bilans zero-sum oraz Skill Release Valve (ekstrakcja rzadkich procedur do skilli).
-  - `evaluator.py` – generator pakietu ewaluacyjnego model-agnostic (działa z dowolnym modelem) oraz walidator cytatów.
-  - `cli.py` + `_skrypty/aios-backpass` – interfejs CLI (`scan`, `distill`, `budget`, `ledger`, `eval`, `apply`).
+  - `scanner.py` - skanuje logi sesji w różnych runtime'ach.
+  - `distiller.py` - mechaniczne odszumianie logów (redukcja 85-98%) i maskowanie sekretów (API keys, tokeny).
+  - `ledger.py` - rejestr luk `gap-ledger.json` z wymogiem corroboracji z co najmniej 2 niezależnych sesji (`min_sessions >= 2`).
+  - `budget.py` - Token Budget Guard egzekwujący bilans zero-sum oraz Skill Release Valve (ekstrakcja rzadkich procedur do skilli).
+  - `evaluator.py` - generator pakietu ewaluacyjnego model-agnostic (działa z dowolnym modelem) oraz walidator cytatów.
+  - `cli.py` + `_skrypty/aios-backpass` - interfejs CLI (`scan`, `distill`, `budget`, `ledger`, `eval`, `apply`).
 - **Przenośny skill w vaulcie**: Dodano `_skille/aios-backpass.md` do szablonu vaulta.
 - **Aktualizacja manifestu**: Podbito wersję pluginu `aios` do 0.6.0 (14 skilli core).
 
@@ -42,7 +75,7 @@ Format: [Semantic Versioning](https://semver.org/). Daty: RRRR-MM-DD.
 - **Wdrażanie `AGENTS.md` jako SSOT**: Jednolite źródło zasad operacyjnych dla Antigravity, Gemini CLI, Cursor, Codex, OpenHand i Claude Code. `CLAUDE.md` zredukowany do 1-liniowego redirectu.
 - **Dodano `bootstrap-prompt.md`**: Uniwersalny prompt startowy dla środowisk AI bez automatycznego ładowania system promptów.
 - **Natywny AIOS Task Tracker**: Dodano `_szablony/zadania.md` i obsługę lokalnych `zadania.md` w projektach (100% offline, zero zbędnych opłat i tokenów). Zewnętrzny ClickUp/Linear/Notion jako opcja.
-- **Nowy skill Vibe Coding**: `/aios:pomysl-do-promptu` – prowadzi użytkownika od luźnego pomysłu do specyfikacji PRD, makiet i finałowego prompta startowego.
+- **Nowy skill Vibe Coding**: `/aios:pomysl-do-promptu` - prowadzi użytkownika od luźnego pomysłu do specyfikacji PRD, makiet i finałowego prompta startowego.
 - **Szybki Onboarding `/aios:init --quick`**: Opcja 10-minutowego startu (12 kluczowych pytań) obok pełnego onboardingu `--full`.
 - **Zoptymalizowany skill `/aios:dzien`**: Równoległe pobieranie wielu kalendarzy Google (`list_calendars` -> `list_events`) oraz szybkie przeszukiwanie `zadania.md` ripgrepem.
 - **Szablony dokumentów (`_szablony/`)**: Utworzono katalog w szablonie vaulta z wzorcami `zadania.md`, `brief-projektu.md`, `decyzja.md`, `index.md`.

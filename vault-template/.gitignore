@@ -10,3 +10,27 @@ _config/mcp-rag.json
 Prywatne/
 Projekty/Prywatne/
 _brudnopis/
+
+# Bazy danych i wektorowe magazyny danych (Preflight Invariant)
+*.db
+*.db-journal
+*.lance
+*.lance/
+
+# Modele ML
+*.tflite
+*.onnx
+
+# Pliki multimedialne (duze pliki binarne)
+*.mp3
+*.wav
+*.m4a
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# Metadane systemowe i AppleDouble
+._*
+.DS_Store
+Thumbs.db

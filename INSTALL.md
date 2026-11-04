@@ -1,4 +1,4 @@
-# Instalacja AIOS-Klaudynki 0.7.0
+# Instalacja AIOS-Klaudynki 0.8.0
 
 Instrukcja dla agenta instalującego **nowy vault**. Nie migruj ani nie nadpisuj istniejącej instalacji. Najpierw przedstaw docelową ścieżkę i zakres instalacji użytkownikowi. Nie usuwaj zajętego katalogu, aby ponowić instalację.
 
@@ -28,10 +28,10 @@ Windows, PowerShell:
 py -3.13 install.py --vault "$HOME/Documents/AIOS-Vault" --with-meta
 ```
 
-Pomiń `--with-meta`, jeśli użytkownik nie chce 4 opcjonalnych skilli meta. Instalator:
+W v0.8.0 wszystkie 18 skilli trafia bezpośrednio do wtyczki `aios`. Flaga `--with-meta` jest zachowana jako bezpieczny no-op dla pełnej kompatybilności wstecznej wywołań. Instalator:
 
 - odmawia zapisu do istniejącego katalogu;
-- kopiuje szablon oraz 14 procedur core, opcjonalnie 4 meta;
+- kopiuje szablon oraz 18 procedur uniwersalnych skilli z prefiksem `aios-`;
 - tworzy własne `.venv` i instaluje przypięte zależności RAG;
 - przygotowuje `_config/mcp-rag.json`, bez zmiany ustawień klienta AI;
 - zwraca `needs_onboarding`, a nie deklarację gotowości całego systemu.
@@ -48,7 +48,7 @@ Na Windows użyj właściwego interpretera (`py -3.13`). Skrypt przygotowania ni
 
 ## 3. Uruchom onboarding i ustal prywatność
 
-Przeczytaj `_skille/aios/skills/init/SKILL.md` w nowym vaulcie i wykonaj `--quick` albo `--full`. Profil `me.md` powstaje dopiero wtedy. Nigdy nie kopiuj profilu autora repozytorium.
+Przeczytaj `_skille/aios/skills/aios-init/SKILL.md` w nowym vaulcie i wykonaj `--quick` albo `--full`. Profil `me.md` powstaje dopiero wtedy. Nigdy nie kopiuj profilu autora repozytorium.
 
 Przed pierwszym indeksem ustal strefy prywatności i zapisz je do `_config/rag.json`. Domyślnie `Prywatne/**` i `Projekty/Prywatne/**` pozostają poza indeksem. Dla prywatności całego vaulta użyj `private_paths: ["**"]`. Wykluczenie obszaru oznacza brak RAG dla jego treści; nie omijaj go wyszukiwaniem tekstowym bez wyraźnej zgody.
 
@@ -97,4 +97,4 @@ Oddziel: pliki, środowisko Python, profil, prywatność, model, indeks, zapytan
 
 Po zmianach plików stosuj wspólną procedurę `_skille/rag.md`. Nie twórz watchera, usługi startowej ani harmonogramu. Nie przenoś `.venv` i indeksu między komputerami; na nowej maszynie przygotuj środowisko i odbuduj indeks.
 
-Szczegóły poleceń, prywatności i naprawy: [docs/rag.md](docs/rag.md). Weryfikacja systemów: [raport odbioru](docs/odbior-0.7.0.md). Starsza paczka `aios-v0.3.0.plugin` jest artefaktem historycznym; instalator 0.7.0 korzysta z aktualnych katalogów źródłowych.
+Szczegóły poleceń, prywatności i naprawy: [docs/rag.md](docs/rag.md). Weryfikacja systemów: [raport odbioru](docs/odbior-0.7.0.md). Starsza paczka `aios-v0.3.0.plugin` jest artefaktem historycznym; instalator 0.8.0 korzysta z aktualnych katalogów źródłowych.

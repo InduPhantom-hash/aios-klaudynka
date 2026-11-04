@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""budget.py – Strażnik budżetu tokenów i zawór bezpieczeństwa (Token Budget Guard & Skill Release Valve).
+"""budget.py - Strażnik budżetu tokenów i zawór bezpieczeństwa (Token Budget Guard & Skill Release Valve).
 
 Pilnuje, aby pliki instrukcji (AGENTS.md) nie ulegały degradacji ("bloat").
 Wymusza bilans zero-sum przy przepełnieniu oraz typuje rzadkie reguły do ekstrakcji do skilli.

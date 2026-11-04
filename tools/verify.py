@@ -1,14 +1,18 @@
 """Run acceptance checks and save local evidence. --live uses only local synthetic fixtures."""
 from __future__ import annotations
 
+import os
+import sys
+
+sys.dont_write_bytecode = True
+os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
+
 import argparse
 from importlib.metadata import version
 import json
-import os
 from pathlib import Path
 import platform
 import subprocess
-import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -18,16 +22,16 @@ def main():
     parser.add_argument("--live", action="store_true")
     parser.add_argument("--output", type=Path, default=ROOT / ".aios/review/verification.json")
     args = parser.parse_args()
-    environment = {**os.environ, "PYTHONUTF8": "1"}
+    environment = {**os.environ, "PYTHONUTF8": "1", "PYTHONDONTWRITEBYTECODE": "1"}
     environment.pop("AIOS_LIVE_RAG", None)
     commands = [
-        [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"],
-        [sys.executable, "vault-template/_skrypty/aios_backpass/tests/run_all_tests.py"],
-        [sys.executable, "tools/validate_release.py"],
+        [sys.executable, "-B", "-m", "unittest", "discover", "-s", "tests", "-v"],
+        [sys.executable, "-B", "vault-template/_skrypty/aios_backpass/tests/run_all_tests.py"],
+        [sys.executable, "-B", "tools/validate_release.py"],
         ["git", "diff", "--check"],
     ]
     if args.live:
-        commands.append([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", "test_live_rag.py", "-v"])
+        commands.append([sys.executable, "-B", "-m", "unittest", "discover", "-s", "tests", "-p", "test_live_rag.py", "-v"])
     results = []
     for i, command in enumerate(commands):
         env = dict(environment)

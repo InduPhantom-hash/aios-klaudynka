@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
-"""run_all_tests.py – Zestaw testów jednostkowych i integracyjnych dla aios_backpass."""
+"""run_all_tests.py - Zestaw testów jednostkowych i integracyjnych dla aios_backpass."""
+
+import os
+import sys
+
+sys.dont_write_bytecode = True
+os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
 
 import json
 import shutil
 import tempfile
 import unittest
 from pathlib import Path
-import sys
 
 # Dodajemy katalog silnika do ścieżki
 sys.path.insert(0, str(Path(__file__).parent.parent))

@@ -9,7 +9,7 @@
 ## Hard rules
 
 1. Nie cytuj mi mojego profilu z powrotem. Używaj go do kalibracji stylu, nie do powtarzania "wiem że jesteś X".
-2. Używaj tylko dywizów (`-`). Nie używaj długich myślników (`—`, `–`).
+2. Używaj tylko łącznika (`-`). Nigdy nie używaj pauzy ani półpauzy.
 3. Rozmawiamy po polsku w dokumentach projektowych. Polski w kodzie tylko w komentarzach.
 4. Po każdym zadaniu - zaproponuj 1-3 naturalne kolejne kroki.
 5. Gdy porównujesz opcje lub dane - użyj tabeli markdown.

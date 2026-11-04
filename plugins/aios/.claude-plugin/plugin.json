@@ -1,7 +1,7 @@
 {
   "name": "aios",
-  "version": "0.7.0",
-  "description": "AIOS-Klaudynka: 14 skilli, lokalny RAG LanceDB/BGE-M3 przez CLI/MCP, profil, pamięć i zadania.",
+  "version": "0.8.0",
+  "description": "AIOS-Klaudynka: 18 skilli z prefiksem aios-, lokalny RAG LanceDB/BGE-M3 przez CLI/MCP, profil, pamięć, higiena bazy i zadania.",
   "author": {
     "name": "Jakub Orlowski",
     "url": "https://github.com/InduPhantom-hash"

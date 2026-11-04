@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""scanner.py – Wielo-środowiskowy skaner transkryptów sesji agentów.
+"""scanner.py - Wielo-środowiskowy skaner transkryptów sesji agentów.
 
 Wyszukuje i mapuje sesje z różnych runtime'ów (Antigravity, Claude Code, Codex,
 OpenCode, Cursor oraz plików markdown w _brudnopis/ i _pamiec/dziennik/).
@@ -192,7 +192,7 @@ def scan_claude_sessions(
             first_ts = None
             match_tier = 3
 
-            # Ścieżka projektu może być zakodowana w nazwie katalogu np. -Users-phantom-Documents-AIOS-Vault
+            # Ścieżka projektu może być zakodowana w nazwie katalogu np. -Users-username-Documents-AIOS-Vault
             sanitized_target = str(target_resolved).replace("/", "-").replace("\\", "-")
             if sanitized_target in proj_dir.name or target_name in proj_dir.name.lower():
                 related = True

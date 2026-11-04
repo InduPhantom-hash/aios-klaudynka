@@ -1,0 +1,81 @@
+{
+  "schema_version": "1.0.0",
+  "skill": "desk-research",
+  "created_at": "",
+  "last_updated_at": "",
+  "current_stage": "setup | brief | queries | dispatch | synthesis | report | complete",
+  "project": {
+    "name": "",
+    "path": "",
+    "industry_or_domain": "",
+    "ingested_files": {
+      "brief": [],
+      "research": [],
+      "analyses": [],
+      "ost_state": null
+    }
+  },
+  "brief": {
+    "problem_statement": "",
+    "working_hypothesis": "",
+    "decision_at_stake": "",
+    "research_questions": [
+      {"id": 1, "question": "", "auto_decided": false}
+    ],
+    "scale": "quick | deep",
+    "scale_auto_decided": false,
+    "disconfirmation_criterion": "",
+    "disconfirmation_skipped": false
+  },
+  "queries": {
+    "competitive": {
+      "companies_to_investigate": [],
+      "search_keywords": [],
+      "recency_window_years": 5,
+      "source_heuristics": ""
+    },
+    "scholar": {
+      "term_mappings": [
+        {"user_language": "", "academic_language": []}
+      ],
+      "search_queries": [],
+      "recency_window_years": 10,
+      "include_preprints": true
+    },
+    "user_edits": []
+  },
+  "dispatch": {
+    "competitive_subagent": {
+      "status": "pending | in_progress | complete | failed",
+      "started_at": null,
+      "completed_at": null,
+      "output_path": null,
+      "summary": "",
+      "findings_count": 0,
+      "disconfirming_count": 0
+    },
+    "scholar_subagent": {
+      "status": "pending | in_progress | complete | failed",
+      "started_at": null,
+      "completed_at": null,
+      "output_path": null,
+      "summary": "",
+      "findings_count": 0,
+      "disconfirming_count": 0,
+      "fallback_to_general_search": false
+    }
+  },
+  "synthesis": {
+    "clusters_per_question": [],
+    "cross_source_contradictions": [],
+    "disconfirming_evidence_count": 0,
+    "synthesis_user_approved": false
+  },
+  "report": {
+    "path": null,
+    "disposition": "supported | refuted | mixed | insufficient-data",
+    "tldr_one_liner": "",
+    "completed_at": null
+  },
+  "iterations": []
+}

@@ -1,9 +1,13 @@
 """Public CLI/MCP integration tests; only the embedding HTTP service is a fixture."""
-import json
 import os
+import sys
+
+sys.dont_write_bytecode = True
+os.environ["PYTHONDONTWRITEBYTECODE"] = "1"
+
+import json
 from pathlib import Path
 import subprocess
-import sys
 import tempfile
 import threading
 import time
@@ -89,9 +93,9 @@ class RagTest(unittest.TestCase):
 
     def cli(self, *args, ok=True):
         result = subprocess.run(
-            [sys.executable, str(RUNNER), "--vault", str(self.vault), *args],
+            [sys.executable, "-B", str(RUNNER), "--vault", str(self.vault), *args],
             cwd=self.tmp.name, capture_output=True, text=True, timeout=40,
-            env={**os.environ, "PYTHONUTF8": "1"},
+            env={**os.environ, "PYTHONUTF8": "1", "PYTHONDONTWRITEBYTECODE": "1"},
         )
         if ok:
             self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
@@ -279,7 +283,7 @@ class RagTest(unittest.TestCase):
             probe = ("import faulthandler,runpy,sys; from pathlib import Path; "
                      "faulthandler.dump_traceback_later(20); script=sys.argv.pop(1); "
                      "sys.path.insert(0,str(Path(script).parent)); runpy.run_path(script,run_name='__main__')")
-            params = StdioServerParameters(command=sys.executable, args=["-c", probe, str(RUNNER), "--vault", str(self.vault), "mcp"])
+            params = StdioServerParameters(command=sys.executable, args=["-B", "-c", probe, str(RUNNER), "--vault", str(self.vault), "mcp"], env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
             async with stdio_client(params) as (read, write):
                 async with ClientSession(read, write) as session:
                     await session.initialize()

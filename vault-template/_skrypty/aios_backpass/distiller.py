@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""distiller.py – Deterministyczna destylacja transkryptów sesji (Code Over AI).
+"""distiller.py - Deterministyczna destylacja transkryptów sesji (Code Over AI).
 
 Redukuje rozmiar transkryptów o 95-99%, usuwa szum wywołań narzędzi,
 maskuje sekrety i zachowuje wyłącznie sygnał decyzyjny (pytanie, próba, błąd, korekta).
@@ -114,7 +114,7 @@ def distill_antigravity_transcript(file_path: Path, session_id: str) -> Distille
                     if entry_text:
                         turns.append({"role": "assistant", "text": "\n".join(entry_text)})
 
-                # Wyniki narzędzi – rejestrujemy tylko status i ewentualny błąd
+                # Wyniki narzędzi - rejestrujemy tylko status i ewentualny błąd
                 elif step_type in ("RUN_COMMAND", "VIEW_FILE", "EDIT_FILE", "CALL_MCP_TOOL"):
                     if status == "ERROR" or (content and "error" in content.lower()[:200]):
                         err_snip = truncate_snippet(redact_secrets(content), 200)
